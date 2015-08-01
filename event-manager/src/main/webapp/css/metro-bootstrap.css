@@ -1,0 +1,97 @@
+.thumbnail.tile {
+	display: block;
+	cursor: pointer;
+	-webkit-perspective: 0;
+	-webkit-transform-style: preserve-3d;
+	-webkit-transition: -webkit-transform .2s;
+	float: left;
+	width: 250px;
+	height: 140px;
+	text-align: center;
+	opacity: .75;
+	background-color: #2e8bcc;
+	border: 0;
+	margin: 22px;
+}
+
+.thumbnail.tile h1,.thumbnail.tile h2,.thumbnail.tile h3,.thumbnail.tile h4,.thumbnail.tile h5,.thumbnail.tile h6
+	{
+	color: #fff;
+	-webkit-user-select: none
+}
+
+.thumbnail.tile h2 {
+	font-size: 1.75em;
+	margin-top: -6px;
+	margin-left: 0
+}
+
+.thumbnail.tile h3,.thumbnail.tile h4 {
+	margin-top: -15px
+}
+
+.thumbnail.tile h1.tile-text,.thumbnail.tile h2.tile-text,.thumbnail.tile h3.tile-text,.thumbnail.tile h4.tile-text
+	{
+	margin-top: 43.333333333333336px
+}
+
+.thumbnail.tile a:hover {
+	text-decoration: none
+}
+
+.thumbnail.tile img {
+	border: 0
+}
+
+.thumbnail.tile:hover {
+	opacity: 1
+}
+
+.thumbnail.tile.tile-double {
+	width: 260px
+}
+
+.thumbnail.tile.tile-blue {
+	background-color: #2e8bcc
+}
+
+.thumbnail.tile.tile-green {
+	background-color: #393
+}
+
+.thumbnail.tile.tile-red {
+	background-color: #e51400
+}
+
+.thumbnail.tile.tile-yellow {
+	background-color: #ffc40d
+}
+h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
+    color: inherit;
+    font-family: "Segoe UI Light","Helvetica Neue","Segoe UI","Segoe WP",sans-serif;
+    font-weight: 100;
+    line-height: 1.1;
+}
+.thumbnail.tile.tile-orange {
+	background-color: #f09609
+}
+
+.thumbnail.tile.tile-pink {
+	background-color: #e671b8
+}
+
+.thumbnail.tile.tile-purple {
+	background-color: #7b4f9d
+}
+
+.thumbnail.tile.tile-lime {
+	background-color: #8cbf26
+}
+
+.thumbnail.tile.tile-magenta {
+	background-color: #ff0097
+}
+
+.thumbnail.tile.tile-teal {
+	background-color: #00aba9
+}
