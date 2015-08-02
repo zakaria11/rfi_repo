@@ -183,7 +183,7 @@
 
 		<!-- To see what's happening under the hood, the example application for
 		this tutorial uses log4j. You'll need to add to pom.xml a dependency
-		node for the log4j jar file:-->		
+		node for the log4j jar file: -->		
 		<dependency>
 			<groupId>log4j</groupId>
 			<artifactId>log4j</artifactId>

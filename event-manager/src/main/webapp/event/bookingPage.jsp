@@ -9,9 +9,8 @@
 	function initPaymentMethod(){
 		$("#paymentType").fadeOut("fast", function() {
 			$("#paymentType").fadeIn("fast");
-		});			
+		});
 	}
-
 </script>
 </head>
 <body>
@@ -45,15 +44,20 @@
 			
 			</form>
   		</fieldset>
-		<fieldset id="userInformations">
-    		<legend><s:text name="i18n.global.user.inofrmations"></s:text> :</legend>
-    		<form class="form-horizontal">
-				<div class="control-group">
+  		<fieldset id="userInformations">
+    		<legend>Event Informations :</legend>
+  			<div class="form-horizontal">
+	  			<div class="control-group">
 					<label class="control-label" for="inputEventName"><s:text name="i18n.global.event.name" /></label>
 					<div class="controls">
 						<s:textfield id="inputEventName" placeholder="${bookedEvent.name}" disabled="true" />
 					</div>
 				</div>
+			</div>    		
+    	</fieldset>
+		<fieldset id="userInformations">
+    		<legend><s:text name="i18n.global.user.inofrmations"></s:text> :</legend>
+    		<form class="form-horizontal">
 				<div class="control-group">
 					<label class="control-label" for="inputFirstName"><s:text name="i18n.global.firstname" /></label>
 					<div class="controls">
@@ -71,7 +75,7 @@
 					<div class="controls">
 						<s:textfield id="inputEmail" placeholder="${getText('i18n.global.email')}" disabled="true"/>
 					</div>
-				</div>				
+				</div>
 				<div class="control-group">
 					<div class="controls">
 						<a class="btn"><s:text name="i18n.global.subscribe"></s:text></a>
