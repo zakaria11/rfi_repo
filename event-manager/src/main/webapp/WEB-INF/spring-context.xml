@@ -23,7 +23,7 @@
 	</bean>
 
 
-	<bean id="eventDaoImpl" class="ma.eventmanager.dao.impl.EventDaoImpl">
+	<bean id="eventManagerDaoImpl" class="ma.eventmanager.dao.impl.EventManagerDaoImpl">
 		<property name="sessionFactory" ref="sessionFactory"></property>
 	</bean>
 
@@ -41,6 +41,16 @@
 		</property>
 	</bean>
 	
+	<bean id="userDetailsServiceEM"  class="ma.eventmanager.service.UserDetailsServiceImpl">
+		<property name="eventManagerDao" ref="eventManagerDaoImpl" />
+	</bean>
+	
+	<bean id="authProvider" class="org.springframework.security.authentication.dao.DaoAuthenticationProvider">
+		<property name="userDetailsService" ref="userDetailsServiceEM" />
+		<property name="passwordEncoder" ref="encoder" />
+  	</bean>
+
+  <bean id="encoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"/>
 	
 	
 	<bean id="data-source" class="org.springframework.jdbc.datasource.DriverManagerDataSource">

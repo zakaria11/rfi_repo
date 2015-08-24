@@ -6,11 +6,11 @@
 <head>
 <jsp:include page="/includes/header.jsp"></jsp:include>
 <script type="text/javascript">
-	function initPaymentMethod(){
+/*function initPaymentMethod(){
 		$("#paymentType").fadeOut("fast", function() {
 			$("#paymentType").fadeIn("fast");
 		});
-	}
+}*/
 </script>
 </head>
 <body>
@@ -18,18 +18,25 @@
 	<div class="container" id="main_container">
 	  	<fieldset>
     		<legend><s:text name="i18n.global.payment.info" /></legend>
-    		<form class="form-horizontal">
+    		<form id="paymentMethodForm" class="form-horizontal" action="<%=request.getContextPath()%>/event/booking" method="POST">
    			<div class="control-group">
 				<label class="control-label" for="inputPaymentMethod"><s:text name="i18n.global.payment.method" /></label>
 				<div class="controls">
-					<select id="inputPaymentMethod" class="span3" onchange="initPaymentMethod();">
+					<select id="inputPaymentMethod" class="span3" name="paymentMethod">
 					<s:iterator value="paymentMethods" var="paymentMethod">
-						<option><s:text name="paymentMethod"></s:text></option>
+						<option  value="<s:property value="key"/>"><s:property value="value"/></option>
 					</s:iterator>
-					</select>
+					</select>					
 				</div>
-			</div>			
+			</div>
 			<div class="control-group">
+				<label class="control-label" for="inputEventPrice">Prix</label>
+				<div class="controls">
+					<s:textfield id="inputEventPrice" placeholder="${bookedEvent.price} DH" disabled="true" />
+				</div>					
+			</div>
+						
+<%-- 			<div class="control-group">
 				<label class="control-label" for="inputCNE"><s:text name="i18n.global.cne" /></label>
 				<div class="controls">
 					<s:textfield id="inputCNE" placeholder="CNE" />
@@ -41,49 +48,45 @@
 					<s:textfield id="inputCIN" placeholder="CIN" />
 				</div>
 			</div>
-			
+ --%>			
 			</form>
   		</fieldset>
   		<fieldset id="userInformations">
     		<legend>Event Informations :</legend>
   			<div class="form-horizontal">
+
 	  			<div class="control-group">
-					<label class="control-label" for="inputEventName"><s:text name="i18n.global.event.name" /></label>
+					<label class="control-label" for="inputEventId">Id</label>
+					<div class="controls">
+						<s:textfield id="inputEventId" placeholder="${bookedEvent.id}" disabled="true" />
+					</div>					
+				</div>
+	  			<div class="control-group">
+					<label class="control-label" for="inputEventName">Nom de l'evenement</label>
 					<div class="controls">
 						<s:textfield id="inputEventName" placeholder="${bookedEvent.name}" disabled="true" />
+					</div>					
+				</div>
+	  			<div class="control-group">				
+					<label class="control-label" for="inputEventDescription"><s:text name="Description" /></label>
+					<div class="controls">
+						<s:textarea id="inputEventDescription" placeholder="${bookedEvent.description}" disabled="true" />
 					</div>
 				</div>
+				<div class="control-group">
+					<div class="controls">
+						<a class="btn" onclick="bookingStep();" ><s:text name="i18n.global.subscribe"></s:text></a>
+					</div>
+				</div>
+				
 			</div>    		
     	</fieldset>
-		<fieldset id="userInformations">
-    		<legend><s:text name="i18n.global.user.inofrmations"></s:text> :</legend>
-    		<form class="form-horizontal">
-				<div class="control-group">
-					<label class="control-label" for="inputFirstName"><s:text name="i18n.global.firstname" /></label>
-					<div class="controls">
-						<s:textfield  id="inputFirstName" placeholder="${getText('i18n.global.firstname')}" disabled="true"/>
-					</div>
-				</div>
-				<div class="control-group">
-					<label class="control-label" for="inputLastName"><s:text name="i18n.global.lastname" /></label>
-					<div class="controls">
-						<s:textfield id="inputLastName" placeholder="${getText('i18n.global.lastname')}" disabled="true" />
-					</div>
-				</div>
-				<div class="control-group">
-					<label class="control-label" for="inputEmail"><s:text name="i18n.global.email" /></label>
-					<div class="controls">
-						<s:textfield id="inputEmail" placeholder="${getText('i18n.global.email')}" disabled="true"/>
-					</div>
-				</div>
-				<div class="control-group">
-					<div class="controls">
-						<a class="btn"><s:text name="i18n.global.subscribe"></s:text></a>
-					</div>
-				</div>
-			</form>
-  		</fieldset>
 	</div>
 	<jsp:include page="/includes/footer.jsp"></jsp:include>
+	<script type="text/javascript">
+	function bookingStep(){
+		$("#paymentMethodForm").submit();			
+	}
+	</script>
 </body>
 </html>

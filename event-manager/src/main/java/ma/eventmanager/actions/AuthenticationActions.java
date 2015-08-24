@@ -3,10 +3,14 @@ package ma.eventmanager.actions;
 import java.util.Collection;
 import java.util.Iterator;
 
+import ma.eventmanager.entitys.User;
+
+import org.apache.struts2.ServletActionContext;
 import org.apache.struts2.convention.annotation.Action;
 import org.apache.struts2.convention.annotation.Namespace;
 import org.apache.struts2.convention.annotation.Result;
 import org.apache.struts2.convention.annotation.ResultPath;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -32,8 +36,7 @@ public class AuthenticationActions extends ActionSupport
 //        for (Iterator it = authorities.iterator(); it.hasNext();) {
 //            SimpleGrantedAuthority authority = (SimpleGrantedAuthority) it.next();
 //            System.out.println("Role: " + authority.getAuthority());
-//        }
- 
+//        } 
 		
 		if (error != null) {
 			error = "Invalid username and password!";

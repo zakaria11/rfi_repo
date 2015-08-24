@@ -59,3 +59,6 @@ function validateForm(target){
 	return isValidflag;
 }
 
+printTicket = function(){
+	window.location = contextPath+'/event/printTicket';
+};

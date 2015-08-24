@@ -13,7 +13,7 @@
 		<div class="row">
 			<a href="<%=request.getContextPath()%>/event/list" >
 				<div class="thumbnail tile tile-orange">
-           			<h1><s:text name="i18n.global.eveents" /></h1>
+           			<h1><s:text name="i18n.global.events" /></h1>
            			<img src="<%=request.getContextPath()%>/img/Daily_Calendar_Day_14_64.png" class="img-rounded" />
 				</div>
 			</a>

@@ -30,7 +30,7 @@
 	                <tr>
 	                  <td><s:property value="id"/></td>
 	                  <td><s:property value="date"/></td>
-	                  <td><s:property value="price"/></td>
+	                  <td><s:property value="price"/> DH</td>
 	                  <td><s:property value="name"/></td>
 	                  <td><s:property value="description"/></td>
 	                  <td class="span2" style="text-align: center">
@@ -89,7 +89,7 @@
 				unloading();
 			}
 		});*/
-		window.location.href = contextPath+'/event/booking?eventId='+eventId;
+		window.location.href = contextPath+'/event/initBooking?eventId='+eventId;
 	}
 	function del(id){
 		$.ajax({

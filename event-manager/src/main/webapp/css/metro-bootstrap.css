@@ -12,6 +12,7 @@
 	background-color: #2e8bcc;
 	border: 0;
 	margin: 22px;
+	
 }
 
 .thumbnail.tile h1,.thumbnail.tile h2,.thumbnail.tile h3,.thumbnail.tile h4,.thumbnail.tile h5,.thumbnail.tile h6
@@ -66,12 +67,7 @@
 .thumbnail.tile.tile-yellow {
 	background-color: #ffc40d
 }
-h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
-    color: inherit;
-    font-family: "Segoe UI Light","Helvetica Neue","Segoe UI","Segoe WP",sans-serif;
-    font-weight: 100;
-    line-height: 1.1;
-}
+
 .thumbnail.tile.tile-orange {
 	background-color: #f09609
 }

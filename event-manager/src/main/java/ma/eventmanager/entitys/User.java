@@ -1,10 +1,15 @@
 package ma.eventmanager.entitys;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 
 @Entity
 public class User
@@ -17,7 +22,7 @@ public class User
 	private String name;
 	
 	@Column
-	private String login;
+	private String username;
 	
 	@Column
 	private String password;
@@ -28,8 +33,16 @@ public class User
 	@Column
 	private String phone;
 
-	@Column
-	private String pofileId;
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "user")
+	private Set<UserRole> userRole = new HashSet<UserRole>(0);
+	
+	
+	public User(){}
+
+	public User(String username, String password){
+		this.username = username;
+		this.password = password;
+	}
 
 	public Integer getId()
 	{
@@ -51,14 +64,15 @@ public class User
 		this.name = name;
 	}
 
-	public String getLogin()
+
+	public String getUsername()
 	{
-		return login;
+		return username;
 	}
 
-	public void setLogin(String login)
+	public void setUsername(String username)
 	{
-		this.login = login;
+		this.username = username;
 	}
 
 	public String getPassword()
@@ -89,6 +103,16 @@ public class User
 	public void setPhone(String phone)
 	{
 		this.phone = phone;
+	}
+
+	public Set<UserRole> getUserRole()
+	{
+		return userRole;
+	}
+
+	public void setUserRole(Set<UserRole> userRole)
+	{
+		this.userRole = userRole;
 	}
 	
 	

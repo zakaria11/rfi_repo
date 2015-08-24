@@ -10,8 +10,11 @@
 		<property name="hibernate.connection.pool_size">1</property>
 		<property name="hibernate.hbm2ddl.auto">create</property>
 		<property name="hibernate.current_session_context_class">thread</property>
+		<mapping class="ma.eventmanager.entitys.Profile"/>
 		<mapping class="ma.eventmanager.entitys.Event"/>
 		<mapping class="ma.eventmanager.entitys.Room"/>
 		<mapping class="ma.eventmanager.entitys.User"/>
+		<mapping class="ma.eventmanager.entitys.Subscription"/>
+		<mapping class="ma.eventmanager.entitys.UserRole"/>
 	</session-factory>
 </hibernate-configuration>
