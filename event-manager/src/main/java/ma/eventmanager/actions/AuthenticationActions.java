@@ -20,63 +20,44 @@ import com.opensymphony.xwork2.ActionSupport;
 
 @Namespace("/")
 @ResultPath(value = "/")
-public class AuthenticationActions extends ActionSupport
-{
+public class AuthenticationActions extends ActionSupport{
 	
 	private String logout;
 	private String error;
 	private String msg;
 
 	@Action(value = "login", results = {@Result(name="success",location="/login.jsp")})
-	public String login(){
-//		UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-//        System.out.println("username: " + userDetails.getUsername());
-//        System.out.println("password: " + userDetails.getPassword());
-//        Collection<SimpleGrantedAuthority> authorities = (Collection<SimpleGrantedAuthority>) userDetails.getAuthorities();
-//        for (Iterator it = authorities.iterator(); it.hasNext();) {
-//            SimpleGrantedAuthority authority = (SimpleGrantedAuthority) it.next();
-//            System.out.println("Role: " + authority.getAuthority());
-//        } 
-		
-		if (error != null) {
-			error = "Invalid username and password!";
+	public String login(){		
+		if(error != null) {
+			error = "nom d'utilisateur ou mot de passe incorrect!";
 		}
- 
-		if (logout != null) {
-			msg = "You've been logged out successfully";
+		if(logout != null) {
+			msg = "Vous avez été déconnecté avec succès";
 		}
         return SUCCESS;
 	}
 
-	public String getLogout()
-	{
+	public String getLogout(){
 		return logout;
 	}
 
-	public void setLogout(String logout)
-	{
+	public void setLogout(String logout){
 		this.logout = logout;
 	}
 
-	public String getError()
-	{
+	public String getError(){
 		return error;
 	}
 
-	public void setError(String error)
-	{
+	public void setError(String error){
 		this.error = error;
 	}
 
-	public String getMsg()
-	{
+	public String getMsg(){
 		return msg;
 	}
 
-	public void setMsg(String msg)
-	{
+	public void setMsg(String msg){
 		this.msg = msg;
-	}
-	
-	
+	}	
 }

@@ -13,19 +13,6 @@ function showEventsEditPopUp(){
     });
 }
 function initBooking(eventId){
-	/*loading();
-	$.ajax({
-		url : contextPath+'/event/booking',
-		method  : 'POST',
-		data : {eventId:eventId},
-		success : function(){
-			unloading();
-			
-		},
-		error : function(){
-			unloading();
-		}
-	});*/
 	window.location.href = contextPath+'/event/booking?eveetId='+eventId;
 }
 
@@ -60,5 +47,5 @@ function validateForm(target){
 }
 
 printTicket = function(){
-	window.location = contextPath+'/event/printTicket';
+	window.location = contextPath+'/print/printTicket';
 };

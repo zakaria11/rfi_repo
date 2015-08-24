@@ -7,41 +7,52 @@
 <html lang="en">
   <head>
 	<jsp:include page="/includes/header.jsp"></jsp:include>
-	<script type="text/javascript">
-	</script>
-  </head>
-  <body>
-  	<jsp:include page="/includes/head_menu.jsp"></jsp:include>
+	<script type="text/javascript"></script>
+	<style type="text/css">
+      body {
+        padding-top: 40px;
+        padding-bottom: 40px;
+        background-color: #f5f5f5;
+      }
+
+      .form-signin {
+        max-width: 300px;
+        padding: 19px 29px 29px;
+        margin: 0 auto 20px;
+        background-color: #fff;
+        border: 1px solid #e5e5e5;
+        -webkit-border-radius: 5px;
+           -moz-border-radius: 5px;
+                border-radius: 5px;
+        -webkit-box-shadow: 0 1px 2px rgba(0,0,0,.05);
+           -moz-box-shadow: 0 1px 2px rgba(0,0,0,.05);
+                box-shadow: 0 1px 2px rgba(0,0,0,.05);
+      }
+      .form-signin .form-signin-heading,
+      .form-signin .checkbox {
+        margin-bottom: 10px;
+      }
+      .form-signin input[type="text"],
+      .form-signin input[type="password"] {
+        font-size: 16px;
+        height: auto;
+        margin-bottom: 15px;
+        padding: 7px 9px;
+      }
+    </style>
+	</head>
+	<body>
+  	<%-- <jsp:include page="/includes/head_menu.jsp"></jsp:include> --%>
     <div class="container" id="main_container">
- 		<h2>Login with Username and Password</h2>
- 
-			<div class="error"><s:property value="error"/></div>
-			<div class="msg"><s:property value="msg"/></div>
- 
-		<form name='loginForm'
-		  action="<c:url value='j_spring_security_check' />" method='POST'>
- 
-		  <table>
-			<tr>
-				<td>User:</td>
-				<td><input type='text' name='username' value=''></td>
-			</tr>
-			<tr>
-				<td>Password:</td>
-				<td><input type='password' name='password' /></td>
-			</tr>
-			<tr>
-				<td colspan='2'><input name="submit" type="submit"
-					value="submit" /></td>
-			</tr>
-		  </table>
- 
-		  <input type="hidden" name="${_csrf.parameterName}"
-			value="${_csrf.token}" />
- 
+      		<form class="form-signin" name='loginForm' action="<c:url value='j_spring_security_check' />" method='POST'>
+      		<h2 class="form-signin-heading">Authentification</h2>			
+				<input id="inputUsername" class="input-block-level" placeholder="Utilisateur" type='text' name='username' value=''>
+				<input id="inputPassword" class="input-block-level" placeholder="Mot de passe :" type='password' name='password' />
+				<input class="btn btn-large btn-primary" name="submit" type="submit" value="submit" />
+		 		<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" /> 
+		  		<div ><s:property value="msg"/></div>
+   				<div class="error"><s:property value="error"/></div>
 		</form>
- 		
-   			<div class="error"><s:property value="errorNotification" /></div>
     </div>
     <div id="modalContainer"></div>
 	<jsp:include page="/includes/footer.jsp"></jsp:include>
