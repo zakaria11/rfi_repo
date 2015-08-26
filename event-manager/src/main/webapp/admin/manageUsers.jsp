@@ -11,7 +11,7 @@
   </head>
   <body>
   	<jsp:include page="/includes/head_menu.jsp"></jsp:include>
-    <div class="container" id="main_container">
+    <div class="container center" id="main_container">
     	<table id="grid"></table>
 		<div id="navGrid"></div>
    		<div class="error"><s:property value="errorNotification" /></div>
@@ -22,23 +22,14 @@
 	jQuery("#grid").jqGrid({
 		url : contextPath+'/user/list',
 		datatype : "json",
-		colNames : [ 'ID', 'nom', 'mail' ],
-		colModel : [ {
-			name : 'id',
-			key : true,
-			index : 'id',
-			width : 40,
-			editable : false
-		}, {
-			name : 'name',
-			key : true,
-			width : 200,
-			editable : true
-		}, {
-			name : 'email',
-			width : 300,
-			editable : true
-		}, ],
+		colNames : [ 'ID', 'nom', 'Login','Mot de passe','Mail','Téléphone' ],
+		colModel : [ {name : 'id',key : true,index : 'id',width : 40, editable : false}, 
+		             {name : 'name',key : true,width : 100,editable : true},
+		             {name : 'username',width : 100,editable : true},
+		             {name : 'mail',width : 120,editable : true},
+		             {name : 'phone',width : 100,editable : true},
+		             {name : 'password',width : 440,editable : true,editable : false}
+		           ],
 		rowNum : 50,
 		width : 700,
 		height : 700,
@@ -47,21 +38,11 @@
 		sortname : 'id',
 		viewrecords : true,
 		sortorder : "desc",
-		jsonReader : {
-			repeatitems : false
-		},
-		prmNames : {
-			addoper : "add",
-			deloper : "del",
-			editoper : "edit",
-		},
+		jsonReader : { repeatitems : false},
+		prmNames : { addoper : "add", deloper : "del", editoper : "edit"},
 		caption : "liste des utilisateurs",
-		height : '65%',
-		width : '100%',
-		jsonReader : {
-			repeatitems : false,
-			root : "list"
-		},
+		height : '65%',width : '100%',
+		jsonReader : {repeatitems : false, root : "list"}
 
 	});
 

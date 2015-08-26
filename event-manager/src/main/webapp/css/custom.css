@@ -37,3 +37,8 @@
 .error{
 	color: red;
 }
+
+.center,.ui-jqgrid {
+	margin-left: auto;
+	margin-right: auto;
+}
