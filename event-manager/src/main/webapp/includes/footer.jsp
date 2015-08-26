@@ -12,9 +12,18 @@
 -->
 <!-- Placed at the end of the document so the pages load faster -->
 <script src="<%=request.getContextPath()%>/js/jquery-1.9.1.js"></script>
+<script src="<%=request.getContextPath()%>/js/jquery-ui-1.10.2.custom.js"></script>
 <script src="<%=request.getContextPath()%>/js/bootstrap.js"></script>
 <script src="<%=request.getContextPath()%>/js/bootstrap-datepicker.js"></script>
 <script src="<%=request.getContextPath()%>/js/jquery.dataTables-1.10.7.js"></script>
 <script src="<%=request.getContextPath()%>/js/DT_bootstrap.js"></script>
 <script src="<%=request.getContextPath()%>/js/common.js"></script>
+
+
+<script src="<%=request.getContextPath()%>/js/i18n/grid.locale-fr.js"></script>
+<script type="text/javascript">
+	$.jgrid.no_legacy_api = true;
+	$.jgrid.useJSON = true;
+</script>
+<script src="<%=request.getContextPath()%>/js/jquery.jqGrid.src.js" type="text/javascript"></script>	
 

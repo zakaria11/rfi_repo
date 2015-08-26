@@ -44,14 +44,14 @@
 	<body>
   	<%-- <jsp:include page="/includes/head_menu.jsp"></jsp:include> --%>
     <div class="container" id="main_container">
-      		<form class="form-signin" name='loginForm' action="<c:url value='j_spring_security_check' />" method='POST'>
+      	<form class="form-signin" name='loginForm' action="<c:url value='j_spring_security_check' />" method='POST'>
       		<h2 class="form-signin-heading">Authentification</h2>			
-				<input id="inputUsername" class="input-block-level" placeholder="Utilisateur" type='text' name='username' value=''>
-				<input id="inputPassword" class="input-block-level" placeholder="Mot de passe :" type='password' name='password' />
-				<input class="btn btn-large btn-primary" name="submit" type="submit" value="submit" />
-		 		<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" /> 
-		  		<div ><s:property value="msg"/></div>
-   				<div class="error"><s:property value="error"/></div>
+			<input id="inputUsername" class="input-block-level" placeholder="Utilisateur" type='text' name='username' value=''>
+			<input id="inputPassword" class="input-block-level" placeholder="Mot de passe :" type='password' name='password' />
+			<input class="btn btn-large btn-primary" name="submit" type="submit" value="Valider" />
+			<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" /> 
+		  	<div ><s:property value="msg"/></div>
+   			<div class="error"><s:property value="error"/></div>
 		</form>
     </div>
     <div id="modalContainer"></div>

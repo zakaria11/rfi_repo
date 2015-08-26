@@ -17,7 +17,7 @@
            			<img src="<%=request.getContextPath()%>/img/Daily_Calendar_Day_14_64.png" class="img-rounded" />
 				</div>
 			</a>
-			<a href="#" >
+			<a href="<%=request.getContextPath()%>/admin/managerDashBoard.jsp" >
 				<div class="thumbnail tile tile-blue">
            			<h1><s:text name="i18n.global.configuation" /></h1>
            			<img src="<%=request.getContextPath()%>/img/Settings_Work_Tool_64.png" class="img-rounded" />

@@ -26,4 +26,8 @@ public interface EventManagerDao {
 
 	public void addUser(String login,String password,List<String> roles);
 
+	Integer getUsersCount();
+
+	List<User> getUsers(int offset, Integer rows);
+
 }

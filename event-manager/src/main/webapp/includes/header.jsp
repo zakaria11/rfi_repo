@@ -13,6 +13,9 @@
 <link href="<%=request.getContextPath()%>/css/DT_bootstrap.css" rel="stylesheet">
 <link href="<%=request.getContextPath()%>/css/metro-bootstrap.css" rel="stylesheet">
 <link href="<%=request.getContextPath()%>/css/custom.css" rel="stylesheet">
+<link href="<%=request.getContextPath()%>/css/jquery-ui.css" rel="stylesheet"/>
+<link href="<%=request.getContextPath()%>/css/ui.jqgrid.css" rel="stylesheet" type="text/css" media="screen" />
+
 <style>
 body {
   padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */

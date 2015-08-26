@@ -88,4 +88,8 @@
 	<!-- Packages scan des beans -->
 	<context:component-scan base-package="ma.eventmanager.dao.impl" />	
 	
+	
+	<bean id="applicationInitialization" class="ma.eventmanager.service.ApplicationInitialization">
+		<property name="eventManagerDao" ref="eventManagerDaoImpl" />
+	</bean>
 </beans>

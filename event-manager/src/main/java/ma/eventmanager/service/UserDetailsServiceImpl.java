@@ -21,8 +21,6 @@ public class UserDetailsServiceImpl implements UserDetailsService{
 	private EventManagerDao eventManagerDao;
 	
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException{
-		eventManagerDao.addUser("zakaria", "zakaria",new ArrayList<String>(Arrays.asList("ROLE_EVENT_ADMIN")));
-		eventManagerDao.addUser("borne", "borne",new ArrayList<String>(Arrays.asList("BORNE_ROLE")));
 
 		User user = eventManagerDao.getUsers(username);
 		List<GrantedAuthority> authorities = buildUserAuthority(user.getUserRole());

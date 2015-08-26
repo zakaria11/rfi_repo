@@ -2,6 +2,9 @@ package ma.eventmanager.dao.impl;
 
 import java.util.List;
 
+import org.hibernate.Query;
+import org.hibernate.Session;
+import org.springframework.dao.support.DataAccessUtils;
 import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Repository;
@@ -55,6 +58,23 @@ public class EventManagerDaoImpl extends HibernateDaoSupport implements EventMan
 			getHibernateTemplate().save(new UserRole(user,role));
 		}
 
+	}
+
+	public Integer getUsersCount(){
+		return DataAccessUtils.intResult(getHibernateTemplate().find("SELECT count(*) FROM User"));
+	}
+
+	public List<User> getUsers(int offset, Integer rows)
+	{
+		Session session = getHibernateTemplate().getSessionFactory().getCurrentSession();
+		session.beginTransaction();
+		Query query = session.createQuery("FROM User");
+		query.setFirstResult(offset);
+		query.setMaxResults(rows);
+		List<User> list = (List<User>) query.list();
+		session.flush();
+		session.close();
+		return list;
 	}
 
 }
