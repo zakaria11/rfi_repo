@@ -22,8 +22,8 @@ public class Subscription{
 	@Column
 	private String userId;
 
-	@Column
-	private String clientId;
+	@ManyToOne
+	private Client client;
 	
 	@Column
 	private Date subscriptionDate;
@@ -52,7 +52,15 @@ public class Subscription{
 		this.event = event;
 	}
 
-	
+	public Client getClient()
+	{
+		return client;
+	}
+
+	public void setClient(Client client)
+	{
+		this.client = client;
+	}
 
 	public String getUserId()
 	{
@@ -64,15 +72,7 @@ public class Subscription{
 		this.userId = userId;
 	}
 
-	public String getClientId()
-	{
-		return clientId;
-	}
-
-	public void setClientId(String clientId)
-	{
-		this.clientId = clientId;
-	}
+	
 
 	public Date getSubscriptionDate()
 	{

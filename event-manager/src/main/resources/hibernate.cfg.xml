@@ -13,6 +13,7 @@
 		<mapping class="ma.eventmanager.entitys.Profile"/>
 		<mapping class="ma.eventmanager.entitys.Event"/>
 		<mapping class="ma.eventmanager.entitys.Room"/>
+		<mapping class="ma.eventmanager.entitys.Client"/>
 		<mapping class="ma.eventmanager.entitys.User"/>
 		<mapping class="ma.eventmanager.entitys.Subscription"/>
 		<mapping class="ma.eventmanager.entitys.UserRole"/>
