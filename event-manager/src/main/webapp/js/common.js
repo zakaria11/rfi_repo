@@ -49,3 +49,17 @@ function validateForm(target){
 printTicket = function(){
 	window.location = contextPath+'/print/printTicket';
 };
+lineBreakFmatter = function(cellvalue, options, rowObject ){
+	return cellvalue.replace(/\s/,'<br />');
+}
+
+userRoleFormatter = function(cellvalue, options, rowObject){
+	var ulDiv = '<ul>';
+	$.each( cellvalue, function( k,v ){
+		ulDiv+= '<li>';
+		ulDiv+= v.role;
+		ulDiv+= '</li>';
+	});
+	ulDiv += '</ul>';
+	return ulDiv;
+} 

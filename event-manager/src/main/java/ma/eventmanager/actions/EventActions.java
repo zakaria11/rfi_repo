@@ -2,10 +2,11 @@ package ma.eventmanager.actions;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
+
+import ma.evenetmanager.criteria.CriteriaModel;
+import ma.eventmanager.constant.Constants;
 import ma.eventmanager.dao.EventManagerDao;
 import ma.eventmanager.entitys.Event;
 import ma.eventmanager.entitys.Subscription;
@@ -20,27 +21,24 @@ import org.apache.struts2.convention.annotation.Result;
 import org.apache.struts2.convention.annotation.ResultPath;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessResourceFailureException;
-import org.springframework.security.core.context.SecurityContextHolder;
-
-import com.opensymphony.xwork2.ActionSupport;
-
 
 
 @Namespace("/event")
 @ResultPath(value = "/")
 @ParentPackage("json-default")
-public class EventActions extends ActionSupport	{
+public class EventActions extends AbstractAction{
 	
 	private static final long serialVersionUID = 8397678142447406483L;
 	private List<Event> list= new ArrayList<Event>();
-	private Integer eventId;
-	private Event bookedEvent;
-	private Map<String,String> paymentMethods;
 	private Event event;
 	private String errorNotification;
-	private String paymentMethod;
 	private static Logger logger = Logger.getLogger(EventActions.class);
 	
+	//Event fields	
+	private Integer id;
+	private String name;
+	private String description;
+	private String state;
 	
 	@Autowired private EventManagerDao eventManagerDao;
 	private Subscription subscription;
@@ -49,7 +47,7 @@ public class EventActions extends ActionSupport	{
 	@Action(value = "list", results = {@Result(name="list",location="/event/list.jsp")})
 	public String  list() {
 		try{
-			list = eventManagerDao.listEvents();			
+			list = eventManagerDao.listEvents(0,Constants.DEFAULT_ROWS_NUM);				
 			return "list";
 		}catch(DataAccessResourceFailureException e){
 			e.printStackTrace();
@@ -57,6 +55,38 @@ public class EventActions extends ActionSupport	{
 			return "list";
 		}
 	}
+
+	
+	private List<CriteriaModel> usedSearchFields(){
+		List<CriteriaModel> criterias = new ArrayList<CriteriaModel>();
+		criterias.add(new CriteriaModel("name",getName()));
+		criterias.add(new CriteriaModel("description",getDescription()));
+		criterias.add(new CriteriaModel("state",getState()));
+		
+		return criterias;
+	}
+
+
+	@Action(value = "listJson", results = { @Result(name = "success", type = "json", params = {"root", "list" }) })
+	public String listJson() throws IOException{
+		int offset;
+		try {
+			offset = (rows) * (page - 1);
+		} catch (NullPointerException e) {
+			offset = 0;
+			rows = Constants.DEFAULT_ROWS_NUM;
+		}
+
+		if(get_search() != null && get_search().equals("true")){
+			list = eventManagerDao.listEvents(offset, rows,usedSearchFields());
+		}else{
+			list = eventManagerDao.listEvents(offset, rows);			
+		}
+		records = eventManagerDao.getEventsCount();
+		total = (int) Math.ceil((double) records / (double) rows);	
+		return SUCCESS;
+	}
+	
 	
 	@Action(value = "add", results = {@Result  (name = "success", type = "json")})
 	public String add() throws IOException{
@@ -67,71 +97,18 @@ public class EventActions extends ActionSupport	{
 
 	@Action(value = "del", results = {@Result  (name = "success", type = "json")})
 	public String del() throws IOException{
-		eventManagerDao.deleteEvent(eventId);
+		eventManagerDao.deleteEvent(id);
 		ProjectHelper.sendObjectAsJsonResponse(null,ServletActionContext.getResponse());
 		return null;
 	}
 
-	@Action(value = "initEdit", results = {@Result(name="edit",location="/event/edit.jsp")})
-	public String initEdit(){
-		event = eventManagerDao.retreivEvent(eventId);
-		ServletActionContext.getRequest().getSession().setAttribute("editEvent", event);
-		return "edit";
-	}
 	
 	@Action(value = "edit", results = {@Result(name = "success", type = "json")})
 	public String edit() throws IOException{
-		Event e= (Event) ServletActionContext.getRequest().getSession().getAttribute("editEvent");
+		Event e = (Event) ServletActionContext.getRequest().getSession().getAttribute("editEvent");
 		event.setId(e.getId());
 		eventManagerDao.updateEvent(event);
 		ProjectHelper.sendObjectAsJsonResponse(null,ServletActionContext.getResponse());
-		return null;
-	}
-	
-	
-	@Action(value = "initBooking", results = {@Result(name="initBookingSuccess",location="/event/bookingPage.jsp")})
-	public String initBooking(){
-		bookedEvent= eventManagerDao.retreivEvent(eventId);
-		ServletActionContext.getRequest().getSession().setAttribute("bookedEvent", bookedEvent);
-		paymentMethods = ProjectHelper.parseMap(getText("global.paymentMethods"));
-		eventManagerDao.listEvents();
-		return "initBookingSuccess";
-	}
-
-	@Action(value = "booking", results = {
-		@Result(name="initBookingUsingCash",location="/event/initBookingUsingCash.jsp"),
-		@Result(name="initBookingByLDAP",location="/event/initBookingByLDAP.jsp"),
-		@Result(name="initBookingByMsCard",location="/event/initBookingByMsCard.jsp")
-	})
-	public String booking(){
-		logger.debug("Selected paymentMethod : "+paymentMethod);
-		bookedEvent = (Event)ServletActionContext.getRequest().getSession().getAttribute("bookedEvent");
-		subscription = new Subscription();
-		subscription.setEvent(bookedEvent);
-		subscription.setType(paymentMethod);
-		
-		//TODO get user form context
-	    ServletActionContext.getRequest().getSession().getAttribute("user");
-	    subscription.setUserId(SecurityContextHolder.getContext().getAuthentication().getName());
-		subscription.setType(paymentMethod);
-		subscription.setSubscriptionDate(new Date());
-		eventManagerDao.saveSubscription(subscription);
-		ServletActionContext.getRequest().getSession().setAttribute("subscription",subscription);
-		
-		
-		if("CASH".equals(paymentMethod) || "CR_CARD".equals(paymentMethod)){			
-			return "initBookingUsingCash";
-		}else if("LIST".equals(paymentMethod)){
-			return "initBookingByLDAP";			
-		}else if("MS_CARD".equals(paymentMethod)){
-			return "initBookingByMsCard";
-		}
-		return null;
-	}
-
-	@Action(value = "printTicket", results = {@Result(name = "success", type = "json")})	
-	public String printTicket(){
-		//TODO jasperreport impl
 		return null;
 	}
 
@@ -142,81 +119,69 @@ public class EventActions extends ActionSupport	{
 	public void setList(List<Event> list) {
 		this.list = list;
 	}
-	public Integer getEventId()
-	{
-		return eventId;
-	}
-	public void setEventId(Integer eventId)
-	{
-		this.eventId = eventId;
-	}
-	public Event getBookedEvent()
-	{
-		return bookedEvent;
-	}
-	public void setBookedEvent(Event bookedEvent)
-	{
-		this.bookedEvent = bookedEvent;
-	}
-	public Map<String, String> getPaymentMethods()
-	{
-		return paymentMethods;
+
+	public Integer getId(){
+		return id;
 	}
 
-	public void setPaymentMethods(Map<String, String> paymentMethods)
-	{
-		this.paymentMethods = paymentMethods;
+	public void setId(Integer id){
+		this.id = id;
 	}
-	public Event getEvent()
-	{
+
+
+	public Event getEvent(){
 		return event;
 	}
-	public void setEvent(Event event)
-	{
+	public void setEvent(Event event){
 		this.event = event;
 	}
 
-	public EventManagerDao getEventDao()
-	{
+	public EventManagerDao getEventDao(){
 		return eventManagerDao;
 	}
 
-	public void setEventDao(EventManagerDao eventDao)
-	{
+	public void setEventDao(EventManagerDao eventDao){
 		this.eventManagerDao = eventDao;
 	}
 
-	public String getErrorNotification()
-	{
+	public String getErrorNotification(){
 		return errorNotification;
 	}
 
-	public void setErrorNotification(String errorNotification)
-	{
+	public void setErrorNotification(String errorNotification){
 		this.errorNotification = errorNotification;
 	}
 
-	public String getPaymentMethod()
-	{
-		return paymentMethod;
-	}
-
-	public void setPaymentMethod(String paymentMethod)
-	{
-		this.paymentMethod = paymentMethod;
-	}
-
-	public Subscription getSubscription()
-	{
+	public Subscription getSubscription(){
 		return subscription;
 	}
 
-	public void setSubscription(Subscription subscription)
-	{
+	public void setSubscription(Subscription subscription){
 		this.subscription = subscription;
 	}
-	
-	
 
+	public String getName(){
+		return name;
+	}
+
+	public void setName(String name){
+		this.name = name;
+	}
+
+	public String getDescription(){
+		return description;
+	}
+
+	public void setDescription(String description){
+		this.description = description;
+	}
+
+	public String getState(){
+		return state;
+	}
+
+	public void setState(String state){
+		this.state = state;
+	}
 	
 }

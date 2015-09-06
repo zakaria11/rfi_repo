@@ -20,6 +20,19 @@ public class Room{
 	
 	@Column
 	private String state;
+	
+	public Room(){}
+
+	public Room(String name, String description, String state)
+	{
+		super();
+		this.name = name;
+		this.description = description;
+		this.state = state;
+	}
+
+
+
 
 	public Integer getId()
 	{

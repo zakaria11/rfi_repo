@@ -19,17 +19,16 @@
     <div id="modalContainer"></div>
 	<jsp:include page="/includes/footer.jsp"></jsp:include>
 	<script type="text/javascript">
-	 var grid = jQuery("#grid").jqGrid({
-		url : contextPath+'/user/list',
+	var grid = jQuery("#grid").jqGrid({
+		url : contextPath+'/client/list',
 		datatype : "json",
-		colNames : [ 'ID', 'nom', 'Login','Mail','Rôls','Téléphone','Mot de passe'],
-		colModel : [ {name : 'id',key : true,index : 'id',width : 40, editable : false,search:false}, 
-		             {name : 'name',key : true,width : 100,editable : true,searchoptions:{sopt:['eq','ne','le','lt','gt','ge']}},
-		             {name : 'username',width : 100,editable : true},
-		             {name : 'mail',width : 120,editable : true},
-		             {name : 'userRole',width : 170,editable : true,formatter:userRoleFormatter},
-		             {name : 'phone',width : 100,editable : true},
-		             {name : 'password',width : 440,editable : true}
+		colNames : [ 'Id', 'Nom', 'Prénom','CNE','CIN','Rôle'],
+		colModel : [ {name : 'id',key : true,index : 'id',width : 100, editable : false,search:false}, 
+		             {name : 'firstName',key : true,width : 100,editable : true},
+		             {name : 'lastName',width : 100,editable : true},
+		             {name : 'cne',width : 120,editable : true},
+		             {name : 'cin',width : 100,editable : true},
+		             {name : 'roleId',width : 100,editable : true}
 		           ],
 		rowNum : 50,
 		width : 700,
@@ -41,23 +40,23 @@
 		sortorder : "desc",
 		jsonReader : { repeatitems : false},
 		prmNames : { addoper : "add", deloper : "del", editoper : "edit"},
-		caption : "liste des clients",
+		caption : "liste des Clients",
 		height : '65%',width : '100%',
 		jsonReader : {repeatitems : false, root : "list"}
 
 	});
 
-	 grid.jqGrid('navGrid', '#navGrid', {
+	grid.jqGrid('navGrid', '#navGrid', {
 		edit : true,
 		add : true,
 		del : true,
 		search : false
 	}, 
-	{url : contextPath+"/user/edit"}, 
-	{url : contextPath+"/user/add"}, 
-	{url : contextPath+"/user/del"}, {});
-	 
-	 grid.jqGrid('filterToolbar',{searchOperators : true});
+	{url : contextPath+"/client/edit"}, 
+	{url : contextPath+"/client/add"}, 
+	{url : contextPath+"/client/del"}, {});
+	
+	grid.jqGrid('filterToolbar',{searchOperators : true});
 	</script>
   </body>
 </html>

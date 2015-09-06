@@ -1,17 +1,13 @@
 package ma.eventmanager.entitys;
 
 import java.util.Date;
-import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 
 
 @Entity
@@ -36,12 +32,33 @@ public class Event {
 	@Column
 	private String state;
 
-	@ManyToMany(fetch = FetchType.EAGER)
-	@JoinTable(name = "event_room", joinColumns = { 
-		@JoinColumn(name = "event_id") }, inverseJoinColumns = { @JoinColumn(name = "room_id") 
-	})
-	private Set<Room> rooms;
+	@Column
+	private Integer places;
+
+	@ManyToOne
+	private Room room;
+
 	
+	
+	
+	public Event(){}
+	
+	
+
+	public Event(Date date, Double price, String name, String description, String state, Integer places, Room room)
+	{
+		super();
+		this.date = date;
+		this.price = price;
+		this.name = name;
+		this.description = description;
+		this.state = state;
+		this.places = places;
+		this.room = room;
+	}
+
+
+
 	public Integer getId()
 	{
 		return id;
@@ -106,6 +123,34 @@ public class Event {
 	{
 		this.state = state;
 	}
+
+	
+	public Integer getPlaces()
+	{
+		return places;
+	}
+
+	public void setPlaces(Integer places)
+	{
+		this.places = places;
+	}
+
+
+
+
+	public Room getRoom()
+	{
+		return room;
+	}
+
+
+
+	public void setRoom(Room room)
+	{
+		this.room = room;
+	}
+
+
 
 	@Override
 	public String toString()

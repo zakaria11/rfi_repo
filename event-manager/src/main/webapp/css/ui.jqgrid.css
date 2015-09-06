@@ -195,6 +195,7 @@ tr.ui-search-toolbar select {
 	border-bottom-width: 1px;
 	border-bottom-color: inherit;
 	border-bottom-style: solid;
+	white-space: normal !important;
 }
 
 .ui-jqgrid tr.jqgfirstrow td {

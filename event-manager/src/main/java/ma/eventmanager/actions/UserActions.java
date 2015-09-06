@@ -1,13 +1,14 @@
 package ma.eventmanager.actions;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
+
+import ma.evenetmanager.criteria.CriteriaModel;
+import ma.eventmanager.constant.Constants;
 import ma.eventmanager.dao.EventManagerDao;
 import ma.eventmanager.entitys.User;
-import ma.eventmanager.util.ProjectHelper;
-
-import org.apache.struts2.ServletActionContext;
 import org.apache.struts2.convention.annotation.Action;
 import org.apache.struts2.convention.annotation.Namespace;
 import org.apache.struts2.convention.annotation.ParentPackage;
@@ -15,91 +16,77 @@ import org.apache.struts2.convention.annotation.Result;
 import org.apache.struts2.convention.annotation.ResultPath;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.opensymphony.xwork2.ActionSupport;
-
 @Namespace("/user")
 @ResultPath(value = "/")
 @ParentPackage("json-default")
-public class UserActions extends ActionSupport{
+public class UserActions extends AbstractAction{
 	
 	@Autowired private EventManagerDao eventManagerDao;
 	
-	private static final Integer DEFAULT_ROWS_NUM = 10;
-	private Integer records;
-	private Integer rows;
-	private int total;
-	private Integer page = 0;
-	private String oper;
+	
+	//User data
+	private Integer id;
+	private String name;
+	private String username;
+	private String password;
+	private String mail;
+	private String phone;
 
 	private List<User> list;
 
 	
 	@Action(value = "list", results = { @Result(name = "success", type = "json", params = {"root", "list" }) })
 	public String list() throws IOException{
-
 		int offset;
 		try {
 			offset = (rows) * (page - 1);
 		} catch (NullPointerException e) {
 			offset = 0;
-			rows = DEFAULT_ROWS_NUM;
+			rows = Constants.DEFAULT_ROWS_NUM;
 		}
 
 		records = eventManagerDao.getUsersCount();
-		list = eventManagerDao.getUsers(offset, rows);
+		if(get_search() != null && get_search().equals("true")){
+			list = eventManagerDao.getUsers(offset, rows,usedSearchFields());
+		}else{
+			list = eventManagerDao.getUsers(offset, rows);			
+		}
 		total = (int) Math.ceil((double) records / (double) rows);	
 		return SUCCESS;
 	}
+	
+	@Action(value = "add", results = { @Result(name = "success", type = "json") })
+	public String add() {
+		User user = new User();
+		user.setId(null);
+		user.setName(name);
+		user.setUsername(username);
+		user.setPassword(password);
+		user.setMail(mail);
+		user.setPhone(phone);
+		eventManagerDao.addUser(user);
+		return SUCCESS;
 
+	}
+	
+	@Action(value = "edit", results = { @Result(name = "success", type = "json") })
+	public String edit() {
+		User user = new User();
 
-	public Integer getRecords(){
-		return records;
+		user.setId(id);
+		user.setName(name);
+		user.setUsername(username);
+		user.setPassword(password);
+		user.setMail(mail);
+		user.setPhone(phone);
+
+		eventManagerDao.editUser(user);
+		return SUCCESS;
+
 	}
 
 
-	public void setRecords(Integer records){
-		this.records = records;
-	}
 
-
-	public Integer getRows(){
-		return rows;
-	}
-
-
-	public void setRows(Integer rows){
-		this.rows = rows;
-	}
-
-
-	public int getTotal(){
-		return total;
-	}
-
-
-	public void setTotal(int total){
-		this.total = total;
-	}
-
-
-	public Integer getPage(){
-		return page;
-	}
-
-
-	public void setPage(Integer page){
-		this.page = page;
-	}
-
-
-	public String getOper(){
-		return oper;
-	}
-
-
-	public void setOper(String oper){
-		this.oper = oper;
-	}
 
 
 	public List<User> getList()
@@ -112,7 +99,81 @@ public class UserActions extends ActionSupport{
 	{
 		this.list = list;
 	}
+
 	
+	public String getId()
+	{
+		return id+"";
+	}
+
+	public void setId(String id)
+	{
+		if (id.equals("_empty")) {
+			return ;
+		} else {
+			this.id = Integer.parseInt(id);
+		}
+	}
+
+	public String getName()
+	{
+		return name;
+	}
+
+	public void setName(String name)
+	{
+		this.name = name;
+	}
+
+	public String getUsername()
+	{
+		return username;
+	}
+
+	public void setUsername(String username)
+	{
+		this.username = username;
+	}
+
+	public String getPassword()
+	{
+		return password;
+	}
+
+	public void setPassword(String password)
+	{
+		this.password = password;
+	}
+
+	public String getMail()
+	{
+		return mail;
+	}
+
+	public void setMail(String mail)
+	{
+		this.mail = mail;
+	}
+
+	public String getPhone()
+	{
+		return phone;
+	}
+
+	public void setPhone(String phone)
+	{
+		this.phone = phone;
+	}
 	
+	public List<CriteriaModel> usedSearchFields(){
+		
+		List<CriteriaModel> criterias = new ArrayList<CriteriaModel>();
+		criterias.add(new CriteriaModel("name",getName()));
+		criterias.add(new CriteriaModel("username",getUsername()));
+		criterias.add(new CriteriaModel("mail",getMail()));
+		criterias.add(new CriteriaModel("phone",getPhone()));
+		
+		return criterias;
+	}
 	
 }

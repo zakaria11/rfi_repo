@@ -29,6 +29,23 @@ public class Client
 	private String roleId;
 	
 	
+	
+	public Client(){}
+	
+	
+
+	public Client(String firstName, String lastName, String cne, String cin, String roleId)
+	{
+		super();
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.cne = cne;
+		this.cin = cin;
+		this.roleId = roleId;
+	}
+
+
+
 	public Integer getId()
 	{
 		return id;

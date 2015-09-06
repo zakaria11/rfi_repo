@@ -92,4 +92,21 @@
 	<bean id="applicationInitialization" class="ma.eventmanager.service.ApplicationInitialization">
 		<property name="eventManagerDao" ref="eventManagerDaoImpl" />
 	</bean>
+	
+
+	<!-- 	
+	<wss:binding url="/eventmanagerservices">
+		<wss:service>
+            <ws:service bean="/eventmanagerWs"/>
+        </wss:service>
+    </wss:binding>
+
+    Web service methods
+    <bean id="eventmanagerWs" class="ma.eventmanager.webservices.api.EventManagerServices">
+    	<property name="eventManagerBo" ref="eventManagerBo" />
+    </bean>
+    
+    <bean id="eventManagerBo" class="ma.eventmanager.webservices.impl.EventManagerServicesImpl" />
+ 	-->
+ 
 </beans>

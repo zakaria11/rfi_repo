@@ -4076,7 +4076,7 @@ input[type="submit"].btn.btn-mini {
 }
 
 .nav-tabs > li {
-  margin-bottom: -1px;
+  margin-bottom: 1px;
 }
 
 .nav-tabs > li > a {

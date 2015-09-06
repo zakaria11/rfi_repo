@@ -13,10 +13,29 @@
 		<div class="row">
 			<a href="manageUsers.jsp" >
 				<div class="thumbnail tile tile-orange">
-           			<h1>Utilisateurs</h1>
-           			<img src="<%=request.getContextPath()%>/img/????" class="img-rounded" />
+           			<h1>Rôles et Utilisateurs</h1>
+           			<img src="<%=request.getContextPath()%>/img/users6.png" class="img-rounded" />
 				</div>
 			</a>
+			<a href="manageRoom.jsp" >
+				<div class="thumbnail tile tile-blue">
+           			<h1>Salles</h1>
+           			<img src="<%=request.getContextPath()%>/img/buildings5.png" class="img-rounded" />
+				</div>
+			</a>
+			<a href="manageEvent.jsp" >
+				<div class="thumbnail tile tile-lime">
+           			<h1>Événements</h1>
+           			<img src="<%=request.getContextPath()%>/img/calendar146.png" class="img-rounded" />
+				</div>
+			</a>
+			<a href="manageClient.jsp" >
+				<div class="thumbnail tile tile-magenta">
+           			<h1>Clients</h1>
+           			<img src="<%=request.getContextPath()%>/img/business12.png" class="img-rounded" />
+				</div>
+			</a>
+			
     	</div>
     </div> 
 	<jsp:include page="/includes/footer.jsp"></jsp:include>
