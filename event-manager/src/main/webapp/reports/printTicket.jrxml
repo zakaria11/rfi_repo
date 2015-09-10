@@ -12,7 +12,7 @@
 			<staticText>
 				<reportElement x="0" y="10" width="108" height="15" uuid="bc2a48bd-505e-4e5d-a3f0-5fb8016a4d03"/>
 				<textElement textAlignment="Center"/>
-				<text><![CDATA[UM6PXXX]]></text>
+				<text><![CDATA[UM6P]]></text>
 			</staticText>
 		</band>
 	</pageHeader>
@@ -23,7 +23,7 @@
 				<text><![CDATA[id]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="49" y="4" width="34" height="14" uuid="216243c0-9b33-4636-b5c3-f82e503f8841"/>
+				<reportElement x="46" y="4" width="34" height="14" uuid="216243c0-9b33-4636-b5c3-f82e503f8841"/>
 				<textFieldExpression><![CDATA[$F{id}]]></textFieldExpression>
 			</textField>
 		</band>

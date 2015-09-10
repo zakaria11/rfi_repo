@@ -21,7 +21,7 @@ public class UserRole
 	@Column(unique = true, nullable = false)
 	private Integer userRoleId;
 	
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "username")
 	private User user;
 	

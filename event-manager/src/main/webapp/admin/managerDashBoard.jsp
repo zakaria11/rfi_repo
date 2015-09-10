@@ -29,7 +29,7 @@
            			<img src="<%=request.getContextPath()%>/img/calendar146.png" class="img-rounded" />
 				</div>
 			</a>
-			<a href="manageClient.jsp" >
+			<a href="manageClient.jsp">
 				<div class="thumbnail tile tile-magenta">
            			<h1>Clients</h1>
            			<img src="<%=request.getContextPath()%>/img/business12.png" class="img-rounded" />

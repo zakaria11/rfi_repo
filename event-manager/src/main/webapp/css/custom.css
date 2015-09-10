@@ -65,3 +65,8 @@
 	border-bottom-width: 0px; 
 	padding-bottom: 0px;	
 }
+
+.tile-large.super-tile.hyper-tile{
+  width: 900px;
+	
+}

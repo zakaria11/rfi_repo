@@ -51,7 +51,7 @@ printTicket = function(){
 };
 lineBreakFmatter = function(cellvalue, options, rowObject ){
 	return cellvalue.replace(/\s/,'<br />');
-}
+};
 
 userRoleFormatter = function(cellvalue, options, rowObject){
 	var ulDiv = '<ul>';
@@ -62,4 +62,17 @@ userRoleFormatter = function(cellvalue, options, rowObject){
 	});
 	ulDiv += '</ul>';
 	return ulDiv;
-} 
+};
+
+
+showEvents = function(currentDiv){
+	//	$(".home-tiles").animate({opacity: 'hide', height: 'hide'}, 'fast');
+	// $("#eventsList").animate({opacity: 'show', height: 'show'}, 'fast');
+
+	$("#eventsList").fadeIn("fast",function(){
+		//$(".home-tiles").animate({opacity: 'hide', height: 'hide'}, 'slow');
+		$(".home-tiles").animate({width:"hide",opacity:0},150,"swing");			
+	});
+};
+
+

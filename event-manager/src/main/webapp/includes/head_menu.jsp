@@ -1,26 +1,20 @@
+ <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib prefix="s" uri="/struts-tags"%>
-<div class="navbar navbar-inverse navbar-fixed-top">
-	<div class="navbar-inner">
-		<div class="container">
-			<button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-				<span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span>
-			</button>
-			<a class="brand" href="<%=request.getContextPath()%>/index.jsp">Gestion de billettrie</a>
-			<div class="nav-collapse collapse">
-<!-- 				<ul class="nav">
-					<li class="active"><a href="#">Home</a></li>
-					<li><a href="#about">About</a></li>
-					<li><a href="#contact">Contact</a></li>
-				</ul>
- -->			</div>
-				<div class="navbar-form pull-right">
-				<ul class="nav">
-					<li>
-						<a href="<%=request.getContextPath()%>/j_spring_security_logout">Logout</a>
-					</li>
-				</ul>
-								
-				</div>
-		</div>
-	</div>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
+    
+<h1 class="tile-area-title">Gestion de billettrie</h1>
+<div class="tile-area-controls">
+    <button class="image-button icon-right bg-transparent fg-white bg-hover-dark no-border"><span class="sub-header no-margin text-light">
+    <sec:authorize access="isAuthenticated()">
+    	<sec:authentication property="principal.username" /> 
+	</sec:authorize>
+	<sec:authorize access="!isAuthenticated()">
+	    Invité
+	</sec:authorize>
+	
+    </span> <span class="icon mif-user"></span></button>
+    <%-- <button class="square-button bg-transparent fg-white bg-hover-dark no-border" onclick="showCharms('#charmSearch')"><span class="mif-search"></span></button> --%>
+    <button class="square-button bg-transparent fg-white bg-hover-dark no-border" onclick="showCharms('#charmSettings')"><span class="mif-cog"></span></button>
+    <a href="<%=request.getContextPath()%>/j_spring_security_logout" class="square-button bg-transparent fg-white bg-hover-dark no-border"><span class="mif-switch"></span></a>
+    
 </div>

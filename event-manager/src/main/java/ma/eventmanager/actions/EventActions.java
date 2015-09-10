@@ -44,7 +44,7 @@ public class EventActions extends AbstractAction{
 	private Subscription subscription;
 	
 	
-	@Action(value = "list", results = {@Result(name="list",location="/event/list.jsp")})
+	@Action(value = "choice", results = {@Result(name="home",location="/event/choice.jsp")})
 	public String  list() {
 		try{
 			list = eventManagerDao.listEvents(0,Constants.DEFAULT_ROWS_NUM);				
@@ -52,9 +52,23 @@ public class EventActions extends AbstractAction{
 		}catch(DataAccessResourceFailureException e){
 			e.printStackTrace();
 			this.errorNotification = "Error accured during listing the events : DataAccessResourceFailureException";
-			return "list";
+			return "choice";
 		}
 	}
+	
+	@Action(value = "administration", results = {@Result(name="administration",location="/event/administration.jsp")})
+	public String  administration() {
+		try{
+			list = eventManagerDao.listEvents(0,Constants.DEFAULT_ROWS_NUM);				
+			return "list";
+		}catch(DataAccessResourceFailureException e){
+			e.printStackTrace();
+			this.errorNotification = "Error accured during listing the events : DataAccessResourceFailureException";
+			return "administration";
+		}
+	}
+
+	
 
 	
 	private List<CriteriaModel> usedSearchFields(){

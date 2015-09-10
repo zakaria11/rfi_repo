@@ -21,7 +21,7 @@ public class ApplicationInitialization{
 	@PostConstruct
 	public void initApp() throws Exception {
 		eventManagerDao.addUser(new User("zakaria", "zakaria"),new ArrayList<String>(Arrays.asList("ROLE_EVENT_ADMIN","ROLE_B")));
-		eventManagerDao.addUser(new User("zakaria", "zakaria"),new ArrayList<String>(Arrays.asList("BORNE_ROLE","USER_ROLE","ROLE_A")));
+		eventManagerDao.addUser(new User("ev", "ev"),new ArrayList<String>(Arrays.asList("BORNE_ROLE","USER_ROLE","ROLE_A")));
 		
 		//Add rooms
 		Room roomA = new Room("Salle A","desc salle A : also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishi","ACTIVATED");
