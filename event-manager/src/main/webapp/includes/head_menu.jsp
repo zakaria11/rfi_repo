@@ -2,7 +2,7 @@
 <%@ taglib prefix="s" uri="/struts-tags"%>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
     
-<h1 class="tile-area-title">Gestion de billettrie</h1>
+<h1 class="tile-area-title"><a href="<%=request.getContextPath()%>/index.jsp" style="color: white;">Gestion de billettrie</a></h1>
 <div class="tile-area-controls">
     <button class="image-button icon-right bg-transparent fg-white bg-hover-dark no-border"><span class="sub-header no-margin text-light">
     <sec:authorize access="isAuthenticated()">

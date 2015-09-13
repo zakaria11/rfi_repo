@@ -4,6 +4,7 @@ public class CriteriaModel{
 
 	private String fieldName;
 	private String fieldValue;
+	private String type; 
 	
 	
 	

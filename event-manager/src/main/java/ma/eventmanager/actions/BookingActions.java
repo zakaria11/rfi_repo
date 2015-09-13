@@ -86,6 +86,14 @@ public class BookingActions extends ActionSupport{
 		return "success";
 	}
 
+	
+	@Action(value = "identification", results = {@Result(name="identification",location="/event/identificationStep.jsp")})
+	public String identification(){
+		//init identification step
+		System.out.println(eventId);
+		return "identification";
+	}
+	
 	public Integer getEventId()
 	{
 		return eventId;

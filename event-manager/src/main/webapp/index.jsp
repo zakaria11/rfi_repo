@@ -120,7 +120,7 @@
         <div class="tile-group double">
             <span class="tile-group-title">Other</span>
             <div class="tile-container">
-                <a href="<%=request.getContextPath()%>/admin/managerDashBoard.jsp" class="tile bg-teal fg-white" data-role="tile">
+                <a href="<%=request.getContextPath()%>/event/administration.jsp" class="tile bg-teal fg-white" data-role="tile">
                     <div class="tile-content iconic">
                         <span class="icon mif-pencil"></span>
                     </div>
@@ -134,8 +134,6 @@
                 </a>
             </div>
         </div>
-        
-        
     </div>
 
 

@@ -162,12 +162,11 @@
                     <table class="dataTable border bordered" data-role="datatable" data-auto-width="false">
                         <thead>
                         <tr>
-                            <td class="sortable-column sort-asc">Id</td>
-                            <td class="sortable-column" style="width: 160px">Date</td>
-                            <td class="sortable-column" style="width: 90px">Prix</td>
-                            <td class="sortable-column" style="width: 70px">Salle</td>
-                            <td class="sortable-column" style="width: 240px">Name</td>
-                            <td class="sortable-column">Description</td>
+		                  <th>Id</th>
+		                  <th>Nom</th>
+		                  <th>Prénom</th>
+		                  <th>CNE</th>
+		                  <th>CIN</th>
                         </tr>
                         </thead>
                         	<tbody>
