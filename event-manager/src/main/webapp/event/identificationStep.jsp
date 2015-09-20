@@ -42,8 +42,6 @@
 	
 	<jsp:include page="/includes/header.jsp"></jsp:include>
 
-    <script></script>
-
     <script>
         $(function(){
             $.StartScreen();
@@ -67,45 +65,6 @@
             });
         });
      
-        var table= $('#clientsSearchResultTable').DataTable({
-    	    ordering: true,
-    	    "drawCallback": function(settings) {}
-    	});
-    	
-
-    	function searchClient(){
-    		$("#goToPaymentStep").animate({width:"hide",opacity:'show'},150,"swing");	
-    		var fields = $('#searchCriteriaSection').find('input');
-    		console.log(fields.serializeArray());
-    		var criteriaList = $(fields).serializeArray();
-    		criteriaList.push({ name : '_search' , value : 'true'});
-    		
-    		$.ajax({
-    			url : contextPath+'/client/list',
-    			method  : 'POST',
-    			data : criteriaList,
-    			dataType : "json",
-    			success : function(searchResult){
-    				table.clear();
-    				$(searchResult).each(function(index, element) {
-    					row = searchResult[index];
-    					table.row.add([row.id,row.firstName,row.lastName,row.cne,row.cin]);
-    				});
-    				table.draw();
-    				
-    				var trs = $("tr");
-    				trs.click(function() {
-    					selectedId = $(this).find("td").first().html();
-    					trs.removeClass("hovered");
-    					$(this).addClass("hovered");
-    					$("#goToPaymentStep").animate({width:"show",opacity:'show'},150,"swing");
-    				});
-    			},
-    			error : function(){
-    				table.clear();
-    			}
-    		});
-    	};
     </script>
 </head>
 <body style="overflow-y: hidden;">
@@ -164,7 +123,7 @@
 					</div>					
 					
                     <hr class="thin bg-grayLighter">
-                    <table aria-describedby="DataTables_Table_0_info" role="grid" id="DataTables_Table_0" class="dataTable border bordered no-footer hovered" data-role="datatable" data-auto-width="false">
+                    <table id="clientsSearchResultTable" class="dataTable border bordered no-footer hovered">
                     	<thead>
 								<tr>
 				                  <th>Id</th>
@@ -184,7 +143,7 @@
 		<div class="tile-group double">
             <span class="tile-group-title">Other</span>
             <div class="tile-container">
-                <a id="goToPaymentStep" href="<%=request.getContextPath()%>/eeeeee" class="tile bg-teal fg-white disabled" data-role="tile" style="display: none;">
+                <a id="goToPaymentStep" href="#" class="tile bg-teal fg-white disabled" data-role="tile" style="display: none;" onclick="goToPaymentStep();">
                     <div class="tile-content iconic">
                         <span class="icon mif-cog"></span>
                     </div>
@@ -206,4 +165,50 @@
         </div>      
     </div>
 </body>
+<script>
+var selectedClientId = -7;
+var table = $('#clientsSearchResultTable').DataTable({
+    ordering: true,
+    "drawCallback": function(settings) {}
+});
+
+
+function searchClient(){
+	console.log(table);
+	var fields = $('#searchCriteriaSection').find('input');
+	console.log(fields.serializeArray());
+	var criteriaList = $(fields).serializeArray();
+	criteriaList.push({ name : '_search' , value : 'true'});
+	
+	$.ajax({
+		url : contextPath+'/client/list',
+		method  : 'POST',
+		data : criteriaList,
+		dataType : "json",
+		success : function(searchResult){
+			table.clear();
+			$(searchResult).each(function(index, element) {
+				row = searchResult[index];
+				table.row.add([row.id,row.firstName,row.lastName,row.cne,row.cin]);
+			});
+			table.draw();
+			
+			var trs = $("tr");
+			trs.click(function() {
+				selectedClientId = $(this).find("td").first().html();
+				trs.removeClass("hovered");
+				$(this).addClass("hovered");
+				$("#goToPaymentStep").animate({width:"show",opacity:'show'},150,"swing");
+			});
+		},
+		error : function(){
+			table.clear();
+		}
+	});
+	
+	goToPaymentStep = function(){
+		window.location = contextPath+'/booking/paymentChoice?selectedClientId='+selectedClientId;
+	};
+};
+</script>
 </html>

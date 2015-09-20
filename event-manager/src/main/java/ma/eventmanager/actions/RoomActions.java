@@ -8,6 +8,7 @@ import ma.evenetmanager.criteria.CriteriaModel;
 import ma.eventmanager.constant.Constants;
 import ma.eventmanager.dao.EventManagerDao;
 import ma.eventmanager.entitys.Room;
+import ma.eventmanager.model.DataTableResponseObject;
 import ma.eventmanager.util.ProjectHelper;
 
 import org.apache.struts2.ServletActionContext;
@@ -27,13 +28,13 @@ public class RoomActions extends AbstractAction{
 	@Autowired private EventManagerDao eventManagerDao;
 	private String responseFormat;
 	private List<Room> list= new ArrayList<Room>();
-
+	private DataTableResponseObject resp = new DataTableResponseObject();
 	private String name;
 	private String description;
 	private String state;
 	
 	
-	@Action(value = "list", results = { @Result(name = "success", type = "json", params = {"root", "list" }) })
+	@Action(value = "list", results = { @Result(name = "success", type = "json", params = {"root", "resp" }) })
 	public String list() throws IOException{
 		int offset;
 		try {
@@ -47,8 +48,10 @@ public class RoomActions extends AbstractAction{
 		
 		if(get_search() != null && get_search().equals("true")){
 			list = eventManagerDao.getRooms(offset, rows,usedSearchFields());
+			resp.setData(list);
 		}else{
 			list = eventManagerDao.getRooms(offset, rows);
+			resp.setData(list);
 		}
 		total = (int) Math.ceil((double) records / (double) rows);
 		
@@ -69,6 +72,14 @@ public class RoomActions extends AbstractAction{
 		}
 		
 		return SUCCESS;
+	}
+	
+	@Action(value = "add", results = { @Result(name = "success", type = "json") })
+	public String add() throws IOException{
+		Room room = new Room(name,description,state);
+		Integer addState = eventManagerDao.addRoom(room);
+		ProjectHelper.sendObjectAsJsonResponse(addState,ServletActionContext.getResponse());
+		return null;
 	}
 
 
@@ -152,6 +163,16 @@ public class RoomActions extends AbstractAction{
 	public void setState(String state)
 	{
 		this.state = state;
+	}
+
+	public DataTableResponseObject getResp()
+	{
+		return resp;
+	}
+
+	public void setResp(DataTableResponseObject resp)
+	{
+		this.resp = resp;
 	}
 	
 	

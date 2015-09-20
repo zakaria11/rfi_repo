@@ -37,7 +37,7 @@ public interface EventManagerDao {
 
 	public List<Room> getRooms(int offset, Integer rows);
 
-	public void addRoom(Room room);
+	public Integer addRoom(Room room);
 
 	public Integer getEventsCount();
 

@@ -1,5 +1,6 @@
 package ma.eventmanager.dao.impl;
 
+import java.io.Serializable;
 import java.util.List;
 
 import org.hibernate.Criteria;
@@ -112,8 +113,8 @@ public class EventManagerDaoImpl extends HibernateDaoSupport implements EventMan
 		return list;
 	}
 
-	public void addRoom(Room room){
-		getHibernateTemplate().save(room);		
+	public Integer addRoom(Room room){
+		 return (Integer) getHibernateTemplate().save(room);		
 	}
 
 	public Integer getEventsCount(){

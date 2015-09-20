@@ -89,8 +89,8 @@ public class BookingActions extends ActionSupport{
 	
 	@Action(value = "identification", results = {@Result(name="identification",location="/event/identificationStep.jsp")})
 	public String identification(){
-		//init identification step
-		System.out.println(eventId);
+		bookedEvent= eventManagerDao.retreivEvent(eventId);
+		ServletActionContext.getRequest().getSession().setAttribute("bookedEvent", bookedEvent);
 		return "identification";
 	}
 	

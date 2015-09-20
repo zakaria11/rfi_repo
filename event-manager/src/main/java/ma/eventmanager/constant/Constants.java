@@ -1,5 +1,5 @@
 package ma.eventmanager.constant;
 
 public class Constants{
-	public static final Integer DEFAULT_ROWS_NUM = 10;
+	public static final Integer DEFAULT_ROWS_NUM = 1000;
 }
