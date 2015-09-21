@@ -68,4 +68,6 @@
 <!-- Fav and touch icons -->
 <script>
 var contextPath = '<%=request.getContextPath()%>';
+var roomsList = null;
+var adminSelectedEvent = null;
 </script>

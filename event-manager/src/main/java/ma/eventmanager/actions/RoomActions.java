@@ -2,13 +2,16 @@ package ma.eventmanager.actions;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import ma.evenetmanager.criteria.CriteriaModel;
 import ma.eventmanager.constant.Constants;
 import ma.eventmanager.dao.EventManagerDao;
 import ma.eventmanager.entitys.Room;
 import ma.eventmanager.model.DataTableResponseObject;
+import ma.eventmanager.model.Select2Model;
 import ma.eventmanager.util.ProjectHelper;
 
 import org.apache.struts2.ServletActionContext;
@@ -56,18 +59,22 @@ public class RoomActions extends AbstractAction{
 		total = (int) Math.ceil((double) records / (double) rows);
 		
 		if("SEMICOLON_MAP".equals(responseFormat)){
-			StringBuilder sb = new StringBuilder();
+			Map rooms = new HashMap<String, String>();
 			for(Room room:list){
-				sb.append(room.getId());
-				sb.append(":");
-				sb.append(room.getName());
-				sb.append(";");
+				rooms.put(room.getId()+"",room.getName());
 			}
-			if(sb.length() > 0){				
-				sb.deleteCharAt(sb.length() -1);
+			ProjectHelper.sendObjectAsJsonResponse(rooms,ServletActionContext.getResponse());
+			return null;
+		}
+		if("SELECT2_MAP".equals(responseFormat)){
+			List<Select2Model> modelList = new ArrayList<Select2Model>();
+			for(Room room:list){
+				Select2Model model = new Select2Model();
+				model.setId(room.getId()+"");
+				model.setText(room.getName());
+				modelList.add(model);
 			}
-			
-			ProjectHelper.sendObjectAsJsonResponse(sb,ServletActionContext.getResponse());
+			ProjectHelper.sendObjectAsJsonResponse(modelList,ServletActionContext.getResponse());
 			return null;
 		}
 		

@@ -205,14 +205,35 @@ showEvents = function(currentDiv){
 
 initCreateEntity = function(entityName){
 	var dialog = $('#'+entityName+'AddDialog').children().data('dialog');
+	if(entityName == 'event'){
+		$.ajax({
+			url: contextPath+'/room/list',
+			data: {responseFormat:'SELECT2_MAP'},
+			success: function(roomList) {
+				console.log($("#roomList"));
+				$.each( roomList, function( key, value ) {
+					$("#roomList").append($('<option></option>').val(value.id).html(value.text));
+				});		
+			},
+			dataType: 'json'
+		});
+	}
     dialog.open();
+};
+
+initEditEntity = function(entityName,entityId){
+
+	//Load entity using entityId
+	
+	//Fill the Edit Popup
+	form = $('#'+entityName+'EditDialog');
 };
 
 createEntity = function(entityName){
 	form = $('#'+entityName+'AddDialog');
 	
 	$.ajax({
-		url : contextPath+'/room/add',
+		url : contextPath+'/'+entityName+'/add',
 		method  : 'POST',
 		data : form.serializeArray(),
 		dataType : "json",
@@ -226,3 +247,59 @@ createEntity = function(entityName){
 		}
 	});
 };
+
+dataTables_Room = function(){
+	$('#roomTable').dataTable({
+		"ajaxSource": contextPath+"/room/list",
+		"columns": [
+		    { "data": "id", "title": "Id" ,"width": "70px"},
+		    { "data": "name", "title": "Name", "width": "140px" },
+		    { "data": "description", "title": "Description"},
+		    { "data": "state", "title": "State"}
+		  ]
+	});
+};
+
+dataTables_Event = function(){
+	
+	 var table = $('#eventTable').dataTable({
+		"ajaxSource": contextPath+"/event/list",
+		"columns": [
+		    { "data": "id", "title": "Id" ,"width": "70px"},
+		    { "data": "date", "title": "Name", "width": "140px" },
+		    { "data": "price", "title": "Prix"},
+		    { "data": "name", "title": "Nom"},
+		    { "data": "description", "title": "Description"},
+		    { "data": "state", "title": "Statut"},
+		    { "data": "places", "title": "Nbr places"},
+		    { "data": "room.name","sDefaultContent": "-", "title": "Salle"}
+		  ]
+	});
+	
+	 var table = $('#eventTable').DataTable();
+	    $('#eventTable tbody').on('click', 'tr', function () {
+	        var data = table.row(this).data();
+	        adminSelectedEvent = data.id;
+	        if(adminSelectedEvent != null){
+	        	$("#eventEditButton b").html(adminSelectedEvent);
+	        	$("#eventEditButton").animate({opacity: 'show', height: 'show'}, 'fast');
+	        }
+	        $("tr").removeClass("selected");
+        	$(this).addClass("selected");
+	    });
+};
+
+updateRooms = function(div){
+	$(div).html('');
+	$.ajax({
+		url: contextPath+'/room/list',
+		data: {responseFormat:'SELECT2_MAP'},
+		success: function(roomList) {
+			$.each( roomList, function( key, value ) {
+				console.log($('<option>').val(value.id).html(value.text));
+				$(div).append($('<option>').val(value.id).html(value.text));
+			});					
+		},
+		dataType: 'json'
+	});
+}
