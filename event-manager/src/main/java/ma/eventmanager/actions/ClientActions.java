@@ -1,5 +1,6 @@
 package ma.eventmanager.actions;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -7,7 +8,12 @@ import ma.evenetmanager.criteria.CriteriaModel;
 import ma.eventmanager.constant.Constants;
 import ma.eventmanager.dao.EventManagerDao;
 import ma.eventmanager.entitys.Client;
+import ma.eventmanager.util.ProjectHelper;
+
+import org.apache.struts2.ServletActionContext;
 import org.apache.struts2.convention.annotation.Action;
+import org.apache.struts2.convention.annotation.InterceptorRef;
+import org.apache.struts2.convention.annotation.InterceptorRefs;
 import org.apache.struts2.convention.annotation.Namespace;
 import org.apache.struts2.convention.annotation.ParentPackage;
 import org.apache.struts2.convention.annotation.Result;
@@ -16,7 +22,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 @Namespace("/client")
 @ResultPath(value = "/")
-@ParentPackage("json-default")
 public class ClientActions extends AbstractAction{
 	
 	//Client filelds
@@ -32,8 +37,8 @@ public class ClientActions extends AbstractAction{
 	private String errorNotification;
 
 
-	@Action(value = "list", results = { @Result(name = "success", type = "json", params = {"root", "list" }) })
-	public String list() {
+	@Action(value = "list")
+	public String list() throws IOException {
 		int offset;
 		try {
 			offset = (rows) * (page - 1);
@@ -49,7 +54,9 @@ public class ClientActions extends AbstractAction{
 		}
 		records = eventManagerDao.getClientsCount();
 		total = (int) Math.ceil((double) records / (double) rows);	
-		return SUCCESS;
+		
+		ProjectHelper.sendObjectAsJsonResponse(list,ServletActionContext.getResponse());
+		return null;
 	}
 
 	public EventManagerDao getEventManagerDao()

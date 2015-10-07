@@ -1,5 +1,6 @@
 package ma.eventmanager.dao;
 
+import java.util.Date;
 import java.util.List;
 
 import ma.evenetmanager.criteria.CriteriaModel;
@@ -8,6 +9,7 @@ import ma.eventmanager.entitys.Event;
 import ma.eventmanager.entitys.Room;
 import ma.eventmanager.entitys.Subscription;
 import ma.eventmanager.entitys.User;
+import ma.eventmanager.model.Attribute;
 
 public interface EventManagerDao {
 
@@ -16,8 +18,6 @@ public interface EventManagerDao {
 	public List<Event> listEvents(int offset, Integer rows);
 
 	public void deleteEvent(Integer eventId);
-
-	public Event retreivEvent(Integer eventId);
 
 	public void updateEvent(Event event);
 
@@ -56,5 +56,20 @@ public interface EventManagerDao {
 	public List<Event> listEvents(int offset, Integer rows, List<CriteriaModel> usedSearchFields);
 
 	public Client retreivClient(Integer selectedClientId);
+
+	public List<Attribute> loadEntity(String entityName, String entityId);
+
+	public Object retrieve(String entityName, String entityId);
+
+	public List<Subscription> loadSubscription(Integer eventId, Integer cleintId);
+
+	public Subscription getSubscriptionById(Integer subscriptionId);
+
+	public void updateSubscription(Subscription subscription);
+
+	public List<Object[]> eventHistory();
+
+	public void addEvents(List<Event> events);
+
 
 }

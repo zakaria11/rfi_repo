@@ -61,14 +61,8 @@ public class EventActions extends AbstractAction{
 	
 	@Action(value = "choice", results = {@Result(name="home",location="/event/choice.jsp")})
 	public String  choice() {
-		try{
-			list = eventManagerDao.listEvents(0,Constants.DEFAULT_ROWS_NUM);				
-			return "list";
-		}catch(DataAccessResourceFailureException e){
-			e.printStackTrace();
-			this.errorNotification = "Error accured during listing the events : DataAccessResourceFailureException";
-			return "choice";
-		}
+		list = eventManagerDao.listEvents(0,Constants.DEFAULT_ROWS_NUM);				
+		return "home";
 	}
 	
 	@Action(value = "administration", results = {@Result(name="administration",location="/event/administration.jsp")})

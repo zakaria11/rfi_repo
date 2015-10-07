@@ -1,6 +1,9 @@
 package ma.eventmanager.dao.impl;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import org.hibernate.Criteria;
@@ -20,12 +23,16 @@ import ma.eventmanager.entitys.Room;
 import ma.eventmanager.entitys.Subscription;
 import ma.eventmanager.entitys.User;
 import ma.eventmanager.entitys.UserRole;
+import ma.eventmanager.model.Attribute;
 
 @Repository
 public class EventManagerDaoImpl extends HibernateDaoSupport implements EventManagerDao{
 
+	private static final String DATEFORMAT = "%Y-%c-%e";
+
 	public void addEvent(Event event){
 		event.setState("ACTIVATED");
+		event.setRemainingPlaces(event.getPlaces());
 		getHibernateTemplate().save(event);		
 	}
 
@@ -45,10 +52,6 @@ public class EventManagerDaoImpl extends HibernateDaoSupport implements EventMan
 		Event event = new Event();
 		event.setId(eventId);
 		getHibernateTemplate().delete(event);
-	}
-
-	public Event retreivEvent(Integer eventId){
-		return getHibernateTemplate().get(Event.class, eventId);
 	}
 
 	public void updateEvent(Event event){
@@ -199,6 +202,63 @@ public class EventManagerDaoImpl extends HibernateDaoSupport implements EventMan
 	public Client retreivClient(Integer selectedClientId){
 		return getHibernateTemplate().get(Client.class, selectedClientId);
 
+	}
+
+	public List<Attribute> loadEntity(String entityName, String entityId){
+		Event entity;
+		List<Attribute> attributes = new ArrayList<Attribute>();
+		
+		if("event".equals(entityName)){
+			entity = (Event) getHibernateTemplate().load(Event.class, Integer.parseInt(entityId));
+			Attribute attr = new Attribute("Id",entity.getId()+"");
+			attributes.add(attr);
+		}
+		
+		return attributes;
+	}
+
+	public Object retrieve(String entityName, String entityId)
+	{
+		Object entity = null;
+		if("event".equals(entityName)){
+			entity = getHibernateTemplate().get(Event.class, Integer.parseInt(entityId));
+		}
+		
+		return entity;	
+	}
+
+
+	public List<Subscription> loadSubscription(Integer eventId, Integer cleintId){
+		return getHibernateTemplate().find("FROM Subscription where event.id = "+eventId+" and client.id = "+cleintId);
+	}
+
+	public Subscription getSubscriptionById(Integer subscriptionId){
+		return getHibernateTemplate().get(Subscription.class, subscriptionId);
+	}
+
+	public void updateSubscription(Subscription subscription){
+		getHibernateTemplate().update(subscription);
+	}
+
+	public List<Object[]> eventHistory()
+	{
+		Calendar c = Calendar.getInstance();
+		c.add(Calendar.DATE, -60);
+		Date from= c.getTime();
+		c.add(Calendar.DATE, +120);
+		Date to = c.getTime();
+		
+		String sqlQuery = "SELECT DATE_FORMAT(date,'"+DATEFORMAT+"'),count(*) FROM Event "
+				+ "WHERE "
+				+ "date BETWEEN ? AND ? "
+				+ "GROUP BY 1";
+		return (List<Object[]>) getHibernateTemplate().find(sqlQuery,from ,to);			
+	}
+
+	public void addEvents(List<Event> events)
+	{
+		getHibernateTemplate().saveOrUpdateAll(events);
+		
 	}
 
 }

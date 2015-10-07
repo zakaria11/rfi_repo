@@ -141,32 +141,46 @@
         </div> 
 
 		<div class="tile-group double">
-            <span class="tile-group-title">Other</span>
+            <span class="tile-group-title">Options</span>
             <div class="tile-container">
-                <a id="goToPaymentStep" href="#" class="tile bg-teal fg-white disabled" data-role="tile" style="display: none;" onclick="goToPaymentStep();">
+                <div id="goToPaymentStep" href="#" class="tile bg-lightRed fg-white disabled" data-role="tile" style="display: none;" onclick="goToPaymentStep();">
                     <div class="tile-content iconic">
-                        <span class="icon mif-cog"></span>
+                        <span class="icon mif-money"></span>
                     </div>
                     <span class="tile-label">Paiement</span>
-                </a>
-                <%-- <a href="<%=request.getContextPath()%>/admin/DashBoard.jsp" class="tile bg-darkGreen fg-white" data-role="tile">
+                </div>
+       			<div class="tile bg-darkBlue fg-white" data-role="tile" onclick="goHome();">
+           			<div class="tile-content iconic">
+						<span class="icon mif-home"></span>
+					</div>
+					<span class="tile-label">Accueil</span>
+				</div>
+				
+				<a href="<%=request.getContextPath()%>/admin/manageEvent.jsp" class="tile bg-teal fg-white" data-role="tile">
                     <div class="tile-content iconic">
-                        <span class="icon mif-chart-pie"></span>
+                        <span class="icon mif-pencil"></span>
+                    </div>
+                    <span class="tile-label">Administration</span>
+                </a>
+                <a href="<%=request.getContextPath()%>/reporting/index.jsp" class="tile bg-darkGreen fg-white" data-role="tile">
+                    <div class="tile-content iconic">
+                        <span class="icon mif-chart-dots"></span>
                     </div>
                     <span class="tile-label">Reporting</span>
                 </a>
-                <div href="#" class="tile-large bg-magenta fg-white" data-role="tile">
-                    <div class="tile-content iconic">
-                        <span class="icon mif-earth mif-ani-ripple mif-ani-fast"></span>
-                    </div>
-                    <span class="tile-label">Reporting</span>
-                </div> --%>
             </div>
         </div>      
     </div>
 </body>
 <script>
 var selectedClientId = -7;
+
+$("#searchCriteriaSection input").keyup(function(event){
+    if(event.keyCode == 13){
+    	searchClient();
+    }
+});
+
 var table = $('#clientsSearchResultTable').DataTable({
     ordering: true,
     "drawCallback": function(settings) {}

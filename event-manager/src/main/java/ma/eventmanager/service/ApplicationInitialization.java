@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 import javax.annotation.PostConstruct;
 
@@ -20,8 +21,8 @@ public class ApplicationInitialization{
 	
 	@PostConstruct
 	public void initApp() throws Exception {
-		eventManagerDao.addUser(new User("zakaria", "zakaria"),new ArrayList<String>(Arrays.asList("ROLE_EVENT_ADMIN","ROLE_B")));
-		eventManagerDao.addUser(new User("ev", "ev"),new ArrayList<String>(Arrays.asList("BORNE_ROLE","USER_ROLE","ROLE_A")));
+		eventManagerDao.addUser(new User("zakaria", "zakaria"),new ArrayList<String>(Arrays.asList("ROLE_EVENT_ADMIN","REPORTING")));
+		eventManagerDao.addUser(new User("ev", "ev"),new ArrayList<String>(Arrays.asList("ROLE_EVENT_ADMIN")));
 		
 		//Add rooms
 		Room roomA = new Room("Salle A","desc salle A : also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishi","ACTIVATED");
@@ -34,17 +35,24 @@ public class ApplicationInitialization{
 		eventManagerDao.addRoom(new Room("Salle F","desc salle F","ACTIVATED"));
 		
 		//Add Events
+		List<Event> events = new ArrayList<Event>();
 		Calendar cal = Calendar.getInstance(); 
 		cal.setTime(new Date()); 
-		eventManagerDao.addEvent(new Event(cal.getTime(), 200D, "Evenet 1", "Desc 1", "A", 22, roomA));
+		events.add(new Event(cal.getTime(), 200D, "Evenet 1", "Desc 1 : also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishi", "A", 22D, roomA));
 		cal.add(Calendar.DATE, 1);
-		eventManagerDao.addEvent(new Event(cal.getTime(), 100D, "Event 2","Desc 2", "A", 100, roomA));
+		events.add(new Event(cal.getTime(), 100D, "Event 2","Desc 2 : Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scramb", "A", 100D, roomA));
 		cal.add(Calendar.DATE, 3);
-		eventManagerDao.addEvent(new Event(cal.getTime(), 20D, "Evenet 3", "Desc 3", "A", 150, roomB));
+		events.add(new Event(cal.getTime(), 20D, "Evenet 3", "Desc 3 : Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scramb", "A", 150D, roomB));
 		cal.add(Calendar.DATE, 8);
-		eventManagerDao.addEvent(new Event(cal.getTime(), 50D, "Evenet 4", "Desc 4", "A", 40, roomB));
+		events.add(new Event(cal.getTime(), 50D, "Evenet 4", "Desc 4 : Sit sint velit at. Vix in invidunt dissentiet, ex eam malis aliquid. Falli mundi democritum te est, an wisi disputando sed. Pri solum facer iracundia at. Duo no latine aperiri.", "A", 40D, roomB));
 		cal.add(Calendar.DATE, 10);
-		eventManagerDao.addEvent(new Event(cal.getTime(), 40D, "Evenet 5", "Desc 5", "A", 40, roomB));
+		events.add(new Event(cal.getTime(), 40D, "Evenet 5", "Desc 5 : Choro definitiones eu usu. Amet nostrud abhorreant per in. Ei pro munere essent, est habeo nostrud electram an. Ad aeque vivendum urbanitas pri, vel dolore principes definitionem an.", "A", 40D, roomB));		
+		
+		for (int i = 0; i < 100; i++){
+			events.add(new Event(cal.getTime(), 40D, "Evenet loop"+i, "Descr "+i+" : Choro definitiones eu usu. Amet nostrud abhorreant per in. Ei pro munere essent, est habeo nostrud electram an. Ad aeque vivendum urbanitas pri, vel dolore principes definitionem an.", "A"+i, i+1D, roomB));
+		}
+		eventManagerDao.addEvents(events);
+		
 		
 		
 		//Add Clients
@@ -60,17 +68,14 @@ public class ApplicationInitialization{
 		eventManagerDao.addClient(new Client("Youssef","Sadik","CNE00010","CIN00010","Etudiant"));
 		eventManagerDao.addClient(new Client("Ali","Youssef","CNE00011","CIN00011","Etudiant"));
 		
+		
 	}
 
-
-	public EventManagerDao getEventManagerDao()
-	{
+	public EventManagerDao getEventManagerDao(){
 		return eventManagerDao;
 	}
 
-
-	public void setEventManagerDao(EventManagerDao eventManagerDao)
-	{
+	public void setEventManagerDao(EventManagerDao eventManagerDao){
 		this.eventManagerDao = eventManagerDao;
 	}
 	

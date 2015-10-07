@@ -49,3 +49,16 @@
 				</div>
 		</div>
 	</form>
+	
+	
+<div id="eventDeleteDialog">
+	<div data-role="dialog" class="padding20" data-close-button="true" data-overlay="true" data-overlay-color="op-dark">
+		<h1>êtes vous sur de vouloir supprimer l'enregistrement</h1>
+		<div>
+			<div class="cell place-right">
+				<!-- <button type="button" class="button primary">Annuler</button> -->
+				<button type="button" class="button alert" onclick="deleteEntity('event',adminSelectedEvent);">Supprimer</button>
+			</div>
+		</div>
+	</div>
+</div>

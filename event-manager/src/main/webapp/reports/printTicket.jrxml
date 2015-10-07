@@ -3,7 +3,14 @@
 	<property name="ireport.zoom" value="2.853116706110003"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
-	<field name="id" class="java.lang.String"/>
+	<field name="subscriptionId" class="java.lang.String"/>
+	<field name="subscriptionType" class="java.lang.String"/>
+	<field name="clientFirstName" class="java.lang.String"/>
+	<field name="clientLastName" class="java.lang.String"/>
+	<field name="subscriptionDate" class="java.lang.String"/>
+	<field name="eventName" class="java.lang.String"/>
+	<field name="roomName" class="java.lang.String"/>
+	<field name="qrCode" class="java.lang.String"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
@@ -17,14 +24,111 @@
 		</band>
 	</pageHeader>
 	<detail>
-		<band height="42" splitType="Stretch">
+		<band height="121" splitType="Stretch">
+			<image>
+				<reportElement x="26" y="87" width="44" height="34" uuid="33008dd1-26a9-4d2a-99fe-de0919aa97f7"/>
+				<imageExpression><![CDATA[com.google.zxing.client.j2se.MatrixToImageWriter.toBufferedImage(
+     new com.google.zxing.qrcode.QRCodeWriter().encode(
+         $F{qrCode},
+         com.google.zxing.BarcodeFormat.QR_CODE, 300, 300))]]></imageExpression>
+			</image>
 			<staticText>
-				<reportElement x="24" y="4" width="22" height="14" uuid="d780fd16-36ab-4e1b-a200-1880952f131b"/>
-				<text><![CDATA[id]]></text>
+				<reportElement x="3" y="0" width="65" height="11" uuid="046e2fcf-c64f-40fc-92ac-1a62cb113ca1"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[souscription N° :]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="46" y="4" width="34" height="14" uuid="216243c0-9b33-4636-b5c3-f82e503f8841"/>
-				<textFieldExpression><![CDATA[$F{id}]]></textFieldExpression>
+				<reportElement x="70" y="0" width="38" height="11" uuid="efba4454-24ba-42f4-8409-b61d829aad27"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{subscriptionId}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="3" y="12" width="40" height="11" uuid="2f34cd6a-d3af-4855-bee2-df12bf98b60a"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Type :]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="53" y="12" width="55" height="11" uuid="774e1cca-1a73-4069-95f8-3ca648d521cb"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{subscriptionType}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="3" y="26" width="40" height="11" uuid="68e6e268-c387-40ff-8de6-9094906da8a8"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Nom :]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="53" y="26" width="55" height="11" uuid="5e8c58b0-3143-465d-918e-d64efb22dc82"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{clientFirstName}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="3" y="39" width="40" height="11" uuid="3370fa93-13e0-42e3-b831-08c8a156fcd2"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Prénom]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="53" y="39" width="55" height="11" uuid="7d0138e6-2cfa-4d39-8c39-de683d33420a"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{clientLastName}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="3" y="50" width="40" height="11" uuid="9e5c49c4-0384-41be-80b5-083f3898186f"/>
+				<textElement>
+					<font size="8" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[Date]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="53" y="50" width="55" height="11" uuid="c3bbc76d-6008-4571-9faa-90a8ce339af6"/>
+				<textElement>
+					<font size="8" isItalic="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{subscriptionDate}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="3" y="61" width="40" height="11" uuid="7d1316fe-ce56-46a7-ae72-bbfb8eae4d32"/>
+				<textElement>
+					<font size="8" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[Événement]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="53" y="61" width="55" height="11" uuid="96b48ee0-b628-4c49-b8a5-d0c32f10c3b0"/>
+				<textElement>
+					<font size="8" isItalic="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{eventName}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="3" y="74" width="40" height="11" uuid="a6d00cee-b594-464e-823b-0141b6d9f2ac"/>
+				<textElement>
+					<font size="8" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[Salle]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="53" y="74" width="55" height="11" uuid="2a63a789-49b8-4a1b-a0ca-c8fbf6dd2c13"/>
+				<textElement>
+					<font size="8" isItalic="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{roomName}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>

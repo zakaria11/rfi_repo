@@ -31,7 +31,34 @@ public class Subscription{
 	@Column
 	private String type;
 	
+	/*
+	 * yes = 1
+	 * no = 0
+	 * */
+	@Column
+	private String assisted;
 	
+	
+	public Subscription(){
+		this.assisted = "0";
+	}
+
+	public Subscription(Event bookedEvent, String paymentMethod, String userId, Client selectedClient, Date date)
+	{
+		this.setEvent(bookedEvent);
+		this.setType(paymentMethod);
+		this.setUserId(userId);
+		this.setClient(selectedClient);
+		this.setSubscriptionDate(date);
+
+	}
+
+	public Subscription(Event event, String cleintId)
+	{
+		this.setEvent(event);
+		this.setClient(client);
+	}
+
 	public Integer getId()
 	{
 		return id;
@@ -92,6 +119,16 @@ public class Subscription{
 	public void setType(String type)
 	{
 		this.type = type;
+	}
+
+	public String getAssisted()
+	{
+		return assisted;
+	}
+
+	public void setAssisted(String assisted)
+	{
+		this.assisted = assisted;
 	}
 
 	

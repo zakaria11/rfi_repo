@@ -1,5 +1,5 @@
 <%@ page pageEncoding="UTF-8"%>
-<%@ taglib prefix="s" uri="/struts-tags"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
 <!DOCTYPE html>
 <html>
@@ -108,17 +108,17 @@
                     <span class="tile-label">Evenements</span>
                 </a>
 
-                <a href="<%=request.getContextPath()%>/event/administration" class="tile bg-lime fg-white" data-role="tile">
+<%--                 <a href="<%=request.getContextPath()%>/event/administration" class="tile bg-lime fg-white" data-role="tile">
                     <div class="tile-content iconic">
                         <span class="icon mif-cogs"></span>
                     </div>
                     <span class="tile-label">Reserver</span>
-                </a>
+                </a> --%>
             </div>
         </div>
 
         <div class="tile-group double">
-            <span class="tile-group-title">Other</span>
+            <span class="tile-group-title">options</span>
             <div class="tile-container">
                 <a href="<%=request.getContextPath()%>/admin/manageEvent.jsp" class="tile bg-teal fg-white" data-role="tile">
                     <div class="tile-content iconic">
@@ -126,9 +126,9 @@
                     </div>
                     <span class="tile-label">Administration</span>
                 </a>
-                <a href="<%=request.getContextPath()%>/admin/DashBoard.jsp" class="tile bg-darkGreen fg-white" data-role="tile">
+                <a href="<%=request.getContextPath()%>/reporting/index.jsp" class="tile bg-darkGreen fg-white" data-role="tile">
                     <div class="tile-content iconic">
-                        <span class="icon mif-shopping-basket"></span>
+                        <span class="icon mif-chart-dots"></span>
                     </div>
                     <span class="tile-label">Reporting</span>
                 </a>

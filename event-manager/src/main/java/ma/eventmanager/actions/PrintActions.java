@@ -17,7 +17,8 @@ import org.apache.struts2.convention.annotation.ResultPath;
 
 import com.opensymphony.xwork2.ActionSupport;
 
-import ma.eventmanager.model.Ticket;
+import ma.eventmanager.entitys.Event;
+import ma.eventmanager.model.TicketRepotBean;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperExportManager;
@@ -37,12 +38,8 @@ public class PrintActions extends ActionSupport{
 	
 		//InputStream input = servletContext.getResourceAsStream("file.txt");
 		ServletContext context = ServletActionContext.getServletContext();	
-
-		
-		Ticket ticketBean = new Ticket();
-		ticketBean.setId("id001");
-		ticketBean.setCreationDate("AAAA");
-		List<Ticket> list = new ArrayList<Ticket>();
+		TicketRepotBean ticketBean = (TicketRepotBean)ServletActionContext.getRequest().getSession().getAttribute("ticketRepotBean");
+		List<TicketRepotBean> list = new ArrayList<TicketRepotBean>();
 		list.add(ticketBean);
 		
 		JRBeanCollectionDataSource jrBean = new JRBeanCollectionDataSource(list);

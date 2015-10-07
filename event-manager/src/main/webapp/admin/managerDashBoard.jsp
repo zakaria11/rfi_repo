@@ -35,6 +35,13 @@
            			<img src="<%=request.getContextPath()%>/img/business12.png" class="img-rounded" />
 				</div>
 			</a>
+
+			<a href="<%=request.getContextPath()%>/reporting/index.jsp">
+				<div class="thumbnail tile tile-magenta">
+           			<h1>Reporting</h1>
+           			<img src="<%=request.getContextPath()%>/img/education20.png" class="img-rounded" />
+				</div>
+			</a>
 			
     	</div>
     </div> 

@@ -55,11 +55,11 @@
                     <hr class="thin bg-grayLighter">
                     <button class="button primary" onclick="initCreateEntity('event')"><span class="mif-plus"></span> Create</button>
                     <%-- <button class="button success" onclick="pushMessage('success')"><span class="mif-play"></span> Start</button> --%>
-                    <button id="eventEditButton" class="button success" onclick="initEditEntity('event',adminSelectedEvent);" style="display: none;"><span class="mif-play"></span> Modifier l'événement n°<b></b></button>
+                    <button id="eventEditButton" class="button success" onclick="initEditEntity('event',adminSelectedEvent);" style="display: none;"><span class="mif-pencil"></span> Modifier l'événement n°<b></b></button>
+                    <button id="eventDeleteButton" class="button alert" onclick="initDeleteEntity('event',adminSelectedEvent);" style="display: none;"><span class="mif-cancel"></span> Supprimer l'événement n°<b></b></button>
                     <%-- <button class="button warning" onclick="pushMessage('warning')"><span class="mif-loop2"></span> Restart</button> --%>
-                    <!-- <button class="button alert" onclick="pushMessage('alert')">Stop all machines</button> -->
                     <hr class="thin bg-grayLighter">
-                    <table id="eventTable" class="dataTable border bordered no-footer hovered"></table>
+                    <table id="eventAdminTable" class="dataTable border bordered no-footer hovered"></table>
    					<div class="error"><s:property value="errorNotification" /></div>
                 </div>
             </div>
@@ -67,7 +67,7 @@
     </div>
     <jsp:include page="/includes/footer.jsp"></jsp:include>
 	<script type="text/javascript">
-		dataTables_Event();
+		dataTables_Event('#eventAdminTable');
 	</script>
 </body>
 </html>

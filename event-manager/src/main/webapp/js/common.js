@@ -222,11 +222,37 @@ initCreateEntity = function(entityName){
 };
 
 initEditEntity = function(entityName,entityId){
-
 	//Load entity using entityId
-	
 	//Fill the Edit Popup
 	form = $('#'+entityName+'EditDialog');
+	alert("Edit___");
+};
+
+initDeleteEntity = function(entityName,entityId){
+	var dialog = $('#'+entityName+'DeleteDialog').children().data('dialog');
+    dialog.open();
+};
+
+deleteEntity = function(entityName,entityId){
+	var dialog = $('#'+entityName+'DeleteDialog').children().data('dialog');
+	$.ajax({
+		url: contextPath+'/entity/delete',
+		data: {
+			entityId:entityId,
+			entityName:entityName
+		},
+		success: function(resp){
+        	$("#"+entityName+"EditButton").animate({opacity: 'hide', height: 'hide'}, 'fast');
+        	$("#"+entityName+"DeleteButton").animate({opacity: 'hide', height: 'hide'}, 'fast');
+        	var table = $('#eventAdminTable').DataTable();
+        	  table.ajax.reload();
+			dialog.close();		
+		},
+		error : function(resp){
+			dialog.close();		
+		},
+		dataType: 'json'
+	});		
 };
 
 createEntity = function(entityName){
@@ -262,7 +288,7 @@ dataTables_Room = function(){
 
 dataTables_Event = function(){
 	
-	 var table = $('#eventTable').dataTable({
+	 var table = $('#eventAdminTable').dataTable({
 		"ajaxSource": contextPath+"/event/list",
 		"columns": [
 		    { "data": "id", "title": "Id" ,"width": "70px"},
@@ -276,17 +302,45 @@ dataTables_Event = function(){
 		  ]
 	});
 	
-	 var table = $('#eventTable').DataTable();
-	    $('#eventTable tbody').on('click', 'tr', function () {
+	 var table = $('#eventAdminTable').DataTable();
+	    $('#eventAdminTable tbody').on('click', 'tr', function () {
 	        var data = table.row(this).data();
 	        adminSelectedEvent = data.id;
 	        if(adminSelectedEvent != null){
 	        	$("#eventEditButton b").html(adminSelectedEvent);
 	        	$("#eventEditButton").animate({opacity: 'show', height: 'show'}, 'fast');
+	        	$("#eventDeleteButton b").html(adminSelectedEvent);
+	        	$("#eventDeleteButton").animate({opacity: 'show', height: 'show'}, 'fast');
 	        }
 	        $("tr").removeClass("selected");
         	$(this).addClass("selected");
 	    });
+};
+
+dataTables_Choice_Event = function(){
+	 var table = $('#eventChoiceTable').dataTable({
+			"ajaxSource": contextPath+"/event/list",
+			"scrollY":"380px",
+	        "scrollCollapse": true,
+			"columns": [
+			    { "data": "id", "title": "Id" ,"width": "70px"},
+			    { "data": "date", "title": "Name", "width": "140px" },
+			    { "data": "price", "title": "Prix"},
+			    { "data": "name", "title": "Nom"},
+			    { "data": "state", "title": "Statut"},
+			    { "data": "places", "title": "Nbr places"},
+			    { "data": "remainingPlaces", "title": "Nbr places restantes"},
+			    { "data": "room.name","sDefaultContent": "-", "title": "Salle"}
+			  ]
+		});
+		
+	 	var table = $('#eventChoiceTable').DataTable();
+	    $('#eventChoiceTable tbody').on('click', 'tr', function () {
+		    var data = table.row(this).data();
+        	$("tr").removeClass("selected");
+        	$(this).addClass("selected");
+        	printEventDetails(data.id);
+		});
 };
 
 updateRooms = function(div){
@@ -302,4 +356,92 @@ updateRooms = function(div){
 		},
 		dataType: 'json'
 	});
+};
+
+goHome = function(){
+	window.location = contextPath+"/index.jsp";
+};
+
+/* reporting */
+
+function getDefaultGraphOptions() {
+	return {
+		seriesDefaults : {
+			renderer : $.jqplot.LineRenderer,
+			rendererOptions : {},
+			markerOptions : {
+				size : 10
+			}
+		},
+		legend : {
+			placement : 'outside',
+			show : true,
+			xoffset : 12,
+			yoffset : 12
+		},
+		title : '',
+		animate : true,
+		animateReplot : true,
+		axes : {
+			xaxis : {
+				tickInterval : 1000 * 60 * 60 * 24,
+				tickOptions : {
+					angle : -50,
+					fontSize : '9pt',
+					formatString : '%Y-%m-%d'
+				},
+				renderer : $.jqplot.DateAxisRenderer,
+				rendererOptions : {
+					tickInset : 0.5
+				},
+				tickRenderer : $.jqplot.CanvasAxisTickRenderer
+			},
+			yaxis : {
+				labelRenderer : $.jqplot.CanvasAxisLabelRenderer,
+				tickOptions : {
+					formatString : '%.8f'
+				},
+				rendererOptions : {
+					tickInset : 0.5
+				}
+			}
+		},
+		cursor : {
+			zoom : true,
+			showTooltip : true,
+			showVerticalLine : true
+		}
+	};
 }
+
+plotGraph = function(target) {
+
+	$.ajax({
+		url : contextPath+"/reporting/eventHistory",
+		dataType : "json",
+		data : '',
+		success : function(response) {
+			//unloading
+		try{
+			options = getDefaultGraphOptions();
+//			if(step == 'month'){
+//				options.axes.xaxis.tickInterval = 1000*60*60*24*30;	
+//			}
+			options.axes.yaxis.tickOptions.formatString = '%d';
+			options.legend.labels = response.labels;
+			options.seriesColors = response.colors;
+			options.legend.location = 'n';
+			options.legend.placement = 'outside';			
+			$.jqplot.config.enablePlugins = true;
+			$.jqplot._noToImageButton = false;
+			//$("#" + target).empty();
+			plot1 = $.jqplot(target,response.seriesData, options);
+		}catch(ex){
+			console.log(ex);
+		}
+		},
+		error : function(errorObject){
+			//unloading
+		}
+	});
+};

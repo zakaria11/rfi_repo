@@ -1,5 +1,4 @@
- <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<%@ taglib prefix="s" uri="/struts-tags"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
     
 <h1 class="tile-area-title"><a href="<%=request.getContextPath()%>/index.jsp" style="color: white;">Gestion de billettrie</a></h1>

@@ -94,6 +94,14 @@
 			<version>1.1</version>
 		</dependency>
 
+
+
+		<dependency>
+			<groupId>ognl</groupId>
+			<artifactId>ognl</artifactId>
+			<version>3.0.12</version>
+		</dependency>
+
 		<!-- Struts -->
 		<dependency>
 			<groupId>org.apache.struts</groupId>
@@ -215,7 +223,13 @@
 			<artifactId>guava</artifactId>
 			<version>18.0</version>
 		</dependency>
-					
+				
+		<dependency>
+			<groupId>net.sf.barcode4j</groupId>
+			<artifactId>barcode4j</artifactId>
+			<version>2.1</version>
+		</dependency>
+							
 					
 		<dependency>
 	  		<groupId>com.sun.xml.ws</groupId>
@@ -244,7 +258,20 @@
 				<artifactId>stax-ex</artifactId>
 				</exclusion>
 			</exclusions>
-		</dependency>		
+		</dependency>
+		
+		<dependency>
+			<groupId>com.google.zxing</groupId>
+			<artifactId>core</artifactId>
+			<version>2.2</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>com.google.zxing</groupId>
+			<artifactId>javase</artifactId>
+			<version>2.2</version>
+		</dependency>
+		
 					
 	</dependencies>
 
@@ -263,16 +290,6 @@
 					<httpConnector><port>8088</port></httpConnector>
 				</configuration>
 			</plugin>
-			<!--
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<version>2.3.1</version>
-				<configuration>
-					<source>1.6</source>
-					<target>1.6</target>
-				</configuration>
-			</plugin>-->		
 		</plugins>
 	</build>
 </project>

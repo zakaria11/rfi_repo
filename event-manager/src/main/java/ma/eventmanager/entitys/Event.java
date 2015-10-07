@@ -24,6 +24,9 @@ public class Event {
 	private Double price;
 	
 	@Column
+	private Double remainingPlaces;
+	
+	@Column
 	private String name;
 	
 	@Column
@@ -33,7 +36,7 @@ public class Event {
 	private String state;
 
 	@Column
-	private Integer places;
+	private Double places;
 
 	@ManyToOne
 	private Room room;
@@ -45,7 +48,7 @@ public class Event {
 	
 	
 
-	public Event(Date date, Double price, String name, String description, String state, Integer places, Room room)
+	public Event(Date date, Double price, String name, String description, String state, Double places, Room room)
 	{
 		super();
 		this.date = date;
@@ -125,16 +128,20 @@ public class Event {
 	}
 
 	
-	public Integer getPlaces()
+
+
+
+	public Double getPlaces()
 	{
 		return places;
 	}
 
-	public void setPlaces(Integer places)
+
+
+	public void setPlaces(Double places)
 	{
 		this.places = places;
 	}
-
 
 
 
@@ -156,6 +163,20 @@ public class Event {
 	public String toString()
 	{
 		return "Event [id=" + id + ", date=" + date + ", price=" + price + ", name=" + name + ", description=" + description + ", state=" + state + "]";
+	}
+
+
+
+	public Double getRemainingPlaces()
+	{
+		return remainingPlaces;
+	}
+
+
+
+	public void setRemainingPlaces(Double remainingPlaces)
+	{
+		this.remainingPlaces = remainingPlaces;
 	}
 
 		
