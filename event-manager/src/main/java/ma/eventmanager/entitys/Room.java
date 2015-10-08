@@ -86,4 +86,13 @@ public class Room{
 		this.state = state;
 	}
 
+	public RoomVo toRoomVo(){
+		RoomVo roomVo = new RoomVo();
+		roomVo.setId(this.getId()+"");
+		roomVo.setName(this.getName());
+		roomVo.setDescription(this.getDescription());
+		roomVo.setState(this.getState());
+		return roomVo;
+	}
+
 }

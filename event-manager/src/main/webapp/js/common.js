@@ -204,7 +204,9 @@ showEvents = function(currentDiv){
 })(jQuery);
 
 initCreateEntity = function(entityName){
-	var dialog = $('#'+entityName+'AddDialog').children().data('dialog');
+    var editdialog= $('#'+entityName+'AddDialog');
+	editdialog.find("input[type=text], textarea").val("");
+	var dialog = editdialog.children().data('dialog');
 	if(entityName == 'event'){
 		$.ajax({
 			url: contextPath+'/room/list',
@@ -305,7 +307,7 @@ deleteEntity = function(entityName,entityId){
 		success: function(resp){
         	$("#"+entityName+"EditButton").animate({opacity: 'hide', height: 'hide'}, 'fast');
         	$("#"+entityName+"DeleteButton").animate({opacity: 'hide', height: 'hide'}, 'fast');
-        	var table = $('#eventAdminTable').DataTable();
+        	var table = $('#'+entityName+'AdminTable').DataTable();
         	  table.ajax.reload();
 			dialog.close();		
 		},
@@ -335,16 +337,20 @@ createEntity = function(entityName){
 	});
 };
 
-dataTables_Room = function(){
-	$('#roomTable').dataTable({
-		"ajaxSource": contextPath+"/room/list",
-		"columns": [
-		    { "data": "id", "title": "Id" ,"width": "70px"},
-		    { "data": "name", "title": "Name", "width": "140px" },
-		    { "data": "description", "title": "Description"},
-		    { "data": "state", "title": "State"}
-		  ]
-	});
+crudHundlers = function(entityName){
+	var table = $('#'+entityName+'AdminTable').DataTable();
+	$('#'+entityName+'AdminTable tbody').on('click', 'tr', function () {
+        var data = table.row(this).data();
+        adminSelectedItem = data.id;
+        if(adminSelectedItem != null){
+        	$("#"+entityName+"EditButton b").html(adminSelectedItem);
+        	$("#"+entityName+"EditButton").animate({opacity: 'show', height: 'show'}, 'fast');
+        	$("#"+entityName+"DeleteButton b").html(adminSelectedItem);
+        	$("#"+entityName+"DeleteButton").animate({opacity: 'show', height: 'show'}, 'fast');
+        }
+        $("tr").removeClass("selected");
+    	$(this).addClass("selected");
+    });
 };
 
 dataTables_Event = function(){
@@ -362,20 +368,34 @@ dataTables_Event = function(){
 		    { "data": "room.name","sDefaultContent": "-", "title": "Salle"}
 		  ]
 	});
-	
-	 var table = $('#eventAdminTable').DataTable();
-	    $('#eventAdminTable tbody').on('click', 'tr', function () {
-	        var data = table.row(this).data();
-	        adminSelectedEvent = data.id;
-	        if(adminSelectedEvent != null){
-	        	$("#eventEditButton b").html(adminSelectedEvent);
-	        	$("#eventEditButton").animate({opacity: 'show', height: 'show'}, 'fast');
-	        	$("#eventDeleteButton b").html(adminSelectedEvent);
-	        	$("#eventDeleteButton").animate({opacity: 'show', height: 'show'}, 'fast');
-	        }
-	        $("tr").removeClass("selected");
-        	$(this).addClass("selected");
-	    });
+	crudHundlers('event');	
+};
+dataTables_Room = function(){
+	$('#roomAdminTable').dataTable({
+		"ajaxSource": contextPath+"/room/list",
+		"columns": [
+		    { "data": "id", "title": "Id" ,"width": "70px"},
+		    { "data": "name", "title": "Name", "width": "140px" },
+		    { "data": "description", "title": "Description"},
+		    { "data": "state", "title": "State"}
+		  ]
+	});
+	crudHundlers('room');
+};
+
+dataTables_Client = function(){
+	$('#clientAdminTable').dataTable({
+		"ajaxSource": contextPath+"/client/list",
+		"columns": [
+		    { "data": "id", "title": "Id" ,"width": "70px"},
+		    { "data": "firstName", "title": "Nom", "width": "140px" },
+		    { "data": "lastName", "title": "Prénom"},
+		    { "data": "cne", "title": "CNE"},
+		    { "data": "cin", "title": "CIN"},
+		    { "data": "roleId", "title": "Rôle"}
+		  ]
+	});
+	crudHundlers('client');
 };
 
 dataTables_Choice_Event = function(){

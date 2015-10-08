@@ -19,12 +19,13 @@
                 <div class="cell auto-size padding20 bg-white" id="cell-content">
                     <h1 class="text-light">Salles<span class="mif-drive-eta place-right"></span></h1>
                     <hr class="thin bg-grayLighter">
-                    <button class="button primary" onclick="initCreateEntity('room')"><span class="mif-plus"></span> Create</button>
-                    <%-- <button class="button success" onclick="pushMessage('success')"><span class="mif-play"></span> Start</button> --%>
-                    <%-- <button class="button warning" onclick="pushMessage('warning')"><span class="mif-loop2"></span> Restart</button> --%>
-                    <!-- <button class="button alert" onclick="pushMessage('alert')">Stop all machines</button> -->
+                    
+                    <button class="button primary" onclick="initCreateEntity('room')"><span class="mif-plus"></span> Créer</button>
+              		<button id="roomEditButton" class="button success" onclick="initEditEntity('room',adminSelectedItem,{});" style="display: none;"><span class="mif-pencil"></span> Modifier la salle n°<b></b></button>
+                    <button id="roomDeleteButton" class="button alert" onclick="initDeleteEntity('room',adminSelectedItem);" style="display: none;"><span class="mif-cancel"></span> Supprimer la salle n°<b></b></button>
+                    
                     <hr class="thin bg-grayLighter">
-                    <table id="roomTable" class="dataTable border bordered no-footer hovered"></table>
+                    <table id="roomAdminTable" class="dataTable border bordered no-footer hovered"></table>
    					<div class="error"><s:property value="errorNotification" /></div>
                 </div>
             </div>

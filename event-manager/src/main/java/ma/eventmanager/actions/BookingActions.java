@@ -50,7 +50,7 @@ public class BookingActions extends ActionSupport{
 	
 	@Action(value = "initBooking", results = {@Result(name="initBookingSuccess",location="/event/bookingPage.jsp")})
 	public String initBooking(){
-		bookedEvent= (Event) eventManagerDao.retrieve("event",eventId+"");
+		bookedEvent= (Event) eventManagerDao.retrieveEvent(eventId+"");
 		ServletActionContext.getRequest().getSession().setAttribute("bookedEvent", bookedEvent);
 		eventManagerDao.listEvents(0,Constants.DEFAULT_ROWS_NUM);
 		return "initBookingSuccess";
@@ -227,7 +227,7 @@ public class BookingActions extends ActionSupport{
 	@Action(value = "paymentChoice", results = {@Result(name="success",location="/event/paymentStep.jsp")})
 	public String paymentChoiceAction(){
 		
-		selectedClient = eventManagerDao.retreivClient(selectedClientId);
+		selectedClient = eventManagerDao.retreiveClient(selectedClientId+"");
 		ServletActionContext.getRequest().getSession().setAttribute("selectedClient",selectedClient);
 		paymentMethods= ReferenceService.getPaymentMethods(); 
 		return "success";
@@ -236,7 +236,7 @@ public class BookingActions extends ActionSupport{
 	
 	@Action(value = "identification", results = {@Result(name="identification",location="/event/identificationStep.jsp")})
 	public String identification(){
-		bookedEvent= (Event) eventManagerDao.retrieve("event",eventId+"");
+		bookedEvent= (Event) eventManagerDao.retrieveEvent(eventId+"");
 		ServletActionContext.getRequest().getSession().setAttribute("bookedEvent", bookedEvent);
 		return "identification";
 	}

@@ -8,6 +8,8 @@ import ma.evenetmanager.criteria.CriteriaModel;
 import ma.eventmanager.constant.Constants;
 import ma.eventmanager.dao.EventManagerDao;
 import ma.eventmanager.entitys.Client;
+import ma.eventmanager.entitys.Room;
+import ma.eventmanager.model.DataTableResponseObject;
 import ma.eventmanager.util.ProjectHelper;
 
 import org.apache.struts2.ServletActionContext;
@@ -22,6 +24,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 @Namespace("/client")
 @ResultPath(value = "/")
+@ParentPackage("json-default")
 public class ClientActions extends AbstractAction{
 	
 	//Client filelds
@@ -31,13 +34,15 @@ public class ClientActions extends AbstractAction{
 	private String cin;
 	private String roleId;
 
+	private DataTableResponseObject resp = new DataTableResponseObject();
+
 
 	@Autowired private EventManagerDao eventManagerDao;
 	private List<Client> list= new ArrayList<Client>();
 	private String errorNotification;
 
 
-	@Action(value = "list")
+	@Action(value = "list", results = { @Result(name = "success", type = "json", params = {"root", "resp" }) })
 	public String list() throws IOException {
 		int offset;
 		try {
@@ -49,15 +54,25 @@ public class ClientActions extends AbstractAction{
 
 		if(get_search() != null && get_search().equals("true")){
 			list = eventManagerDao.listClients(offset, rows,usedSearchFields());
+			resp.setData(list);
 		}else{
-			list = eventManagerDao.listClients(offset, rows);			
+			list = eventManagerDao.listClients(offset, rows);	
+			resp.setData(list);
 		}
 		records = eventManagerDao.getClientsCount();
 		total = (int) Math.ceil((double) records / (double) rows);	
 		
-		ProjectHelper.sendObjectAsJsonResponse(list,ServletActionContext.getResponse());
+		return SUCCESS;
+	}
+	
+	@Action(value = "add", results = { @Result(name = "success", type = "json") })
+	public String add() throws IOException{
+		Client client = new Client(firstName,lastName,cne,cin,roleId);
+		Integer addState = eventManagerDao.addClient(client);
+		ProjectHelper.sendObjectAsJsonResponse(addState,ServletActionContext.getResponse());
 		return null;
 	}
+
 
 	public EventManagerDao getEventManagerDao()
 	{
@@ -154,5 +169,16 @@ public class ClientActions extends AbstractAction{
 		return criterias;
 	}
 
+	public DataTableResponseObject getResp()
+	{
+		return resp;
+	}
+
+	public void setResp(DataTableResponseObject resp)
+	{
+		this.resp = resp;
+	}
+
+	
 		
 }

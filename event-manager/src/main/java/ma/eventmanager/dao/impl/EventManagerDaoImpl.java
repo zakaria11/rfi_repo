@@ -53,10 +53,29 @@ public class EventManagerDaoImpl extends HibernateDaoSupport implements EventMan
 		event.setId(eventId);
 		getHibernateTemplate().delete(event);
 	}
+	public void deleteRoom(Integer roomId){
+		Room room = new Room();
+		room.setId(roomId);
+		getHibernateTemplate().delete(room);
+	}
 
+	public void deleteClient(Integer clientId){
+		Client client = new Client();
+		client.setId(clientId);
+		getHibernateTemplate().delete(client);
+	}
+
+	
 	public void updateEvent(Event event){
-		event.setState("1");
 		getHibernateTemplate().update(event);
+	}
+
+	public void updateRoom(Room room){
+		getHibernateTemplate().update(room);
+	}
+	
+	public void updateClient(Client client){
+		getHibernateTemplate().update(client);
 	}
 
 	public void saveSubscription(Subscription subscription){
@@ -137,8 +156,8 @@ public class EventManagerDaoImpl extends HibernateDaoSupport implements EventMan
 
 	}
 
-	public void addClient(Client client){
-		getHibernateTemplate().save(client);
+	public Integer addClient(Client client){
+		return (Integer) getHibernateTemplate().save(client);
 	}
 
 	public List<User> getUsers(int offset, Integer rows, List<CriteriaModel> usedSearchFields){
@@ -199,8 +218,8 @@ public class EventManagerDaoImpl extends HibernateDaoSupport implements EventMan
 		}
 	}
 
-	public Client retreivClient(Integer selectedClientId){
-		return getHibernateTemplate().get(Client.class, selectedClientId);
+	public Client retreiveClient(String clientId){
+		return getHibernateTemplate().get(Client.class, Integer.parseInt(clientId));
 
 	}
 
@@ -217,14 +236,20 @@ public class EventManagerDaoImpl extends HibernateDaoSupport implements EventMan
 		return attributes;
 	}
 
-	public Object retrieve(String entityName, String entityId)
-	{
-		Object entity = null;
-		if("event".equals(entityName)){
-			entity = getHibernateTemplate().get(Event.class, Integer.parseInt(entityId));
-		}
-		
-		return entity;	
+	public Event retrieveEvent(String eventId){
+		return getHibernateTemplate().get(Event.class, Integer.parseInt(eventId));	
+	}
+
+	public Room retrieveRoom(String roomId){
+		return getHibernateTemplate().get(Room.class, Integer.parseInt(roomId));	
+	}
+	
+	public User retrieveUser(String userId){
+		return getHibernateTemplate().get(User.class, Integer.parseInt(userId));	
+	}
+	
+	public Subscription retrieveSubscription(String subscriptionId){
+		return getHibernateTemplate().get(Subscription.class, Integer.parseInt(subscriptionId));	
 	}
 
 
@@ -258,6 +283,18 @@ public class EventManagerDaoImpl extends HibernateDaoSupport implements EventMan
 	public void addEvents(List<Event> events)
 	{
 		getHibernateTemplate().saveOrUpdateAll(events);
+		
+	}
+
+	public void deleteRoom(int roomId)
+	{
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void deleteClient(int clientId)
+	{
+		// TODO Auto-generated method stub
 		
 	}
 

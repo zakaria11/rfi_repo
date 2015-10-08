@@ -1,39 +1,4 @@
-<%-- <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<%@ taglib prefix="s" uri="/struts-tags" %>
-
-<%@ page pageEncoding="UTF-8"%>
-
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-	<jsp:include page="/includes/header.jsp"></jsp:include>	
-	<script type="text/javascript"></script>
-  </head>
-  <body>
-  	<jsp:include page="/includes/head_menu.jsp"></jsp:include>
-    <div class="container center" id="main_container">
-    	<table id="grid"></table>
-		<div id="navGrid"></div>
-   		<div class="error"><s:property value="errorNotification" /></div>
-    </div>
-    <div id="modalContainer"></div>
-	<jsp:include page="/includes/footer.jsp"></jsp:include>
-	<script type="text/javascript">
-
-	$.ajax({
-		url: contextPath+'/room/list',
-		data: {responseFormat:'SEMICOLON_MAP'},
-		success: function(data) {
-			plotGrid_Event(data);
-		},
-		dataType: 'text'
-	});
-
-	</script>
-  </body>
-</html>
- --%>
- <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib prefix="s" uri="/struts-tags" %>
 <%@ page pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -53,11 +18,11 @@
                 <div class="cell auto-size padding20 bg-white" id="cell-content">
                     <h1 class="text-light">Événements<span class="mif-drive-eta place-right"></span></h1>
                     <hr class="thin bg-grayLighter">
-                    <button class="button primary" onclick="initCreateEntity('event')"><span class="mif-plus"></span> Create</button>
-                    <%-- <button class="button success" onclick="pushMessage('success')"><span class="mif-play"></span> Start</button> --%>
-                    <button id="eventEditButton" class="button success" onclick="initEditEntity('event',adminSelectedEvent,{'room_id':'room.id'});" style="display: none;"><span class="mif-pencil"></span> Modifier l'événement n°<b></b></button>
-                    <button id="eventDeleteButton" class="button alert" onclick="initDeleteEntity('event',adminSelectedEvent);" style="display: none;"><span class="mif-cancel"></span> Supprimer l'événement n°<b></b></button>
-                    <%-- <button class="button warning" onclick="pushMessage('warning')"><span class="mif-loop2"></span> Restart</button> --%>
+                    
+                    <button class="button primary" onclick="initCreateEntity('event')"><span class="mif-plus"></span> Créer</button>
+                    <button id="eventEditButton" class="button success" onclick="initEditEntity('event',adminSelectedItem,{'room_id':'room.id'});" style="display: none;"><span class="mif-pencil"></span> Modifier l'événement n°<b></b></button>
+                    <button id="eventDeleteButton" class="button alert" onclick="initDeleteEntity('event',adminSelectedItem);" style="display: none;"><span class="mif-cancel"></span> Supprimer l'événement n°<b></b></button>
+                    
                     <hr class="thin bg-grayLighter">
                     <table id="eventAdminTable" class="dataTable border bordered no-footer hovered"></table>
    					<div class="error"><s:property value="errorNotification" /></div>

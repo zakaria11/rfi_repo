@@ -58,7 +58,7 @@
 					<div class="cell">
 						<label>Id</label>
 						<div class="input-control text full-size" data-role="input">
-							<input id="id" style="padding-right: 41px;" type="text" name="id">
+							<input id="id" style="padding-right: 41px;" type="text" name="id" readonly >
 						</div>
 					</div>
 					<div class="cell">
@@ -116,7 +116,7 @@
 		<div>
 			<div class="cell place-right">
 				<!-- <button type="button" class="button primary">Annuler</button> -->
-				<button type="button" class="button alert" onclick="deleteEntity('event',adminSelectedEvent);">Supprimer</button>
+				<button type="button" class="button alert" onclick="deleteEntity('event',adminSelectedItem);">Supprimer</button>
 			</div>
 		</div>
 	</div>

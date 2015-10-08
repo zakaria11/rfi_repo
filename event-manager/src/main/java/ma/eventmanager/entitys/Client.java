@@ -6,6 +6,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
+import ma.eventmanager.model.ClientVo;
+
 @Entity
 public class Client
 {
@@ -42,6 +44,20 @@ public class Client
 		this.cne = cne;
 		this.cin = cin;
 		this.roleId = roleId;
+	}
+
+
+
+	public Client(ClientVo client)
+	{
+		if(client.getId() != null){
+			this.id = Integer.parseInt(client.getId());
+		}
+		this.firstName = client.getFirstName();
+		this.lastName = client.getLastName();
+		this.cne = client.getCne();
+		this.cin = client.getCin();
+		this.roleId = client.getRoleId();
 	}
 
 
@@ -104,6 +120,22 @@ public class Client
 	public void setRoleId(String roleId)
 	{
 		this.roleId = roleId;
+	}
+
+
+
+	public Object toClientVo()
+	{
+		ClientVo clientVo = new ClientVo();
+		
+		clientVo.setId(this.getId()+"");
+		clientVo.setFirstName(this.getFirstName());
+		clientVo.setLastName(this.getLastName());
+		clientVo.setCne(this.getCne());
+		clientVo.setCin(this.getCin());
+		clientVo.setRoleId(this.getRoleId());
+		
+		return clientVo;
 	}
 
 }

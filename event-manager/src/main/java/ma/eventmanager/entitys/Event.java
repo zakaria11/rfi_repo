@@ -62,6 +62,7 @@ public class Event {
 		this.state = state;
 		this.places = places;
 		this.room = room;
+		this.remainingPlaces = places;
 	}
 
 
@@ -210,6 +211,32 @@ public class Event {
 	public void setRemainingPlaces(Double remainingPlaces)
 	{
 		this.remainingPlaces = remainingPlaces;
+	}
+
+
+
+	public EventVo toEventVo()
+	{
+		EventVo eventVo = new EventVo(); 
+		eventVo.setId(this.getId()+"");
+		
+		
+		if(this.getDate() != null){
+			SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+			eventVo.setDate(sdf.format(this.getDate()));	
+		}
+		eventVo.setPrice(this.getPrice()+"");
+		eventVo.setRemainingPlaces(this.getRemainingPlaces()+"");
+		eventVo.setPlaces(this.getPlaces()+"");
+		eventVo.setName(this.getName());
+		eventVo.setDescription(this.getDescription());
+		eventVo.setState(this.getState());
+		eventVo.setPlaces(this.getPlaces()+"");
+		eventVo.setRoom(this.getRoom().toRoomVo());	
+
+		
+		
+		return eventVo;
 	}
 
 		

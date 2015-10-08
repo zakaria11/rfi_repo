@@ -188,7 +188,6 @@ var table = $('#clientsSearchResultTable').DataTable({
 
 
 function searchClient(){
-	console.log(table);
 	var fields = $('#searchCriteriaSection').find('input');
 	console.log(fields.serializeArray());
 	var criteriaList = $(fields).serializeArray();
@@ -200,6 +199,7 @@ function searchClient(){
 		data : criteriaList,
 		dataType : "json",
 		success : function(searchResult){
+			searchResult=searchResult.data;
 			table.clear();
 			$(searchResult).each(function(index, element) {
 				row = searchResult[index];

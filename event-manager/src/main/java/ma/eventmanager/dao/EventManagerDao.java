@@ -1,6 +1,5 @@
 package ma.eventmanager.dao;
 
-import java.util.Date;
 import java.util.List;
 
 import ma.evenetmanager.criteria.CriteriaModel;
@@ -43,7 +42,7 @@ public interface EventManagerDao {
 
 	public List<Client> listClients(int offset, Integer rows);
 
-	public void addClient(Client client);
+	public Integer addClient(Client client);
 
 	public List<User> getUsers(int offset, Integer rows, List<CriteriaModel> usedSearchFields);
 
@@ -55,12 +54,18 @@ public interface EventManagerDao {
 
 	public List<Event> listEvents(int offset, Integer rows, List<CriteriaModel> usedSearchFields);
 
-	public Client retreivClient(Integer selectedClientId);
+	public Client retreiveClient(String entityId);
 
 	public List<Attribute> loadEntity(String entityName, String entityId);
 
-	public Object retrieve(String entityName, String entityId);
-
+	public Event retrieveEvent(String eventId);
+	
+	public Room retrieveRoom(String roomId);
+	
+	public User retrieveUser(String userId);
+	
+	public Subscription retrieveSubscription(String subscriptionId);
+	
 	public List<Subscription> loadSubscription(Integer eventId, Integer cleintId);
 
 	public Subscription getSubscriptionById(Integer subscriptionId);
@@ -70,6 +75,14 @@ public interface EventManagerDao {
 	public List<Object[]> eventHistory();
 
 	public void addEvents(List<Event> events);
+
+	public void updateRoom(Room room);
+
+	public void updateClient(Client client);
+
+	public void deleteRoom(Integer roomId);
+
+	public void deleteClient(Integer clientId);
 
 
 }
