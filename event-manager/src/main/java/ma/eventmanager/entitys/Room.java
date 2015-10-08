@@ -6,6 +6,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
+import ma.eventmanager.model.RoomVo;
+
 @Entity
 public class Room{
 	@Id
@@ -33,6 +35,16 @@ public class Room{
 
 
 
+
+	public Room(RoomVo room)
+	{
+		if(room.getId() != null){
+			this.id = Integer.parseInt(room.getId());	
+		}
+		this.name = room.getName();
+		this.description = room.getDescription();
+		this.state = room.getState();
+	}
 
 	public Integer getId()
 	{

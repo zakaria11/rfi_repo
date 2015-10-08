@@ -55,7 +55,7 @@
                     <hr class="thin bg-grayLighter">
                     <button class="button primary" onclick="initCreateEntity('event')"><span class="mif-plus"></span> Create</button>
                     <%-- <button class="button success" onclick="pushMessage('success')"><span class="mif-play"></span> Start</button> --%>
-                    <button id="eventEditButton" class="button success" onclick="initEditEntity('event',adminSelectedEvent);" style="display: none;"><span class="mif-pencil"></span> Modifier l'événement n°<b></b></button>
+                    <button id="eventEditButton" class="button success" onclick="initEditEntity('event',adminSelectedEvent,{'room_id':'room.id'});" style="display: none;"><span class="mif-pencil"></span> Modifier l'événement n°<b></b></button>
                     <button id="eventDeleteButton" class="button alert" onclick="initDeleteEntity('event',adminSelectedEvent);" style="display: none;"><span class="mif-cancel"></span> Supprimer l'événement n°<b></b></button>
                     <%-- <button class="button warning" onclick="pushMessage('warning')"><span class="mif-loop2"></span> Restart</button> --%>
                     <hr class="thin bg-grayLighter">

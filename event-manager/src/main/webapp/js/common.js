@@ -221,11 +221,72 @@ initCreateEntity = function(entityName){
     dialog.open();
 };
 
-initEditEntity = function(entityName,entityId){
+initEditEntity = function(entityName,entityId,columns){
 	//Load entity using entityId
 	//Fill the Edit Popup
+	$.ajax({
+		url: contextPath+'/entity/load',
+		data: {entityName:entityName,entityId : entityId},
+		beforeSend : function(){
+			//TODO loading
+		},
+		complete : function(){
+			//TODO unloading
+		},
+		success: function(entity){
+			var editDialog = $('#'+entityName+'EditDialog').children();
+			$.each( entity, function( key, value ) {
+				editDialog.find('#'+key).val(value);					
+			});
+			
+			$.each( columns, function( key, value ) {
+				var evalStr = 'var att = entity.'+value+';';
+				eval(evalStr);
+				editDialog.find('#'+key).val(att);
+			});
+			
+
+			editDialog.data('dialog').open();
+		},
+		dataType: 'json'
+	});
+	
+};
+
+editEntity = function(entityName){
 	form = $('#'+entityName+'EditDialog');
-	alert("Edit___");
+	
+	var params = {};
+	var serArray = form.serializeArray();
+	$.each(serArray, function(key, value){
+		var n =serArray[key].name;
+		var v =serArray[key].value;
+		if(n.indexOf("_") > -1){
+			var re = new RegExp('_', 'g');
+			n = n.replace(re, '.');
+		}
+		params[entityName+'.'+n] = v;
+	});
+	params['entityName']=entityName;
+	
+	$.ajax({
+		url : contextPath+'/entity/modify',
+		method  : 'POST',
+		data : params,
+		dataType : "json",
+		success : function(response){
+			form.children().data('dialog').close();
+			var table = $('#'+entityName+'AdminTable').DataTable();
+			console.log(table);
+			table.ajax.reload();
+		},
+		error : function(response){
+			
+		},
+		complete : function(){
+			//TODO unloading
+		}
+	});
 };
 
 initDeleteEntity = function(entityName,entityId){

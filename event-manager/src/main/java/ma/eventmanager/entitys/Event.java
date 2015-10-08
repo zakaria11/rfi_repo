@@ -1,5 +1,7 @@
 package ma.eventmanager.entitys;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -8,6 +10,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+
+import ma.eventmanager.model.EventVo;
 
 
 @Entity
@@ -58,6 +62,35 @@ public class Event {
 		this.state = state;
 		this.places = places;
 		this.room = room;
+	}
+
+
+
+	public Event(EventVo event) throws ParseException{
+		if (event.getId() != null){
+			this.id = Integer.parseInt(event.getId());	
+		}
+		
+		if(event.getDate() != null){
+			SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+			this.date = sdf.parse(event.getDate());			
+		}
+		if (event.getPrice() != null){
+			this.price = Double.parseDouble(event.getPrice());	
+		}				
+		if(event.getRemainingPlaces() != null){
+			this.remainingPlaces = Double.parseDouble(event.getRemainingPlaces());
+		}		
+		if(event.getPlaces() != null){
+			this.places = Double.parseDouble(event.getPlaces());
+		}
+		this.name = event.getName();
+		this.description = event.getDescription();
+		this.state = event.getDescription();
+		if (event.getPlaces() != null){
+			this.places = Double.parseDouble(event.getPlaces());	
+		}
+		this.room = new Room(event.getRoom());
 	}
 
 
