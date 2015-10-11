@@ -1,25 +1,25 @@
-	<form id="eventAddDialog">
+	<form id="eventAddDialog" data-role="validator">
 		<div data-role="dialog" class="padding20" data-close-button="true" data-overlay="true" data-overlay-color="op-dark">
 			<h1>Créer un Événement</h1>
 				<div>
 					<div class="cell">
 						<label>Nom</label>
 						<div class="input-control text full-size" data-role="input">
-							<input style="padding-right: 41px;" type="text" name="name">
+							<input style="padding-right: 41px;" data-validate-func="required" type="text" name="name">
 							<button type="button" tabindex="-1" class="button helper-button clear"><span class="mif-cross"></span></button>
 						</div>
 					</div>
 					<div class="cell">
 						<label>Prix</label>
 						<div class="input-control text full-size" data-role="input">
-							<input style="padding-right: 41px;" type="text" name="price">
+							<input style="padding-right: 41px;" data-validate-func="number" type="text" name="price">
 							<button type="butt	on" tabindex="-1" class="button helper-button clear"><span class="mif-cross"></span></button>
 						</div>
 					</div>
 					<div class="cell">
 						<label>N° places</label>
 						<div class="input-control text full-size" data-role="input">
-							<input style="padding-right: 41px;" type="text" name="places">
+							<input style="padding-right: 41px;" data-validate-func="number" type="text" name="places">
 							<button type="button" tabindex="-1" class="button helper-button clear"><span class="mif-cross"></span></button>
 						</div>
 					</div>
@@ -33,7 +33,7 @@
 					<div class="cell">
 						<label>Salle</label>
 						<div class="input-control text full-size" data-role="input">
-							<select id="roomsList" onclick="updateRooms(this);" name="roomId"></select>
+							<select id="roomsList" name="roomId"></select>
 						</div>
 					</div>
 					<div class="cell">
@@ -51,7 +51,7 @@
 	</form>
 	
 	
-	<form id="eventEditDialog">
+	<form id="eventEditDialog" data-role="validator">
 		<div data-role="dialog" class="padding20" data-close-button="true" data-overlay="true" data-overlay-color="op-dark">
 			<h1>Modifier un Événement</h1>
 				<div>

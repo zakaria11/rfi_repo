@@ -3,10 +3,12 @@
         <a href="<%=request.getContextPath()%>/index.jsp" class="app-bar-element branding">Gestion de billettrie</a>
         <span class="app-bar-divider"></span>
         <ul class="app-bar-menu">
-            <li><a href="<%=request.getContextPath()%>/admin/manageUsers.jsp">Rôles et Utilisateurs</a></li>
-            <li><a href="<%=request.getContextPath()%>/admin/manageClient.jsp">Clients</a></li>
-            <li><a href="<%=request.getContextPath()%>/admin/manageRoom.jsp">Salles</a></li>
-            <li><a href="<%=request.getContextPath()%>/admin/manageEvent.jsp">Événements</a></li>
+        	<sec:authorize access="hasRole('ADMIN')">
+            	<li><a href="<%=request.getContextPath()%>/admin/manageUsers.jsp">Rôles et Utilisateurs</a></li>
+            	<li><a href="<%=request.getContextPath()%>/admin/manageClient.jsp">Clients</a></li>
+            	<li><a href="<%=request.getContextPath()%>/admin/manageRoom.jsp">Salles</a></li>
+            	<li><a href="<%=request.getContextPath()%>/admin/manageEvent.jsp">Événements</a></li>
+            </sec:authorize>
             <sec:authorize access="hasRole('REPORTING')">
             	<li><a href="<%=request.getContextPath()%>/reporting/index.jsp">Reporting</a></li>
             </sec:authorize>

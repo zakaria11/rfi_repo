@@ -30,13 +30,24 @@ public class Client
 	@Column
 	private String roleId;
 	
+	@Column
+	private String mail;
 	
+	@Column
+	private String password;
+	
+	@Column
+	private String orderNumber;
+	
+	@Column
+	private String gender;
+
 	
 	public Client(){}
 	
 	
 
-	public Client(String firstName, String lastName, String cne, String cin, String roleId)
+	public Client(String firstName, String lastName, String cne, String cin, String roleId,String orderNumber,String mail,String gender)
 	{
 		super();
 		this.firstName = firstName;
@@ -44,6 +55,10 @@ public class Client
 		this.cne = cne;
 		this.cin = cin;
 		this.roleId = roleId;
+		this.orderNumber = orderNumber;
+		this.mail = mail;
+		this.gender = gender;
+
 	}
 
 
@@ -58,6 +73,11 @@ public class Client
 		this.cne = client.getCne();
 		this.cin = client.getCin();
 		this.roleId = client.getRoleId();
+		
+		this.mail = client.getMail();
+		this.password = client.getPassword();
+		this.orderNumber = client.getOrderNumber();
+		this.gender = client.getGender();
 	}
 
 
@@ -121,6 +141,63 @@ public class Client
 	{
 		this.roleId = roleId;
 	}
+	
+
+
+
+	public String getMail()
+	{
+		return mail;
+	}
+
+
+
+	public void setMail(String mail)
+	{
+		this.mail = mail;
+	}
+
+
+
+	public String getPassword()
+	{
+		return password;
+	}
+
+
+
+	public void setPassword(String password)
+	{
+		this.password = password;
+	}
+
+
+
+	public String getOrderNumber()
+	{
+		return orderNumber;
+	}
+
+
+
+	public void setOrderNumber(String orderNumber)
+	{
+		this.orderNumber = orderNumber;
+	}
+
+
+
+	public String getGender()
+	{
+		return gender;
+	}
+
+
+
+	public void setGender(String gender)
+	{
+		this.gender = gender;
+	}
 
 
 
@@ -134,6 +211,11 @@ public class Client
 		clientVo.setCne(this.getCne());
 		clientVo.setCin(this.getCin());
 		clientVo.setRoleId(this.getRoleId());
+		
+		clientVo.setMail(this.getMail());
+		clientVo.setPassword(this.getPassword());
+		clientVo.setOrderNumber(this.getOrderNumber());
+		clientVo.setGender(this.getGender());
 		
 		return clientVo;
 	}

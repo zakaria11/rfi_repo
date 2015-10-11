@@ -2,6 +2,7 @@
 
 <div class="cell size-x200" id="cell-sidebar" style="background-color: #71b1d1; height: 100%">
     <ul class="sidebar">
+    	<sec:authorize access="hasRole('ADMIN')">
         <li><a href="<%=request.getContextPath()%>/admin/manageUsers.jsp">
             <span class="mif-security icon"></span>
             <span class="title">Rôles et Utilisateurs</span>
@@ -22,6 +23,7 @@
             <span class="title">Événements</span>
             <span class="counter"></span>
         </a></li>
+        </sec:authorize>
         <sec:authorize access="hasRole('REPORTING')">
         <li><a href="<%=request.getContextPath()%>/reporting/index.jsp">
             <span class="mif-chart-dots icon"></span>

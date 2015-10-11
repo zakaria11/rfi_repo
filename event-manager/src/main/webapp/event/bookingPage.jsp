@@ -14,9 +14,9 @@ showSearchClientGrid = function(){
 	$("#searchClientModal").modal();
 };
 
-proceedPayment = function(){	
+/* proceedPayment = function(){
 	$.ajax({
-		url : contextPath+'/booking/payTicket',
+		url : contextPath+'/booking/executePayment',
 		method  : 'POST',
 		data : {paymentMethod : $("#inputPaymentMethod").val()},
 		dataType : "html",
@@ -27,7 +27,7 @@ proceedPayment = function(){
 		},
 		error : function(){}
 	});
-};
+}; */
 
 paymentStep = function(){	
 	$.ajax({
@@ -111,7 +111,7 @@ paymentStep = function(){
        	<fieldset>
     		<legend><img src="<%=request.getContextPath()%>/img/tag79.png"> Ticket</legend>
     	     <div id="printTicketSection" class="form-horizontal" style="margin-left: 50px;">
-    			<%-- Loaded by ajax from payTicket --%>
+    			<%-- Loaded by ajax from executePayment --%>
 			</div> 
     	</fieldset>
 	</div>

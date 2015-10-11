@@ -106,7 +106,7 @@
             <div class="tile-container">
                 <a href="#" class="tile-large bg-white super-tile" data-role="tile" data-transform="false">
 					<div class="cell auto-size padding20 bg-white" id="cell-content">
-                    <h1 class="text-light">Événements<span class="mif-database place-right"></span></h1>
+                    <h1 class="text-light">Événements</h1>
                     <!-- <hr class="thin bg-grayLighter"> -->
 
 					<%-- <button class="shortcut-button bg-cyan bg-active-darkBlue fg-white" onclick="identificationStep();">

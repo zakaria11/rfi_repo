@@ -80,9 +80,16 @@ public interface EventManagerDao {
 
 	public void updateClient(Client client);
 
+	public void updateUser(User user);
+
 	public void deleteRoom(Integer roomId);
 
 	public void deleteClient(Integer clientId);
+
+	public void deleteUser(Integer userId);
+
+	public void addClients(List<Client> clientsList);
+
 
 
 }

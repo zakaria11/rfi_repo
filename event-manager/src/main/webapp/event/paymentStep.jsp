@@ -2,23 +2,6 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib prefix="s" uri="/struts-tags"%>
 
-<%--
-<form id="paymentMethodForm" class="form-horizontal" action="<%=request.getContextPath()%>/event/booking" method="POST">
-	<div class="control-group">
-		<label class="control-label" for="inputPaymentMethod"></label>
-		<div class="controls">
-			<select id="inputPaymentMethod" class="span3" name="paymentMethod">
-			</select>					
-		</div>
-	</div>
-	<div class="control-group">
-		<div class="controls">
-			<a class="btn">Annuler</a>
-			<a class="btn" onclick="proceedPayment();">Procéder au paiement</a>
-		</div>
-	</div>
-</form> --%>
-
 <!DOCTYPE html>
 <html>
 <head lang="en">
@@ -50,54 +33,6 @@
                 left: 0
             });
         });
-        
-        showTicketInfos = function(resp){
-			var infosDiv = $('#ticketInfoArea');
-			infosDiv.empty(); 
-			infosDiv.append('<p>ticket N °<span>'+resp.subscription.id+'</span></p>');
-			infosDiv.append('<p>Nom de l\'événement : <span>'+resp.subscription.event.name+'</span></p>');
-			infosDiv.append('<p>Prix : <span>'+resp.subscription.event.price+'</span></p>');
-			infosDiv.append('<p>Salle : <span>'+resp.subscription.event.room.name+'</span></p>');
-			infosDiv.append('<p>Description : <span>'+resp.subscription.event.description+'</span></p>');
-			
-			$("#paymentTypesGroup").animate({opacity: 'hide', height: 'hide'}, 'fast', function() {
-				$("#ticketInfosGroup").animate({opacity: 'show', height: 'show'}, 'fast');
-			  });
-			
-        };
-              
-        executePayment = function(PaymentType){
-        	$.ajax({
-    			url: contextPath+'/booking/payTicket',
-    			data: {
-    				paymentMethod:PaymentType
-    			},
-    			success: function(resp){
-    				if(resp.isOK == "1"){
-    					//dialog.removeClass("alert");
-    					//dialog.addClass("success");
-    					//dialog.find("#content1").html('<button class="button" onclick="identificationStep()">Informations sur le ticket</button>');    					
-    					showTicketInfos(resp);
-    				}else{
-        				var dialog = $('#dialog');
-        				dialog.addClass("alert");
-        				dialog.find("h1:first").html(resp.message);
-       					
-        				var dialogData = dialog.data('dialog');
-       					dialogData.open();    					
-    				}
-    			},
-    			error : function(){
-    				var dialog = $('#dialog');
-   					var dialogData = dialog.data('dialog');
-   					dialog.addClass("alert");
-   					dialog.find("h1:first").html("Une erreur est survenu, merci de reessayer ultérieurement");
-   					dialogData.open();
-    			},
-    			dataType: 'json'
-    		});
-        };
-
     </script>
 </head>
 <body style="overflow-y: hidden;">
@@ -108,7 +43,7 @@
             <div class="tile-container">
                 
             <s:iterator value="paymentMethods" var="paymentMethod">
-				<a onclick="executePayment('<s:property value="key"/>');"  class="tile bg-orange fg-white" data-role="tile">
+				<a onclick="executePayment('<s:property value="key"/>',null);"  class="tile bg-orange fg-white" data-role="tile">
                     <div class="tile-content iconic">
                         <span class="icon mif-coins"></span>
                     </div>

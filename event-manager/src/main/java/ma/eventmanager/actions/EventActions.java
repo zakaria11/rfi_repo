@@ -14,6 +14,7 @@ import java.util.List;
 
 
 
+
 import ma.evenetmanager.criteria.CriteriaModel;
 import ma.eventmanager.constant.Constants;
 import ma.eventmanager.dao.EventManagerDao;
@@ -21,6 +22,7 @@ import ma.eventmanager.entitys.Event;
 import ma.eventmanager.entitys.Room;
 import ma.eventmanager.entitys.Subscription;
 import ma.eventmanager.model.DataTableResponseObject;
+import ma.eventmanager.model.EventVo;
 import ma.eventmanager.util.ProjectHelper;
 
 import org.apache.log4j.Logger;
@@ -42,7 +44,7 @@ public class EventActions extends AbstractAction{
 	private static final long serialVersionUID = 8397678142447406483L;
 	private List<Event> list= new ArrayList<Event>();
 	private DataTableResponseObject resp = new DataTableResponseObject();
-	private Event event;
+	private EventVo event;
 	private String errorNotification;
 	private static Logger logger = Logger.getLogger(EventActions.class);
 	
@@ -113,7 +115,7 @@ public class EventActions extends AbstractAction{
 	}
 	
 	
-	@Action(value = "add", results = {@Result  (name = "success", type = "json")})
+	@Action(value = "add", results = {@Result  (name = "success", type = "json",params = {"root", "resp" })})
 	public String add() throws IOException{
 		Event e = new Event();
 		e.setName(name);
@@ -124,8 +126,7 @@ public class EventActions extends AbstractAction{
 		room.setId(roomId);
 		e.setRoom(room);
 		eventManagerDao.addEvent(e);
-		ProjectHelper.sendObjectAsJsonResponse(null,ServletActionContext.getResponse());
-		return null;
+		return SUCCESS;
 	}
 
 	@Action(value = "del", results = {@Result  (name = "success", type = "json")})
@@ -137,10 +138,11 @@ public class EventActions extends AbstractAction{
 
 	
 	@Action(value = "edit", results = {@Result(name = "success", type = "json")})
-	public String edit() throws IOException{
+	public String edit() throws IOException, ParseException{
 		Event e = (Event) ServletActionContext.getRequest().getSession().getAttribute("editEvent");
-		event.setId(e.getId());
-		eventManagerDao.updateEvent(event);
+		
+		event.setId(e.getId()+"");
+		eventManagerDao.updateEvent(new Event(event));
 		ProjectHelper.sendObjectAsJsonResponse(null,ServletActionContext.getResponse());
 		return null;
 	}
@@ -161,11 +163,13 @@ public class EventActions extends AbstractAction{
 		this.id = id;
 	}
 
-
-	public Event getEvent(){
+	public EventVo getEvent()
+	{
 		return event;
 	}
-	public void setEvent(Event event){
+
+	public void setEvent(EventVo event)
+	{
 		this.event = event;
 	}
 

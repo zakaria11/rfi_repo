@@ -220,9 +220,6 @@ function searchClient(){
 		}
 	});
 	
-	goToPaymentStep = function(){
-		window.location = contextPath+'/booking/paymentChoice?selectedClientId='+selectedClientId;
-	};
 };
 </script>
 </html>

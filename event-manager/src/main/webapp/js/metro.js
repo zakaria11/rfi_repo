@@ -8123,6 +8123,9 @@ $.widget( "metro.validator" , {
 
     _setOption: function ( key, value ) {
         this._super('_setOption', key, value);
+    },
+    validateForm : function(){
+    	return this._submit();
     }
 });
 

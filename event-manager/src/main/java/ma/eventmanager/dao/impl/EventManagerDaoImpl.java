@@ -1,6 +1,5 @@
 package ma.eventmanager.dao.impl;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -77,6 +76,10 @@ public class EventManagerDaoImpl extends HibernateDaoSupport implements EventMan
 	public void updateClient(Client client){
 		getHibernateTemplate().update(client);
 	}
+	
+	public void updateUser(User user){
+		getHibernateTemplate().update(user);
+	}
 
 	public void saveSubscription(Subscription subscription){
 		getHibernateTemplate().save(subscription);
@@ -113,7 +116,9 @@ public class EventManagerDaoImpl extends HibernateDaoSupport implements EventMan
 	}
 
 	public void addUser(User user){
-		user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
+		if(user.getPassword() != null){
+			user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));	
+		}
 		getHibernateTemplate().save(user);	
 	}
 
@@ -288,13 +293,33 @@ public class EventManagerDaoImpl extends HibernateDaoSupport implements EventMan
 
 	public void deleteRoom(int roomId)
 	{
-		// TODO Auto-generated method stub
-		
+		Room room = new Room();
+		room.setId(roomId);
+		getHibernateTemplate().delete(room);
 	}
 
 	public void deleteClient(int clientId)
 	{
-		// TODO Auto-generated method stub
+		Client client = new Client();
+		client.setId(clientId);
+		getHibernateTemplate().delete(client);		
+	}
+
+	public void deleteUser(Integer userId)
+	{
+		User user = new User();
+		user.setId(userId);
+		String hql = "delete from UserRole where username= :userId";
+		Session session = getHibernateTemplate().getSessionFactory().openSession();
+		Criteria criteria = session.createCriteria(User.class);
+		session.createQuery(hql).setInteger("userId", userId).executeUpdate();
+		session.delete(user);
+		session.flush();
+		session.close();
+	}
+
+	public void addClients(List<Client> clientsList){
+		getHibernateTemplate().saveOrUpdateAll(clientsList);
 		
 	}
 

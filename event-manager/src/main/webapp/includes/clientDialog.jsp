@@ -1,4 +1,4 @@
-	<form id="clientAddDialog">
+	<form id="clientAddDialog" data-role="validator">
 		<div data-role="dialog" class="padding20" data-close-button="true" data-overlay="true" data-overlay-color="op-dark">
 			<h1>Créer un Client</h1>
 				<div>
@@ -23,10 +23,31 @@
 							<button type="button" tabindex="-1" class="button helper-button clear"><span class="mif-cross"></span></button>
 						</div>
 					</div>
-					<div class="cell">
+					<!-- <div class="cell">
 						<label>CIN</label>
 						<div class="input-control text full-size" data-role="input">
 							<input style="padding-right: 41px;" type="text" name="cin">
+							<button type="button" tabindex="-1" class="button helper-button clear"><span class="mif-cross"></span></button>
+						</div>
+					</div> -->
+					<div class="cell">
+						<label>Numéro D'ordre</label>
+						<div class="input-control text full-size" data-role="input">
+							<input style="padding-right: 41px;" type="text" name="orderNumber">
+							<button type="button" tabindex="-1" class="button helper-button clear"><span class="mif-cross"></span></button>
+						</div>
+					</div>
+					<div class="cell">
+						<label>Mail</label>
+						<div class="input-control text full-size" data-role="input">
+							<input style="padding-right: 41px;" type="text" name="mail">
+							<button type="button" tabindex="-1" class="button helper-button clear"><span class="mif-cross"></span></button>
+						</div>
+					</div>
+					<div class="cell">
+						<label>Civil</label>
+						<div class="input-control text full-size" data-role="input">
+							<input style="padding-right: 41px;" type="text" name="gender">
 							<button type="button" tabindex="-1" class="button helper-button clear"><span class="mif-cross"></span></button>
 						</div>
 					</div>
@@ -38,7 +59,7 @@
 	</form>
 	
 	
-	<form id="clientEditDialog">
+	<form id="clientEditDialog" data-role="validator">
 		<div data-role="dialog" class="padding20" data-close-button="true" data-overlay="true" data-overlay-color="op-dark">
 			<h1>Modifier un Client</h1>
 				<div>
@@ -72,9 +93,23 @@
 						</div>
 					</div>
 					<div class="cell">
-						<label>CIN</label>
+						<label>Numéro D'ordre</label>
 						<div class="input-control text full-size" data-role="input">
-							<input id="cin" style="padding-right: 41px;" type="text" name="cin">
+							<input id="orderNumber" style="padding-right: 41px;" type="text" name="orderNumber">
+							<button type="button" tabindex="-1" class="button helper-button clear"><span class="mif-cross"></span></button>
+						</div>
+					</div>
+					<div class="cell">
+						<label>Mail</label>
+						<div class="input-control text full-size" data-role="input">
+							<input id="mail" style="padding-right: 41px;" type="text" name="mail">
+							<button type="button" tabindex="-1" class="button helper-button clear"><span class="mif-cross"></span></button>
+						</div>
+					</div>
+					<div class="cell">
+						<label>Civil</label>
+						<div class="input-control text full-size" data-role="input">
+							<input id="gender" style="padding-right: 41px;" type="text" name="gender">
 							<button type="button" tabindex="-1" class="button helper-button clear"><span class="mif-cross"></span></button>
 						</div>
 					</div>

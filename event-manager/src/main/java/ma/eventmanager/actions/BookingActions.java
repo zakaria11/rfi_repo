@@ -1,8 +1,10 @@
 package ma.eventmanager.actions;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.RandomAccessFile;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -20,6 +22,7 @@ import ma.eventmanager.model.TicketRepotBean;
 import ma.eventmanager.service.ReferenceService;
 import ma.eventmanager.util.ProjectHelper;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 import org.apache.struts2.ServletActionContext;
 import org.apache.struts2.convention.annotation.Action;
@@ -46,6 +49,7 @@ public class BookingActions extends ActionSupport{
 	@Autowired private EventManagerDao eventManagerDao;
 	private Subscription subscription;
 	private static Logger logger = Logger.getLogger(EventActions.class);
+	Map<String, Object> responseInfo = new  HashMap<String, Object>();
 
 	
 	@Action(value = "initBooking", results = {@Result(name="initBookingSuccess",location="/event/bookingPage.jsp")})
@@ -55,14 +59,34 @@ public class BookingActions extends ActionSupport{
 		eventManagerDao.listEvents(0,Constants.DEFAULT_ROWS_NUM);
 		return "initBookingSuccess";
 	}
-	
-	@Action(value = "payTicket", results = {@Result(name="ticket",location="/event/ticketStep.jsp")})
-	public String payTicket() throws IOException{
 		
-		Map<String, Object> responseInfo = new  HashMap<String, Object>();
+	@Action(value = "executePayment", results = {@Result(name="ticket",location="/event/ticketStep.jsp")})
+	public String executePayment() throws IOException{
+		
 		responseInfo.put("isOK", "1");
 		
 		logger.debug("Selected paymentMethod : "+paymentMethod);
+		logger.debug("Selected event : "+eventId);
+		if("BORDER".equals(paymentMethod)){
+			responseInfo.put("isOK","0");
+
+			bookedEvent= (Event) eventManagerDao.retrieveEvent(eventId+"");
+
+			
+			
+			//Reteive client informations from credit card
+			CartInformations cartInfo= creatCartInfo(ReferenceService.getEnvVariabls().get("payment.reader.outFile"));
+			if(!validateCard(cartInfo)){
+				ProjectHelper.sendObjectAsJsonResponse(responseInfo,ServletActionContext.getResponse());
+				return null;
+			}
+
+			debitFromCard(cartInfo.getNumPme(),bookedEvent.getPrice()+"");
+			
+			ProjectHelper.sendObjectAsJsonResponse(responseInfo,ServletActionContext.getResponse());
+			return null;
+		}
+		
 		bookedEvent = (Event)ServletActionContext.getRequest().getSession().getAttribute("bookedEvent");
 		selectedClient = (Client)ServletActionContext.getRequest().getSession().getAttribute("selectedClient");
 		
@@ -108,26 +132,34 @@ public class BookingActions extends ActionSupport{
 		}else if("MS_CARD".equals(paymentMethod)){
 			//get card information
 			CartInformations cartInfo= creatCartInfo(ReferenceService.getEnvVariabls().get("payment.reader.outFile"));
-			if(cartInfo.getNumPme() == null){
-				responseInfo.put("isOK","0");
-				responseInfo.put("message",ReferenceService.getMessages().get("MSG000001"));
-				ProjectHelper.sendObjectAsJsonResponse(responseInfo,ServletActionContext.getResponse());
-				return null;
-			}
-			
-			if(Integer.parseInt(cartInfo.getSoldePme()) <= 0){
-				responseInfo.put("isOK","0");
-				responseInfo.put("message",ReferenceService.getMessages().get("MSG000002"));
+
+			if(!validateCard(cartInfo)){
 				ProjectHelper.sendObjectAsJsonResponse(responseInfo,ServletActionContext.getResponse());
 				return null;
 			}
 			
 			//debiter
-			debitFromCard(cartInfo,responseInfo);
+			debitFromCard(cartInfo.getNumPme(),bookedEvent.getPrice()+"");
 			ProjectHelper.sendObjectAsJsonResponse(responseInfo,ServletActionContext.getResponse());
 			return null;
 		}
 		return "ticket";
+	}
+
+	private boolean validateCard(CartInformations cartInfo) throws IOException
+	{
+		if(cartInfo.getNumPme() == null){
+			responseInfo.put("isOK","0");
+			responseInfo.put("message",ReferenceService.getMessages().get("MSG000001"));
+			return false;
+		}
+		
+		if(Integer.parseInt(cartInfo.getSoldePme()) <= 0){
+			responseInfo.put("isOK","0");
+			responseInfo.put("message",ReferenceService.getMessages().get("MSG000002"));
+			return false;
+		}
+		return true;
 	}
 	
 	
@@ -186,24 +218,33 @@ public class BookingActions extends ActionSupport{
 			return false;	
 		}
 	}
+	
 
-	private void debitFromCard(CartInformations cartInfo, Map<String, Object> responseInfo) throws IOException{
-		Runtime.getRuntime().exec(new String[]{ReferenceService.getEnvVariabls().get("payment.debit.exec")});
+	private void debitFromCard(String pmeNumber,String price) throws IOException{
 		
+		// write price and numPme in DataDebitIn
+		File paymentParamsFile = new File(ReferenceService.getEnvVariabls().get("payment.debit.inFile"));
+		List<String> lines = FileUtils.readLines(paymentParamsFile);
+		
+		creatCartInfo(ReferenceService.getEnvVariabls().get("payment.reader.outFile"));
+		
+		lines.set(2, "NumPME>ASC/16="+pmeNumber);
+		lines.set(6, "Recharge>ASC/1=0"+price);
+		FileUtils.writeLines(paymentParamsFile, lines);
+		
+		//and execute payment.debit.exec using payment.debit.inFile (passed as param in bat file)
+		Runtime.getRuntime().exec(new String[]{ReferenceService.getEnvVariabls().get("payment.debit.exec")});	
 		String paymentOutData = ReferenceService.getEnvVariabls().get("payment.debit.outFile");
 		BufferedReader bufferedReader = new BufferedReader(new FileReader(paymentOutData));
 		String line;
 		while ((line = bufferedReader.readLine()) != null) {
-			if(line.startsWith("param_XXXXXXXXXXX")){
-				String id = line.substring(line.indexOf("=")+1);
-				if(id != null && id.equals(cartInfo.getNumPme())){
-					responseInfo.put("message",ReferenceService.getMessages().get("MSG000003"));			
-				}else {
-					responseInfo.put("message",ReferenceService.getMessages().get("MSG000004"));
-				}
+			System.out.println(line);
+			if(line.contains("-1")){
+				responseInfo.put("message",ReferenceService.getMessages().get("MSG000004"));
+				return;
 			}
 		}
-		
+		this.responseInfo.put("message",ReferenceService.getMessages().get("MSG000003"));
 
 		
 	}

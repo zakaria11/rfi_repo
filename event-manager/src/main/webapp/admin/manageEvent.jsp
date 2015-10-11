@@ -16,7 +16,7 @@
                 <jsp:include page="/includes/left_menu.jsp"></jsp:include>
                 
                 <div class="cell auto-size padding20 bg-white" id="cell-content">
-                    <h1 class="text-light">Événements<span class="mif-drive-eta place-right"></span></h1>
+                    <h1 class="text-light">Événements</h1>
                     <hr class="thin bg-grayLighter">
                     
                     <button class="button primary" onclick="initCreateEntity('event')"><span class="mif-plus"></span> Créer</button>

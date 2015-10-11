@@ -21,8 +21,8 @@ public class ApplicationInitialization{
 	
 	@PostConstruct
 	public void initApp() throws Exception {
-		eventManagerDao.addUser(new User("zakaria", "zakaria"),new ArrayList<String>(Arrays.asList("ROLE_EVENT_ADMIN","REPORTING")));
-		eventManagerDao.addUser(new User("ev", "ev"),new ArrayList<String>(Arrays.asList("ROLE_EVENT_ADMIN")));
+		eventManagerDao.addUser(new User("zakaria", "zakaria","+212677665512"),new ArrayList<String>(Arrays.asList("ADMIN","REPORTING","BORDER","EVENT")));
+		eventManagerDao.addUser(new User("ev", "ev","+212635665511"),new ArrayList<String>(Arrays.asList("ADMIN")));
 		
 		//Add rooms
 		Room roomA = new Room("Salle A","desc salle A : also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishi","ACTIVATED");
@@ -56,17 +56,17 @@ public class ApplicationInitialization{
 		
 		
 		//Add Clients
-		eventManagerDao.addClient(new Client("Ali","Mohamed","CNE0001","CIN0001","Etudiant"));
-		eventManagerDao.addClient(new Client("Hassan","Omar","CNE0002","CIN0002","Chercheur"));
-		eventManagerDao.addClient(new Client("Khadija","Hajar","CNE0003","CIN0003","Etudiant"));
-		eventManagerDao.addClient(new Client("Adam","Ismail","CNE0004","CIN0004","Etudiant"));
-		eventManagerDao.addClient(new Client("Adam","Abdellah","CNE0005","CIN0005","Chercheur"));
-		eventManagerDao.addClient(new Client("Adam","Zineb","CNE0006","CIN0006","Etudiant"));
-		eventManagerDao.addClient(new Client("Monir","Zakaria","CNE0007","CIN0007","Etudiant"));
-		eventManagerDao.addClient(new Client("Houssain","Sadik","CNE0008","CIN0008","Etudiant"));
-		eventManagerDao.addClient(new Client("Yahia","Youssef","CNE0009","CIN0009","Etudiant"));
-		eventManagerDao.addClient(new Client("Youssef","Sadik","CNE00010","CIN00010","Etudiant"));
-		eventManagerDao.addClient(new Client("Ali","Youssef","CNE00011","CIN00011","Etudiant"));
+		eventManagerDao.addClient(new Client("Ali","Mohamed","CNE0001","CIN0001","Etudiant","order1","mail@mail.com","Mr"));
+		eventManagerDao.addClient(new Client("Hassan","Omar","CNE0002","CIN0002","Chercheur","order1","mail@mail.com","Mr"));
+		eventManagerDao.addClient(new Client("Khadija","Hajar","CNE0003","CIN0003","Etudiant","order1","mail@mail.com","Mr"));
+		eventManagerDao.addClient(new Client("Adam","Ismail","CNE0004","CIN0004","Etudiant","order1","mail@mail.com","Mr"));
+		eventManagerDao.addClient(new Client("Adam","Abdellah","CNE0005","CIN0005","Chercheur","order1","mail@mail.com","Mr"));
+		eventManagerDao.addClient(new Client("Adam","Zineb","CNE0006","CIN0006","Etudiant","order1","mail@mail.com","Mr"));
+		eventManagerDao.addClient(new Client("Monir","Zakaria","CNE0007","CIN0007","Etudiant","order1","mail@mail.com","Mr"));
+		eventManagerDao.addClient(new Client("Houssain","Sadik","CNE0008","CIN0008","Etudiant","order1","mail@mail.com","Mr"));
+		eventManagerDao.addClient(new Client("Yahia","Youssef","CNE0009","CIN0009","Etudiant","order1","mail@mail.com","Mr"));
+		eventManagerDao.addClient(new Client("Youssef","Sadik","CNE00010","CIN00010","Etudiant","order1","mail@mail.com","Mr"));
+		eventManagerDao.addClient(new Client("Ali","Youssef","CNE00011","CIN00011","Etudiant","order1","mail@mail.com","Mr"));
 		
 		
 	}

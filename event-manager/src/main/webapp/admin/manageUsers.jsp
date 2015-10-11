@@ -1,63 +1,41 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib prefix="s" uri="/struts-tags" %>
-
 <%@ page pageEncoding="UTF-8"%>
-
 <!DOCTYPE html>
-<html lang="en">
-  <head>
-	<jsp:include page="/includes/header.jsp"></jsp:include>	
-	<script type="text/javascript"></script>
-  </head>
-  <body>
-  	<jsp:include page="/includes/head_menu.jsp"></jsp:include>
-    <div class="container center" id="main_container">
-    	<table id="grid"></table>
-		<div id="navGrid"></div>
-   		<div class="error"><s:property value="errorNotification" /></div>
+<html>
+<head>
+	<jsp:include page="/includes/header.jsp"></jsp:include>
+	<jsp:include page="/includes/administration_common.jsp"></jsp:include>
+</head>
+<body class="bg-steel">
+	<jsp:include page="/includes/admin_header.jsp"></jsp:include>
+	<jsp:include page="/includes/userDialog.jsp"></jsp:include>
+
+    <div class="page-content">
+        <div class="flex-grid no-responsive-future" style="height: 100%;">
+            <div class="row" style="height: 100%">
+                <jsp:include page="/includes/left_menu.jsp"></jsp:include>
+                
+                <div class="cell auto-size padding20 bg-white" id="cell-content">
+                    <h1 class="text-light">Utilisateur</h1>
+                    <hr class="thin bg-grayLighter">
+                    
+                    <button class="button primary" onclick="initCreateEntity('user')"><span class="mif-plus"></span> Créer</button>
+              		<button id="userEditButton" class="button success" onclick="initEditEntity('user',adminSelectedItem,{});" style="display: none;"><span class="mif-pencil"></span> Modifier l'utilidateur n°<b></b></button>
+                    <button id="userDeleteButton" class="button alert" onclick="initDeleteEntity('user',adminSelectedItem);" style="display: none;"><span class="mif-cancel"></span> Supprimer l'utilidateur n°<b></b></button>
+                    
+                    <hr class="thin bg-grayLighter">
+                    <table id="userAdminTable" class="dataTable border bordered no-footer hovered"></table>
+   					<div class="error"><s:property value="errorNotification" /></div>
+                </div>
+            </div>
+        </div>
     </div>
-    <div id="modalContainer"></div>
-	<jsp:include page="/includes/footer.jsp"></jsp:include>
-	<script type="text/javascript">
-	 var grid = jQuery("#grid").jqGrid({
-		url : contextPath+'/user/list',
-		datatype : "json",
-		colNames : [ 'ID', 'nom', 'Login','Mail','Rôls','Téléphone','Mot de passe'],
-		colModel : [ {name : 'id',key : true,index : 'id',width : 40, editable : false,search:false}, 
-		             {name : 'name',key : true,width : 100,editable : true,searchoptions:{sopt:['eq','ne','le','lt','gt','ge']}},
-		             {name : 'username',width : 100,editable : true},
-		             {name : 'mail',width : 120,editable : true},
-		             {name : 'userRole',width : 170,editable : true,formatter:userRoleFormatter},
-		             {name : 'phone',width : 100,editable : true},
-		             {name : 'password',width : 440,editable : true}
-		           ],
-		rowNum : 50,
-		width : 700,
-		height : 700,
-		rowList : [ 10, 20, 30 ],
-		pager : '#navGrid',
-		sortname : 'id',
-		viewrecords : true,
-		sortorder : "desc",
-		jsonReader : { repeatitems : false},
-		prmNames : { addoper : "add", deloper : "del", editoper : "edit"},
-		caption : "liste des clients",
-		height : '65%',width : '100%',
-		jsonReader : {repeatitems : false, root : "list"}
-
-	});
-
-	 grid.jqGrid('navGrid', '#navGrid', {
-		edit : true,
-		add : true,
-		del : true,
-		search : false
-	}, 
-	{url : contextPath+"/user/edit"}, 
-	{url : contextPath+"/user/add"}, 
-	{url : contextPath+"/user/del"}, {});
-	 
-	 grid.jqGrid('filterToolbar',{searchOperators : true});
+    <jsp:include page="/includes/footer.jsp"></jsp:include>
+	<script type="text/javascript">	
+		dataTables_User();
 	</script>
-  </body>
+</body>
 </html>
+ 
+ 

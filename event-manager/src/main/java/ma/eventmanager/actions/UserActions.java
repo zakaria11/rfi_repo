@@ -2,13 +2,18 @@ package ma.eventmanager.actions;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+
+
 
 
 import ma.evenetmanager.criteria.CriteriaModel;
 import ma.eventmanager.constant.Constants;
 import ma.eventmanager.dao.EventManagerDao;
 import ma.eventmanager.entitys.User;
+import ma.eventmanager.model.DataTableResponseObject;
+
 import org.apache.struts2.convention.annotation.Action;
 import org.apache.struts2.convention.annotation.Namespace;
 import org.apache.struts2.convention.annotation.ParentPackage;
@@ -22,7 +27,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class UserActions extends AbstractAction{
 	
 	@Autowired private EventManagerDao eventManagerDao;
-	
+	private DataTableResponseObject resp = new DataTableResponseObject();
+
 	
 	//User data
 	private Integer id;
@@ -31,11 +37,13 @@ public class UserActions extends AbstractAction{
 	private String password;
 	private String mail;
 	private String phone;
+	
+	private String[] roles;
 
 	private List<User> list;
 
 	
-	@Action(value = "list", results = { @Result(name = "success", type = "json", params = {"root", "list" }) })
+	@Action(value = "list", results = { @Result(name = "success", type = "json", params = {"root", "resp" }) })
 	public String list() throws IOException{
 		int offset;
 		try {
@@ -48,8 +56,13 @@ public class UserActions extends AbstractAction{
 		records = eventManagerDao.getUsersCount();
 		if(get_search() != null && get_search().equals("true")){
 			list = eventManagerDao.getUsers(offset, rows,usedSearchFields());
+			resp.setData(list);
+
+			
 		}else{
 			list = eventManagerDao.getUsers(offset, rows);			
+			resp.setData(list);
+
 		}
 		total = (int) Math.ceil((double) records / (double) rows);	
 		return SUCCESS;
@@ -63,8 +76,8 @@ public class UserActions extends AbstractAction{
 		user.setUsername(username);
 		user.setPassword(password);
 		user.setMail(mail);
-		user.setPhone(phone);
-		eventManagerDao.addUser(user);
+		user.setPhone(phone);		
+		eventManagerDao.addUser(user,new ArrayList<String>(Arrays.asList(roles)));
 		return SUCCESS;
 
 	}
@@ -165,6 +178,27 @@ public class UserActions extends AbstractAction{
 		this.phone = phone;
 	}
 	
+	
+	public DataTableResponseObject getResp()
+	{
+		return resp;
+	}
+
+	public void setResp(DataTableResponseObject resp)
+	{
+		this.resp = resp;
+	}
+
+	public String[] getRoles()
+	{
+		return roles;
+	}
+
+	public void setRoles(String[] roles)
+	{
+		this.roles = roles;
+	}
+
 	public List<CriteriaModel> usedSearchFields(){
 		
 		List<CriteriaModel> criterias = new ArrayList<CriteriaModel>();

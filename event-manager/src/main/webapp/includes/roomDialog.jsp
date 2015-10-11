@@ -1,4 +1,4 @@
-	<form id="roomAddDialog">
+	<form id="roomAddDialog" data-role="validator">
 		<div data-role="dialog" class="padding20" data-close-button="true" data-overlay="true" data-overlay-color="op-dark">
 			<h1>Créer une salle</h1>
 				<div>
@@ -34,9 +34,9 @@
 		</div>
 	</form>
 	
-		<form id="roomEditDialog">
+		<form id="roomEditDialog" data-role="validator">
 		<div data-role="dialog" class="padding20" data-close-button="true" data-overlay="true" data-overlay-color="op-dark">
-			<h1>Créer une salle</h1>
+			<h1>Modifier une salle</h1>
 				<div>
 					<div class="cell">
 						<label>Id</label>

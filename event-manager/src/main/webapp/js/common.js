@@ -105,6 +105,58 @@ function initBooking(eventId){
 	window.location.href = contextPath+'/event/booking?eveetId='+eventId;
 }
 
+goToPaymentStep = function(){
+	window.location = contextPath+'/booking/paymentChoice?selectedClientId='+selectedClientId;
+};
+
+showTicketInfos = function(resp){
+	var infosDiv = $('#ticketInfoArea');
+	infosDiv.empty(); 
+	infosDiv.append('<p>ticket N °<span>'+resp.subscription.id+'</span></p>');
+	infosDiv.append('<p>Nom de l\'événement : <span>'+resp.subscription.event.name+'</span></p>');
+	infosDiv.append('<p>Prix : <span>'+resp.subscription.event.price+'</span></p>');
+	infosDiv.append('<p>Salle : <span>'+resp.subscription.event.room.name+'</span></p>');
+	infosDiv.append('<p>Description : <span>'+resp.subscription.event.description+'</span></p>');
+	
+	$("#paymentTypesGroup").animate({opacity: 'hide', height: 'hide'}, 'fast', function() {
+		$("#ticketInfosGroup").animate({opacity: 'show', height: 'show'}, 'fast');
+	  });
+	
+};
+      
+executePayment = function(PaymentType,eventId){
+	$.ajax({
+		url: contextPath+'/booking/executePayment',
+		data: {
+			paymentMethod:PaymentType,
+			eventId : eventId
+		},
+		success: function(resp){
+			if(resp.isOK == "1"){
+				//dialog.removeClass("alert");
+				//dialog.addClass("success");
+				//dialog.find("#content1").html('<button class="button" onclick="identificationStep()">Informations sur le ticket</button>');    					
+				showTicketInfos(resp);
+			}else{
+				var dialog = $('#dialog');
+				dialog.addClass("alert");
+				dialog.find("h1:first").html(resp.message);
+					
+				var dialogData = dialog.data('dialog');
+					dialogData.open();    					
+			}
+		},
+		error : function(){
+			var dialog = $('#dialog');
+				var dialogData = dialog.data('dialog');
+				dialog.addClass("alert");
+				dialog.find("h1:first").html("Une erreur est survenu, merci de reessayer ultérieurement");
+				dialogData.open();
+		},
+		dataType: 'json'
+	});
+};
+
 
 function isNumeric(n) {
   return !isNaN(parseFloat(n)) && isFinite(n);
@@ -212,15 +264,24 @@ initCreateEntity = function(entityName){
 			url: contextPath+'/room/list',
 			data: {responseFormat:'SELECT2_MAP'},
 			success: function(roomList) {
-				console.log($("#roomList"));
+				var roomsOptionComponent= $("#roomsList");
+				roomsOptionComponent.empty();
 				$.each( roomList, function( key, value ) {
-					$("#roomList").append($('<option></option>').val(value.id).html(value.text));
-				});		
+					var option = $('<option>');
+					option.html(value.text);
+					option.attr({"value":value.id});
+					roomsOptionComponent.append(option);
+				});
+				dialog.open();
 			},
 			dataType: 'json'
 		});
 	}
-    dialog.open();
+	//Create dialog with no extra treatment (Select component, ajax calls ...)
+	else{
+		dialog.open();
+	}
+    
 };
 
 initEditEntity = function(entityName,entityId,columns){
@@ -320,21 +381,22 @@ deleteEntity = function(entityName,entityId){
 
 createEntity = function(entityName){
 	form = $('#'+entityName+'AddDialog');
-	
-	$.ajax({
-		url : contextPath+'/'+entityName+'/add',
-		method  : 'POST',
-		data : form.serializeArray(),
-		dataType : "json",
-		success : function(response){
-			form.children().data('dialog').close();
-			var table = $('#'+entityName+'Table').DataTable();
-			table.ajax.reload();
-		},
-		error : function(response){
-			
-		}
-	});
+	if(form.data("validator").validateForm()){
+		$.ajax({
+			url : contextPath+'/'+entityName+'/add',
+			method  : 'POST',
+			data : form.serializeArray(),
+			dataType : "json",
+			success : function(response){
+				form.children().data('dialog').close();
+				var table = $('#'+entityName+'Table').DataTable();
+				table.ajax.reload();
+			},
+			error : function(response){
+				//form.children().data('dialog').close();
+			}
+		});
+	}
 };
 
 crudHundlers = function(entityName){
@@ -359,7 +421,7 @@ dataTables_Event = function(){
 		"ajaxSource": contextPath+"/event/list",
 		"columns": [
 		    { "data": "id", "title": "Id" ,"width": "70px"},
-		    { "data": "date", "title": "Name", "width": "140px" },
+		    { "data": "date", "title": "Date", "width": "140px" },
 		    { "data": "price", "title": "Prix"},
 		    { "data": "name", "title": "Nom"},
 		    { "data": "description", "title": "Description"},
@@ -383,6 +445,32 @@ dataTables_Room = function(){
 	crudHundlers('room');
 };
 
+listFormatter = function ( data, type, row ) {
+	var ulDiv = '<div class="list-group-content">';
+	$.each(row.userRole, function( k,v ){
+		ulDiv+= '<div class="list"><div class="list-content"><span class="list-title">';
+		ulDiv+= v.role;
+		ulDiv+= '</span></div></div>';
+	});
+	ulDiv += '</ul>';
+	return ulDiv;
+  };
+
+dataTables_User = function(){
+	$('#userAdminTable').dataTable({
+		"ajaxSource": contextPath+"/user/list",
+		"columns": [
+		    { "data": "id", "title": "Id" ,"width": "70px"},
+		    { "data": "username", "title": "Utilisateur"},
+		    { "data": "userRole", "title": "Rôls","render": listFormatter},
+		    { "data": "mail", "title": "Email"},
+		    { "data": "name", "title": "Nom", "width": "140px" },
+		    { "data": "description", "title": "Description"}
+		  ]
+	});
+	crudHundlers('user');
+};
+
 dataTables_Client = function(){
 	$('#clientAdminTable').dataTable({
 		"ajaxSource": contextPath+"/client/list",
@@ -391,8 +479,10 @@ dataTables_Client = function(){
 		    { "data": "firstName", "title": "Nom", "width": "140px" },
 		    { "data": "lastName", "title": "Prénom"},
 		    { "data": "cne", "title": "CNE"},
-		    { "data": "cin", "title": "CIN"},
-		    { "data": "roleId", "title": "Rôle"}
+		    //{ "data": "cin", "title": "CIN"},
+		    { "data": "orderNumber", "title": "Numéro D'ordre"},
+		    { "data": "mail", "title": "Mail"},
+		    { "data": "gender", "title": "Civil"}
 		  ]
 	});
 	crudHundlers('client');
@@ -525,4 +615,57 @@ plotGraph = function(target) {
 			//unloading
 		}
 	});
+};
+
+
+goBackward = function(){
+	window.history.back();
+};
+
+goForward = function(){
+	window.history.forward();
+};
+
+initUploadClients = function(){
+	$('#uploadClientsButton').animate({opacity: 'show', height: 'show'}, 'fast');
+};
+showUploadDialog = function(){
+	$('#selectClientsInput').click();
+};
+
+printEventDetails = function(entityId){
+	selectedEventId = entityId;
+	$.ajax({
+		url: contextPath+'/entity/load',
+		data: {entityName:'event',entityId : entityId},
+		beforeSend : function(){
+			$("#eventAttributesSpinner").animate({opacity: 'show', height: 'show'}, 'fast');
+			$('#eventAttributes').animate({opacity: 'hide', height: 'hide'}, 'fast');
+			$("#identificationStepButton").animate({opacity: 'hide', height: 'hide'}, 'fast');
+		},
+		complete : function(){
+			$("#eventAttributesSpinner").animate({opacity: 'hide', height: 'hide'}, 'fast');
+		},
+		success: function(entity){
+			/*$.each(entity, function( key, value ) {
+				var eventAttrDiv = '<p class="no-margin text-shadow">'+entity.key+'<span class="text-bold  padding10">'+entity.val+'</span></p>';
+				$('#eventAttributes').append(eventAttrDiv);
+			});*/
+			var evntAttrsDiv = $('#eventAttributes');
+			evntAttrsDiv.empty();
+			evntAttrsDiv.append('<p class="no-margin text-shadow"><span class="text-bold">Id</span><span class="padding10">'+entity.id+'</span></p>');
+			evntAttrsDiv.append('<p class="no-margin text-shadow"><span class="text-bold">Nom</span><span class="padding10">'+entity.name+'</span></p>');
+			evntAttrsDiv.append('<p class="no-margin text-shadow"><span class="text-bold">Prix</span><span class="padding10">'+entity.price+'</span></p>');
+			evntAttrsDiv.append('<p class="no-margin text-shadow"><span class="text-bold">Description</span><span class="padding10">'+entity.description+'</span></p>');
+			evntAttrsDiv.animate({opacity: 'show', height: 'show'}, 'fast');
+			$("#identificationStepButton").animate({opacity: 'show', height: 'show'}, 'fast');
+		},
+		dataType: 'json'
+	});
+};
+
+
+var identificationStep = function(){
+	console.log(selectedEventId);
+	window.location = contextPath+'/booking/identification?eventId='+selectedEventId;
 };

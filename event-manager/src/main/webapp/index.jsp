@@ -101,36 +101,35 @@
 
             <div class="tile-container">
 
-                <a href="<%=request.getContextPath()%>/event/choice" class="tile bg-indigo fg-white" data-role="tile">
+                <a href="<%=request.getContextPath()%>/event/choice" class="tile tile-large bg-indigo fg-white" data-role="tile">
                     <div class="tile-content iconic">
                         <span class="icon mif-calendar"></span>
                     </div>
                     <span class="tile-label">Evenements</span>
                 </a>
-
-<%--                 <a href="<%=request.getContextPath()%>/event/administration" class="tile bg-lime fg-white" data-role="tile">
-                    <div class="tile-content iconic">
-                        <span class="icon mif-cogs"></span>
-                    </div>
-                    <span class="tile-label">Reserver</span>
-                </a> --%>
             </div>
         </div>
 
         <div class="tile-group double">
             <span class="tile-group-title">options</span>
             <div class="tile-container">
-                <a href="<%=request.getContextPath()%>/admin/manageEvent.jsp" class="tile bg-teal fg-white" data-role="tile">
+                <a href="<%=request.getContextPath()%>/admin/manageEvent.jsp" class="tile bg-yellow fg-white" data-role="tile">
                     <div class="tile-content iconic">
-                        <span class="icon mif-pencil"></span>
+                        <span class="icon mif-cogs"></span>
                     </div>
                     <span class="tile-label">Administration</span>
                 </a>
-                <a href="<%=request.getContextPath()%>/reporting/index.jsp" class="tile bg-darkGreen fg-white" data-role="tile">
+                <a href="<%=request.getContextPath()%>/reporting/index.jsp" class="tile bg-lightGreen fg-white" data-role="tile">
                     <div class="tile-content iconic">
                         <span class="icon mif-chart-dots"></span>
                     </div>
                     <span class="tile-label">Reporting</span>
+                </a>
+                <a href="<%=request.getContextPath()%>/border/index.jsp" class="tile bg-orange fg-white" data-role="tile">
+                    <div class="tile-content iconic">
+                        <span class="icon mif-tablet"></span>
+                    </div>
+                    <span class="tile-label">Borne</span>
                 </a>
             </div>
         </div>

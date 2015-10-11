@@ -19,7 +19,7 @@
 		</property>
 		<property name="dataSource">
 			<ref bean="data-source" />
-		</property>		
+		</property>
 	</bean>
 
 
@@ -98,9 +98,12 @@
 	<bean id="envVariabls" class="java.util.HashMap">
 		<constructor-arg>
 			<map>
+				<!-- Lecture -->
 				<entry key="payment.reader.exec" value="C:\Users\zakaria\dev\evenetmanager\dll_monetique\Lecture\lecture.bat" />
 				<entry key="payment.reader.outFile" value="C:\Users\zakaria\dev\evenetmanager\dll_monetique\Lecture\Dataout.txt" />
+				<!-- Debiter -->
 				<entry key="payment.debit.exec" value="C:\Users\zakaria\dev\evenetmanager\dll_monetique\Debit\Debit.bat" />
+				<entry key="payment.debit.inFile" value="C:\Users\zakaria\dev\evenetmanager\dll_monetique\Debit\DataDebitIn.txt" />
 				<entry key="payment.debit.outFile" value="C:\Users\zakaria\dev\evenetmanager\dll_monetique\Debit\DataDebitout.txt" />
 				
 			</map>
@@ -112,13 +115,15 @@
 			<map>
 				<entry key="MSG000001" value="Impossible de récuperer les informations sur la carte" />
 				<entry key="MSG000002" value="Solde insuffisant pour effectuer l'opération" />
-				<entry key="MSG000003" value="Paiement effectué avec succes" />
+				<entry key="MSG000003" value="Paiement effectué avec succès" />
 				<entry key="MSG000004" value="Erreur est survenue durant le paiement" />
-				<entry key="MSG000005" value="Le client %s est déjà inscrit dans cette événemnt" />		
+				<entry key="MSG000005" value="Le client N° %s est déjà inscrit dans cette événemnt" />		
 				<entry key="MSG000006" value="Invalid subcription id" />
 				<entry key="MSG000007" value="User subscription not found" />
 				<entry key="MSG000008" value="User subscription successfully updated" />
 				<entry key="MSG000009" value="La salle est pleine Nombre (Max = %s)" />
+				<entry key="MSG000010" value="Fichier invalid" />
+				<entry key="MSG000011" value="Fichier importé avec succès" />
 				
 			</map>
 		</constructor-arg>
@@ -130,7 +135,7 @@
 				<entry key="MS_CARD" value="Carte multiservices" />
 				<entry key="CASH" value="Espèce" />
 				<entry key="CR_CARD" value="Carte bancaire" />
-				<entry key="LIST" value="Echange d'un billet electrique" />
+				<!-- <entry key="LIST" value="Echange d'un billet electrique" /> -->
 			</map>
 		</constructor-arg>
 	</bean>

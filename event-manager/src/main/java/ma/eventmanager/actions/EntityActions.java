@@ -15,6 +15,7 @@ import ma.eventmanager.entitys.UserRole;
 import ma.eventmanager.model.ClientVo;
 import ma.eventmanager.model.EventVo;
 import ma.eventmanager.model.RoomVo;
+import ma.eventmanager.model.UserVo;
 import ma.eventmanager.util.ProjectHelper;
 
 import org.apache.struts2.ServletActionContext;
@@ -39,6 +40,7 @@ public class EntityActions extends AbstractAction{
 	private EventVo event;
 	private RoomVo room;
 	private ClientVo client;
+	private UserVo user;
 	
 	@Action(value = "load", results = {@Result  (name = "success", type = "json",params = {"root", "resp" })})
 	public String load() throws IOException{
@@ -61,7 +63,7 @@ public class EntityActions extends AbstractAction{
 
 		if("user".equals(entityName)){
 			User user= (User) eventManagerDao.retrieveUser(entityId);
-			//ProjectHelper.sendObjectAsJsonResponse(user.toUserVo(),ServletActionContext.getResponse());
+			ProjectHelper.sendObjectAsJsonResponse(user.toUserVo(),ServletActionContext.getResponse());
 			return null;			
 		}
 
@@ -86,6 +88,9 @@ public class EntityActions extends AbstractAction{
 		if("client".equals(entityName)){
 			eventManagerDao.deleteClient(Integer.parseInt(entityId));
 		}	
+		if("user".equals(entityName)){
+			eventManagerDao.deleteUser(Integer.parseInt(entityId));
+		}	
 		resp.put("isOK", "1");
 
 		return SUCCESS;
@@ -101,7 +106,11 @@ public class EntityActions extends AbstractAction{
 		}		
 		if("client".equals(entityName)){
 			eventManagerDao.updateClient(new Client(client));
+		}	
+		if("user".equals(entityName)){
+			eventManagerDao.updateUser(new User(user));
 		}		
+
 		resp.put("isOK", "1");
 		return SUCCESS;
 	}
@@ -166,9 +175,14 @@ public class EntityActions extends AbstractAction{
 		this.client = client;
 	}
 
-	
-	
-	
-	
+	public UserVo getUser()
+	{
+		return user;
+	}
+
+	public void setUser(UserVo user)
+	{
+		this.user = user;
+	}
 
 }

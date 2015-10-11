@@ -9,6 +9,7 @@ import ma.eventmanager.constant.Constants;
 import ma.eventmanager.dao.EventManagerDao;
 import ma.eventmanager.entitys.Client;
 import ma.eventmanager.entitys.Room;
+import ma.eventmanager.model.ClientVo;
 import ma.eventmanager.model.DataTableResponseObject;
 import ma.eventmanager.util.ProjectHelper;
 
@@ -27,19 +28,23 @@ import org.springframework.beans.factory.annotation.Autowired;
 @ParentPackage("json-default")
 public class ClientActions extends AbstractAction{
 	
-	//Client filelds
+	//Client search filelds
 	private String firstName;
 	private String lastName;
 	private String cne;
 	private String cin;
 	private String roleId;
-
+	private String orderNumber;
+	private String mail;
+	private String gender;
+	
 	private DataTableResponseObject resp = new DataTableResponseObject();
 
 
 	@Autowired private EventManagerDao eventManagerDao;
 	private List<Client> list= new ArrayList<Client>();
 	private String errorNotification;
+	private ClientVo client;
 
 
 	@Action(value = "list", results = { @Result(name = "success", type = "json", params = {"root", "resp" }) })
@@ -67,7 +72,7 @@ public class ClientActions extends AbstractAction{
 	
 	@Action(value = "add", results = { @Result(name = "success", type = "json") })
 	public String add() throws IOException{
-		Client client = new Client(firstName,lastName,cne,cin,roleId);
+		Client client = new Client(firstName,lastName,cne,cin,roleId,orderNumber,mail,gender);
 		Integer addState = eventManagerDao.addClient(client);
 		ProjectHelper.sendObjectAsJsonResponse(addState,ServletActionContext.getResponse());
 		return null;
@@ -178,6 +183,47 @@ public class ClientActions extends AbstractAction{
 	{
 		this.resp = resp;
 	}
+
+	public ClientVo getClient()
+	{
+		return client;
+	}
+
+	public void setClient(ClientVo client)
+	{
+		this.client = client;
+	}
+
+	public String getOrderNumber()
+	{
+		return orderNumber;
+	}
+
+	public void setOrderNumber(String orderNumber)
+	{
+		this.orderNumber = orderNumber;
+	}
+
+	public String getMail()
+	{
+		return mail;
+	}
+
+	public void setMail(String mail)
+	{
+		this.mail = mail;
+	}
+
+	public String getGender()
+	{
+		return gender;
+	}
+
+	public void setGender(String gender)
+	{
+		this.gender = gender;
+	}
+	
 
 	
 		
