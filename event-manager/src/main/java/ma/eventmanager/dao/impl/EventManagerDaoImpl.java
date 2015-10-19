@@ -35,10 +35,18 @@ public class EventManagerDaoImpl extends HibernateDaoSupport implements EventMan
 		getHibernateTemplate().save(event);		
 	}
 
-	public List<Event> listEvents(int offset, Integer rows){
+	public List<Event> listEvents(int offset, Integer rows,Date from,Date to){
 		Session session = getHibernateTemplate().getSessionFactory().getCurrentSession();
 		session.beginTransaction();
-		Query query = session.createQuery("FROM Event");
+		Query query = session.createQuery("FROM Event WHERE date between :from AND :to");
+		query.setDate("from", from);
+		if(to == null){
+			Calendar cal = Calendar.getInstance(); 
+			cal.add(Calendar.YEAR, 7000);
+			to = cal.getTime();
+		}
+		query.setDate("to",to);
+		
 		query.setFirstResult(offset);
 		query.setMaxResults(rows);
 		List<Event> list = (List<Event>) query.list();
@@ -212,9 +220,9 @@ public class EventManagerDaoImpl extends HibernateDaoSupport implements EventMan
 		}
 	}
 
-	public List<Event> listEvents(int offset, Integer rows, List<CriteriaModel> usedSearchFields){
+	public List<Event> listEvents(int offset, Integer rows, List<CriteriaModel> usedSearchFields,Date from,Date to){
 		if(usedSearchFields == null && usedSearchFields.size() == 0){
-			return listEvents(offset, rows);
+			return listEvents(offset, rows,from,to);
 		}else{
 			Session session = getHibernateTemplate().getSessionFactory().openSession();
 			Criteria criteria = session.createCriteria(Event.class);

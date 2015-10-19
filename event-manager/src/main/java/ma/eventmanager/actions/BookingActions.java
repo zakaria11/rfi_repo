@@ -56,7 +56,7 @@ public class BookingActions extends ActionSupport{
 	public String initBooking(){
 		bookedEvent= (Event) eventManagerDao.retrieveEvent(eventId+"");
 		ServletActionContext.getRequest().getSession().setAttribute("bookedEvent", bookedEvent);
-		eventManagerDao.listEvents(0,Constants.DEFAULT_ROWS_NUM);
+		eventManagerDao.listEvents(0,Constants.DEFAULT_ROWS_NUM,new Date(),null);
 		return "initBookingSuccess";
 	}
 		
@@ -65,35 +65,16 @@ public class BookingActions extends ActionSupport{
 		
 		responseInfo.put("isOK", "1");
 		
-		logger.debug("Selected paymentMethod : "+paymentMethod);
-		logger.debug("Selected event : "+eventId);
-		if("BORDER".equals(paymentMethod)){
-			responseInfo.put("isOK","0");
-
-			bookedEvent= (Event) eventManagerDao.retrieveEvent(eventId+"");
-
-			
-			
-			//Reteive client informations from credit card
-			CartInformations cartInfo= creatCartInfo(ReferenceService.getEnvVariabls().get("payment.reader.outFile"));
-			if(!validateCard(cartInfo)){
-				ProjectHelper.sendObjectAsJsonResponse(responseInfo,ServletActionContext.getResponse());
-				return null;
-			}
-
-			debitFromCard(cartInfo.getNumPme(),bookedEvent.getPrice()+"");
-			
-			ProjectHelper.sendObjectAsJsonResponse(responseInfo,ServletActionContext.getResponse());
-			return null;
-		}
 		
 		bookedEvent = (Event)ServletActionContext.getRequest().getSession().getAttribute("bookedEvent");
+		if(bookedEvent == null){
+			bookedEvent= (Event) eventManagerDao.retrieveEvent(eventId+"");
+		}
+		
+		
 		selectedClient = (Client)ServletActionContext.getRequest().getSession().getAttribute("selectedClient");
 		
-	    ServletActionContext.getRequest().getSession().getAttribute("user");
-
-		String userId = SecurityContextHolder.getContext().getAuthentication().getName();
-	
+		String userId = SecurityContextHolder.getContext().getAuthentication().getName();	
 		subscription = new Subscription(bookedEvent,paymentMethod,userId,selectedClient,new Date());
 		
 		if(bookedEvent.getRemainingPlaces() <= 0){
@@ -107,20 +88,19 @@ public class BookingActions extends ActionSupport{
 			bookedEvent.setRemainingPlaces(count);	
 		}
 		
-		if(!isAlreadySubscribed(bookedEvent.getId(),selectedClient.getId())){
-			eventManagerDao.saveSubscription(subscription);
-			eventManagerDao.updateEvent(bookedEvent);
-		
-		}else{
+		if(isAlreadySubscribed(bookedEvent.getId(),selectedClient.getId())){
 			responseInfo.put("isOK","0");
 			responseInfo.put("message",String.format(ReferenceService.getMessages().get("MSG000005"), selectedClient.getId()));
 			ProjectHelper.sendObjectAsJsonResponse(responseInfo,ServletActionContext.getResponse());
 			return null;
-		}		
+		}
+		
+		eventManagerDao.saveSubscription(subscription);
+		eventManagerDao.updateEvent(bookedEvent);
 		responseInfo.put("subscription", subscription);
-		
 		ServletActionContext.getRequest().getSession().setAttribute("ticketRepotBean", createReportBean(subscription));
-		
+
+		/*Payment types test*/
 		if("CASH".equals(paymentMethod) || "CR_CARD".equals(paymentMethod)){
 			responseInfo.put("message",ReferenceService.getMessages().get("MSG000003"));
 			ProjectHelper.sendObjectAsJsonResponse(responseInfo,ServletActionContext.getResponse());
@@ -136,9 +116,20 @@ public class BookingActions extends ActionSupport{
 			if(!validateCard(cartInfo)){
 				ProjectHelper.sendObjectAsJsonResponse(responseInfo,ServletActionContext.getResponse());
 				return null;
-			}
-			
+			}		
 			//debiter
+			debitFromCard(cartInfo.getNumPme(),bookedEvent.getPrice()+"");
+			ProjectHelper.sendObjectAsJsonResponse(responseInfo,ServletActionContext.getResponse());
+			return null;
+		}else if("BORDER".equals(paymentMethod)){
+			responseInfo.put("isOK","0");
+			//Reteive client informations from credit card
+			CartInformations cartInfo= creatCartInfo(ReferenceService.getEnvVariabls().get("payment.reader.outFile"));
+			if(!validateCard(cartInfo)){
+				ProjectHelper.sendObjectAsJsonResponse(responseInfo,ServletActionContext.getResponse());
+				return null;
+			}
+			//deiiter
 			debitFromCard(cartInfo.getNumPme(),bookedEvent.getPrice()+"");
 			ProjectHelper.sendObjectAsJsonResponse(responseInfo,ServletActionContext.getResponse());
 			return null;
@@ -201,9 +192,14 @@ public class BookingActions extends ActionSupport{
 		
 		//QR Code
 		bean.setQrCode( 
-			bean.getSubscriptionId()+";"
-			+bean.getClientFirstName()+" "+bean.getClientLastName()+";"
-			+bean.getRoomId()
+//			bean.getSubscriptionId()+";"
+//			+bean.getClientFirstName()+" "+bean.getClientLastName()+";"
+//			+bean.getRoomId()
+			"ID_ISC_00001\n"
+			+"NOM_PORTEUR000001\n"
+			+"CODE_PORTEUR000001\n"
+			+"http://server/path/to/image/image.jpeg\n"
+			+"NOM_SALLE00001\n"
 		);
 		
 		return bean;

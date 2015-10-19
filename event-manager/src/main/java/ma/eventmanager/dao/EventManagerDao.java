@@ -1,5 +1,6 @@
 package ma.eventmanager.dao;
 
+import java.util.Date;
 import java.util.List;
 
 import ma.evenetmanager.criteria.CriteriaModel;
@@ -14,7 +15,7 @@ public interface EventManagerDao {
 
 	public void addEvent(Event event);
 
-	public List<Event> listEvents(int offset, Integer rows);
+	public List<Event> listEvents(int offset, Integer rows,Date from,Date to);
 
 	public void deleteEvent(Integer eventId);
 
@@ -52,7 +53,7 @@ public interface EventManagerDao {
 
 	public List<Room> getRooms(int offset, Integer rows, List<CriteriaModel> usedSearchFields);
 
-	public List<Event> listEvents(int offset, Integer rows, List<CriteriaModel> usedSearchFields);
+	public List<Event> listEvents(int offset, Integer rows, List<CriteriaModel> usedSearchFields,Date from,Date to);
 
 	public Client retreiveClient(String entityId);
 

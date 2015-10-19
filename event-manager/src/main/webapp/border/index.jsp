@@ -101,7 +101,7 @@
     </div>
 
 <script type="text/javascript">
-dataTables_Choice_Event();
+eventsBorderChoice();
 </script>
 </body>
 </html>

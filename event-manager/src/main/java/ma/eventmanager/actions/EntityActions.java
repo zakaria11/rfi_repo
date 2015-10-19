@@ -12,10 +12,12 @@ import ma.eventmanager.entitys.Room;
 import ma.eventmanager.entitys.Subscription;
 import ma.eventmanager.entitys.User;
 import ma.eventmanager.entitys.UserRole;
+import ma.eventmanager.model.Attribute;
 import ma.eventmanager.model.ClientVo;
 import ma.eventmanager.model.EventVo;
 import ma.eventmanager.model.RoomVo;
 import ma.eventmanager.model.UserVo;
+import ma.eventmanager.model.ViewEntity;
 import ma.eventmanager.util.ProjectHelper;
 
 import org.apache.struts2.ServletActionContext;
@@ -36,6 +38,7 @@ public class EntityActions extends AbstractAction{
 	Map<String,Object> resp = new HashMap<String, Object>();
 	private String entityName;
 	private String entityId;
+	private String entityFormat;
 	
 	private EventVo event;
 	private RoomVo room;
@@ -44,35 +47,31 @@ public class EntityActions extends AbstractAction{
 	
 	@Action(value = "load", results = {@Result  (name = "success", type = "json",params = {"root", "resp" })})
 	public String load() throws IOException{
+		
+		Object entity = null;
 		if("event".equals(entityName)){
-			Event ev = (Event) eventManagerDao.retrieveEvent(entityId);
-			ProjectHelper.sendObjectAsJsonResponse(ev.toEventVo(),ServletActionContext.getResponse());
-			return null;			
+			entity = eventManagerDao.retrieveEvent(entityId).toEventVo();
 		}
 		if("room".equals(entityName)){
-			Room room= (Room) eventManagerDao.retrieveRoom(entityId);
-			ProjectHelper.sendObjectAsJsonResponse(room.toRoomVo(),ServletActionContext.getResponse());
-			return null;			
+			entity= eventManagerDao.retrieveRoom(entityId).toRoomVo();
 		}
-
 		if("client".equals(entityName)){
-			Client client= (Client) eventManagerDao.retreiveClient(entityId);
-			ProjectHelper.sendObjectAsJsonResponse(client.toClientVo(),ServletActionContext.getResponse());
-			return null;			
+			entity = eventManagerDao.retreiveClient(entityId).toClientVo();
 		}
-
 		if("user".equals(entityName)){
-			User user= (User) eventManagerDao.retrieveUser(entityId);
-			ProjectHelper.sendObjectAsJsonResponse(user.toUserVo(),ServletActionContext.getResponse());
-			return null;			
+			entity=eventManagerDao.retrieveUser(entityId).toUserVo();
 		}
-
 		if("subscription".equals(entityName)){
 			Subscription subscription= (Subscription) eventManagerDao.retrieveSubscription(entityId);
 			//ProjectHelper.sendObjectAsJsonResponse(subscription.toSubscriptionVo(),ServletActionContext.getResponse());
 			return null;			
 		}
-		
+		if(entityFormat == null){
+			ProjectHelper.sendObjectAsJsonResponse(entity,ServletActionContext.getResponse());			
+		}else if ("view".equals(entityFormat)) {
+			ViewEntity viewEntity = ProjectHelper.toViewEntity(entity);			
+			ProjectHelper.sendObjectAsJsonResponse(viewEntity,ServletActionContext.getResponse());
+		}
 		return null;
 	}
 
@@ -184,5 +183,16 @@ public class EntityActions extends AbstractAction{
 	{
 		this.user = user;
 	}
+
+	public String getEntityFormat()
+	{
+		return entityFormat;
+	}
+
+	public void setEntityFormat(String entityFormat)
+	{
+		this.entityFormat = entityFormat;
+	}
+	
 
 }

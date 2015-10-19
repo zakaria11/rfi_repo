@@ -488,10 +488,16 @@ dataTables_Client = function(){
 	crudHundlers('client');
 };
 
-dataTables_Choice_Event = function(){
+
+
+eventsBorderChoice = function(){
 	 var table = $('#eventChoiceTable').dataTable({
 			"ajaxSource": contextPath+"/event/list",
-			"scrollY":"380px",
+			//"scrollY":"470px",
+			"searching":false,
+			"pageLength": 8,
+		    "bLengthChange": false,
+		    "bFilter": true,
 	        "scrollCollapse": true,
 			"columns": [
 			    { "data": "id", "title": "Id" ,"width": "70px"},
@@ -499,8 +505,34 @@ dataTables_Choice_Event = function(){
 			    { "data": "price", "title": "Prix"},
 			    { "data": "name", "title": "Nom"},
 			    { "data": "state", "title": "Statut"},
-			    { "data": "places", "title": "Nbr places"},
-			    { "data": "remainingPlaces", "title": "Nbr places restantes"},
+			    { "data": "places", "title": "Nbr places","width": "70px"},
+			    { "data": "remainingPlaces", "title": "Nbr places restantes","width": "70px"},
+			    { "data": "room.name","sDefaultContent": "-", "title": "Salle"}
+			  ]
+		});
+		
+	 	var table = $('#eventChoiceTable').DataTable();
+	    $('#eventChoiceTable tbody').on('click', 'tr', function () {
+		    var data = table.row(this).data();
+       	$("tr").removeClass("selected");
+       	$(this).addClass("selected");
+       	printEventDetails(data.id);
+		});
+};
+
+dataTables_Choice_Event = function(){
+	 var table = $('#eventChoiceTable').dataTable({
+			"ajaxSource": contextPath+"/event/list",
+			//"scrollY":"380px",
+	        "scrollCollapse": true,
+			"columns": [
+			    { "data": "id", "title": "Id" ,"width": "70px"},
+			    { "data": "date", "title": "Name", "width": "140px" },
+			    { "data": "price", "title": "Prix"},
+			    { "data": "name", "title": "Nom"},
+			    { "data": "state", "title": "Statut"},
+			    { "data": "places", "title": "Nbr places","width": "70px"},
+			    { "data": "remainingPlaces", "title": "Nbr places restantes","width": "70px"},
 			    { "data": "room.name","sDefaultContent": "-", "title": "Salle"}
 			  ]
 		});

@@ -19,27 +19,35 @@ public class Event {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@ViewField(name="Date")
 	private Integer id;
 	
 	@Column
+	@ViewField(name="Date")
 	private Date date;
 	
 	@Column
+	@ViewField(name="Prix")
 	private Double price;
 	
 	@Column
+	@ViewField(name="Nbr places restantes")
 	private Double remainingPlaces;
 	
 	@Column
+	@ViewField(name="Nome")
 	private String name;
 	
 	@Column
+	@ViewField(name="Description")
 	private String description;
 	
 	@Column
+	@ViewField(name="Etat")
 	private String state;
 
 	@Column
+	@ViewField(name="Places")
 	private Double places;
 
 	@ManyToOne

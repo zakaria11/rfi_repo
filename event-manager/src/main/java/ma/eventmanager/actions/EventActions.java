@@ -63,14 +63,14 @@ public class EventActions extends AbstractAction{
 	
 	@Action(value = "choice", results = {@Result(name="home",location="/event/choice.jsp")})
 	public String  choice() {
-		list = eventManagerDao.listEvents(0,Constants.DEFAULT_ROWS_NUM);				
+		list = eventManagerDao.listEvents(0,Constants.DEFAULT_ROWS_NUM,new Date(),null);				
 		return "home";
 	}
 	
 	@Action(value = "administration", results = {@Result(name="administration",location="/event/administration.jsp")})
 	public String  administration() {
 		try{
-			list = eventManagerDao.listEvents(0,Constants.DEFAULT_ROWS_NUM);				
+			list = eventManagerDao.listEvents(0,Constants.DEFAULT_ROWS_NUM,new Date(),null);				
 			return "list";
 		}catch(DataAccessResourceFailureException e){
 			e.printStackTrace();
@@ -103,10 +103,10 @@ public class EventActions extends AbstractAction{
 		}
 
 		if(get_search() != null && get_search().equals("true")){
-			list = eventManagerDao.listEvents(offset, rows,usedSearchFields());
+			list = eventManagerDao.listEvents(offset, rows,usedSearchFields(), new Date(),null);
 			resp.setData(list);
 		}else{
-			list = eventManagerDao.listEvents(offset, rows);
+			list = eventManagerDao.listEvents(offset, rows,new Date(),null);
 			resp.setData(list);
 		}
 		records = eventManagerDao.getEventsCount();
