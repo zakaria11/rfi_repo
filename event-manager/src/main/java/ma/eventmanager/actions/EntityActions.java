@@ -45,21 +45,26 @@ public class EntityActions extends AbstractAction{
 	private ClientVo client;
 	private UserVo user;
 	
-	@Action(value = "load", results = {@Result  (name = "success", type = "json",params = {"root", "resp" })})
+	ViewEntity viewEntity;
+	
+	@Action(value = "load", results = {
+		@Result  (name = "success", type = "json",params = {"root", "resp" }),
+		@Result  (name = "htmlTableDetails", location="/entity/htmlTableDetails.jsp")
+	})
 	public String load() throws IOException{
 		
-		Object entity = null;
+		Object entityVo = null;
 		if("event".equals(entityName)){
-			entity = eventManagerDao.retrieveEvent(entityId).toEventVo();
+			entityVo = eventManagerDao.retrieveEvent(entityId).toEventVo();
 		}
 		if("room".equals(entityName)){
-			entity= eventManagerDao.retrieveRoom(entityId).toRoomVo();
+			entityVo= eventManagerDao.retrieveRoom(entityId).toRoomVo();
 		}
 		if("client".equals(entityName)){
-			entity = eventManagerDao.retreiveClient(entityId).toClientVo();
+			entityVo = eventManagerDao.retreiveClient(entityId).toClientVo();
 		}
 		if("user".equals(entityName)){
-			entity=eventManagerDao.retrieveUser(entityId).toUserVo();
+			entityVo=eventManagerDao.retrieveUser(entityId).toUserVo();
 		}
 		if("subscription".equals(entityName)){
 			Subscription subscription= (Subscription) eventManagerDao.retrieveSubscription(entityId);
@@ -67,10 +72,14 @@ public class EntityActions extends AbstractAction{
 			return null;			
 		}
 		if(entityFormat == null){
-			ProjectHelper.sendObjectAsJsonResponse(entity,ServletActionContext.getResponse());			
-		}else if ("view".equals(entityFormat)) {
-			ViewEntity viewEntity = ProjectHelper.toViewEntity(entity);			
+			ProjectHelper.sendObjectAsJsonResponse(entityVo,ServletActionContext.getResponse());			
+		}else if ("json".equals(entityFormat)) {
+			viewEntity = ProjectHelper.toViewEntity(entityVo);
 			ProjectHelper.sendObjectAsJsonResponse(viewEntity,ServletActionContext.getResponse());
+		}else if ("htmlTableDetails".equals(entityFormat)) {
+			viewEntity = ProjectHelper.toViewEntity(entityVo);
+			
+			return "htmlTableDetails";
 		}
 		return null;
 	}
@@ -192,6 +201,16 @@ public class EntityActions extends AbstractAction{
 	public void setEntityFormat(String entityFormat)
 	{
 		this.entityFormat = entityFormat;
+	}
+
+	public ViewEntity getViewEntity()
+	{
+		return viewEntity;
+	}
+
+	public void setViewEntity(ViewEntity viewEntity)
+	{
+		this.viewEntity = viewEntity;
 	}
 	
 

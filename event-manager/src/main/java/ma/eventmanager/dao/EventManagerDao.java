@@ -13,6 +13,7 @@ import ma.eventmanager.model.Attribute;
 
 public interface EventManagerDao {
 
+	//dao EVnmt
 	public void addEvent(Event event);
 
 	public List<Event> listEvents(int offset, Integer rows,Date from,Date to);
@@ -22,6 +23,7 @@ public interface EventManagerDao {
 	public void updateEvent(Event event);
 
 	public void saveSubscription(Subscription subscription);
+	//dao User
 
 	public User getUsers(String username);
 
@@ -35,11 +37,10 @@ public interface EventManagerDao {
 
 	public void editUser(User user);
 
-	public List<Room> getRooms(int offset, Integer rows);
-
-	public Integer addRoom(Room room);
+	
 
 	public Integer getEventsCount();
+	//dao client
 
 	public List<Client> listClients(int offset, Integer rows);
 
@@ -51,7 +52,10 @@ public interface EventManagerDao {
 
 	public Integer getClientsCount();
 
+	//dao Rom
 	public List<Room> getRooms(int offset, Integer rows, List<CriteriaModel> usedSearchFields);
+	public List<Room> getRooms(int offset, Integer rows);
+	public Integer addRoom(Room room);
 
 	public List<Event> listEvents(int offset, Integer rows, List<CriteriaModel> usedSearchFields,Date from,Date to);
 

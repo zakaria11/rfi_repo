@@ -2,6 +2,7 @@ package ma.eventmanager.util;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
@@ -9,7 +10,8 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
 
-import ma.eventmanager.entitys.ViewField;
+import ma.eventmanager.annotations.ViewField;
+import ma.eventmanager.annotations.ViewObject;
 import ma.eventmanager.model.Attribute;
 import ma.eventmanager.model.ViewEntity;
 
@@ -38,20 +40,39 @@ public class ProjectHelper
 	    return Splitter.on(",").withKeyValueSeparator("=").split(formattedMap);
 	}
 
-	public static ViewEntity toViewEntity(Object entity)
-	{
-		List<Attribute> attributes = new ArrayList<Attribute>();
-		//Check for @ViewField Annotations
-	      Method[] methods = entity.getClass().getMethods();
-	      for (Method method : methods) {
-	          if (method.isAnnotationPresent(myAnnotation)) {
-	        	  Attribute attr = new Attribute();
-	        	  attributes.add(attr);
-	          }
-	      }
+	public static ViewEntity toViewEntity(Object entity){
+		
+		ViewEntity viewEntity = new ViewEntity();
+		if(entity != null){
+			if(entity.getClass().isAnnotationPresent(ViewObject.class)){
+				viewEntity.setName(entity.getClass().getAnnotation(ViewObject.class).name());				
+			}
 
-
-		// TODO Auto-generated method stub
-		return null;
+			Method[] methods = entity.getClass().getMethods();
+			List<Attribute> attributes = new ArrayList<Attribute>();
+		    for (Method method : methods) {
+		    	if (method.isAnnotationPresent(ViewField.class)) {
+		    		Attribute attr = new Attribute();
+		    		attr.setLabel(method.getAnnotation(ViewField.class).name());
+					String value;
+					try{
+						value = (String) method.invoke(entity,null);
+			    		attr.setValue(value);
+			    		attributes.add(attr);
+					}
+					catch (IllegalArgumentException e){
+						e.printStackTrace();
+					}
+					catch (IllegalAccessException e){
+						e.printStackTrace();
+					}
+					catch (InvocationTargetException e){
+						e.printStackTrace();
+					}
+		    	}
+		    }
+			viewEntity.setAttributes(attributes);
+		}
+		return viewEntity;
 	}
 }

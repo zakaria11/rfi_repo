@@ -1,7 +1,10 @@
 package ma.eventmanager.model;
 
-import javax.persistence.Column;
 
+import ma.eventmanager.annotations.ViewField;
+import ma.eventmanager.annotations.ViewObject;
+
+@ViewObject(name="Utilisateur")
 public class UserVo
 {
 	private String id;
@@ -12,6 +15,7 @@ public class UserVo
 	private String phone;
 	private String description;
 	
+	@ViewField(name="Id")
 	public String getId()
 	{
 		return id;
@@ -20,6 +24,7 @@ public class UserVo
 	{
 		this.id = id;
 	}
+	@ViewField(name="Nom")
 	public String getName()
 	{
 		return name;
@@ -28,6 +33,8 @@ public class UserVo
 	{
 		this.name = name;
 	}
+	
+	@ViewField(name="Utilisateur")
 	public String getUsername()
 	{
 		return username;
@@ -36,6 +43,8 @@ public class UserVo
 	{
 		this.username = username;
 	}
+	
+	@ViewField(name="Mot de passe")
 	public String getPassword()
 	{
 		return password;
@@ -44,6 +53,8 @@ public class UserVo
 	{
 		this.password = password;
 	}
+	
+	@ViewField(name="E-mail")
 	public String getMail()
 	{
 		return mail;
@@ -52,6 +63,8 @@ public class UserVo
 	{
 		this.mail = mail;
 	}
+	
+	@ViewField(name="Téléphone")
 	public String getPhone()
 	{
 		return phone;
@@ -60,6 +73,7 @@ public class UserVo
 	{
 		this.phone = phone;
 	}
+	@ViewField(name="Description")
 	public String getDescription()
 	{
 		return description;

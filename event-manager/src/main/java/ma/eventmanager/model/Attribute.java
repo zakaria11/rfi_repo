@@ -2,26 +2,26 @@ package ma.eventmanager.model;
 
 public class Attribute{
 	
-	private String lable;
+	private String label;
 	private String value;
 	
 	public Attribute(){
 	}
 
 	
-	public Attribute(String lable, String value){
-		this.lable = lable;
+	public Attribute(String label, String value){
+		this.label = label;
 		this.value = value;
 	}
 
 
-	public String getLable()
+	public String getLabel()
 	{
-		return lable;
+		return label;
 	}
-	public void setLable(String lable)
+	public void setLabel(String label)
 	{
-		this.lable = lable;
+		this.label = label;
 	}
 	public String getValue()
 	{

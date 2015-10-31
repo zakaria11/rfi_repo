@@ -1,18 +1,31 @@
 package ma.eventmanager.model;
 
+import ma.eventmanager.annotations.ViewField;
+import ma.eventmanager.annotations.ViewObject;
 
+
+@ViewObject(name="événement")
 public class EventVo{
 
-	
 	private String id;	
+	
 	private String date;
+	
 	private String price;
+	
 	private String remainingPlaces;
+	
 	private String name;
+	
 	private String description;
+	
 	private String state;
+	
 	private String places;
+	
 	private RoomVo room;
+
+	@ViewField(name="Id")
 	public String getId()
 	{
 		return id;
@@ -21,6 +34,7 @@ public class EventVo{
 	{
 		this.id = id;
 	}
+	@ViewField(name="Date")
 	public String getDate()
 	{
 		return date;
@@ -29,6 +43,7 @@ public class EventVo{
 	{
 		this.date = date;
 	}
+	@ViewField(name="Prix")
 	public String getPrice()
 	{
 		return price;
@@ -37,6 +52,7 @@ public class EventVo{
 	{
 		this.price = price;
 	}
+	@ViewField(name="Nbr places restantes")
 	public String getRemainingPlaces()
 	{
 		return remainingPlaces;
@@ -45,6 +61,7 @@ public class EventVo{
 	{
 		this.remainingPlaces = remainingPlaces;
 	}
+	@ViewField(name="Nom")
 	public String getName()
 	{
 		return name;
@@ -53,6 +70,7 @@ public class EventVo{
 	{
 		this.name = name;
 	}
+	@ViewField(name="Description")
 	public String getDescription()
 	{
 		return description;
@@ -61,6 +79,7 @@ public class EventVo{
 	{
 		this.description = description;
 	}
+	@ViewField(name="Etat")
 	public String getState()
 	{
 		return state;
@@ -69,6 +88,7 @@ public class EventVo{
 	{
 		this.state = state;
 	}
+	@ViewField(name="Places")
 	public String getPlaces()
 	{
 		return places;

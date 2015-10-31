@@ -1,6 +1,10 @@
 package ma.eventmanager.model;
 
+import ma.eventmanager.annotations.ViewField;
+import ma.eventmanager.annotations.ViewObject;
 
+
+@ViewObject(name="Client")
 public class ClientVo{
 
 	private String id;
@@ -15,6 +19,7 @@ public class ClientVo{
 	private String orderNumber;
 	private String gender;
 	
+	@ViewField(name="Id")
 	public String getId()
 	{
 		return id;
@@ -23,6 +28,8 @@ public class ClientVo{
 	{
 		this.id = id;
 	}
+	
+	@ViewField(name="Nom")
 	public String getFirstName()
 	{
 		return firstName;
@@ -31,6 +38,7 @@ public class ClientVo{
 	{
 		this.firstName = firstName;
 	}
+	@ViewField(name="Prénom")
 	public String getLastName()
 	{
 		return lastName;
@@ -39,6 +47,7 @@ public class ClientVo{
 	{
 		this.lastName = lastName;
 	}
+	@ViewField(name="CNE")
 	public String getCne()
 	{
 		return cne;
@@ -47,6 +56,7 @@ public class ClientVo{
 	{
 		this.cne = cne;
 	}
+	@ViewField(name="CIN")
 	public String getCin()
 	{
 		return cin;
@@ -55,6 +65,7 @@ public class ClientVo{
 	{
 		this.cin = cin;
 	}
+	@ViewField(name="Id rôle")
 	public String getRoleId()
 	{
 		return roleId;
@@ -63,6 +74,7 @@ public class ClientVo{
 	{
 		this.roleId = roleId;
 	}
+	@ViewField(name="E-Mail")
 	public String getMail()
 	{
 		return mail;
@@ -79,6 +91,8 @@ public class ClientVo{
 	{
 		this.password = password;
 	}
+	
+	@ViewField(name="Numéro d'ordre")
 	public String getOrderNumber()
 	{
 		return orderNumber;
@@ -87,6 +101,8 @@ public class ClientVo{
 	{
 		this.orderNumber = orderNumber;
 	}
+	
+	@ViewField(name="Le sexe")
 	public String getGender()
 	{
 		return gender;
@@ -96,6 +112,4 @@ public class ClientVo{
 		this.gender = gender;
 	}
 
-	
-	
 }

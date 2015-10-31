@@ -420,7 +420,11 @@ dataTables_Event = function(){
 	 var table = $('#eventAdminTable').dataTable({
 		"ajaxSource": contextPath+"/event/list",
 		"columns": [
-		    { "data": "id", "title": "Id" ,"width": "70px"},
+		    { "data": "id", "title": "Id" ,"width": "70px",
+		    	"fnCreatedCell": function (nTd, sData, oData, iRow, iCol) {
+		    		$(nTd).html("<a href='"+contextPath+"/entity/load?entityFormat=htmlTableDetails&entityName=event&entityId="+oData.id+"'>"+oData.id+"</a>");
+		    	}
+		    },
 		    { "data": "date", "title": "Date", "width": "140px" },
 		    { "data": "price", "title": "Prix"},
 		    { "data": "name", "title": "Nom"},
@@ -436,7 +440,11 @@ dataTables_Room = function(){
 	$('#roomAdminTable').dataTable({
 		"ajaxSource": contextPath+"/room/list",
 		"columns": [
-		    { "data": "id", "title": "Id" ,"width": "70px"},
+		    { "data": "id", "title": "Id" ,"width": "70px",
+		    	"fnCreatedCell": function (nTd, sData, oData, iRow, iCol) {
+		    		$(nTd).html("<a href='"+contextPath+"/entity/load?entityFormat=htmlTableDetails&entityName=room&entityId="+oData.id+"'>"+oData.id+"</a>");
+		    	}
+		    },
 		    { "data": "name", "title": "Name", "width": "140px" },
 		    { "data": "description", "title": "Description"},
 		    { "data": "state", "title": "State"}
@@ -460,7 +468,11 @@ dataTables_User = function(){
 	$('#userAdminTable').dataTable({
 		"ajaxSource": contextPath+"/user/list",
 		"columns": [
-		    { "data": "id", "title": "Id" ,"width": "70px"},
+		    { "data": "id", "title": "Id" ,"width": "70px",
+		    	"fnCreatedCell": function (nTd, sData, oData, iRow, iCol) {
+		    		$(nTd).html("<a href='"+contextPath+"/entity/load?entityFormat=htmlTableDetails&entityName=user&entityId="+oData.id+"'>"+oData.id+"</a>");
+		    	}
+		    },
 		    { "data": "username", "title": "Utilisateur"},
 		    { "data": "userRole", "title": "Rôls","render": listFormatter},
 		    { "data": "mail", "title": "Email"},
@@ -475,7 +487,11 @@ dataTables_Client = function(){
 	$('#clientAdminTable').dataTable({
 		"ajaxSource": contextPath+"/client/list",
 		"columns": [
-		    { "data": "id", "title": "Id" ,"width": "70px"},
+		    { "data": "id", "title": "Id" ,"width": "70px",
+		    	"fnCreatedCell": function (nTd, sData, oData, iRow, iCol) {
+		    		$(nTd).html("<a href='"+contextPath+"/entity/load?entityFormat=htmlTableDetails&entityName=client&entityId="+oData.id+"'>"+oData.id+"</a>");
+		    	}
+		    },
 		    { "data": "firstName", "title": "Nom", "width": "140px" },
 		    { "data": "lastName", "title": "Prénom"},
 		    { "data": "cne", "title": "CNE"},
