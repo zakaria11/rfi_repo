@@ -105,7 +105,7 @@
 				<entry key="payment.debit.exec" value="C:\Users\zakaria\dev\evenetmanager\dll_monetique\Debit\Debit.bat" />
 				<entry key="payment.debit.inFile" value="C:\Users\zakaria\dev\evenetmanager\dll_monetique\Debit\DataDebitIn.txt" />
 				<entry key="payment.debit.outFile" value="C:\Users\zakaria\dev\evenetmanager\dll_monetique\Debit\DataDebitout.txt" />
-				
+				<entry key="event.trending.max" value="7" />
 			</map>
 		</constructor-arg>
 	</bean>

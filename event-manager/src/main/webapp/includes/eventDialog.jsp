@@ -24,6 +24,18 @@
 						</div>
 					</div>
 					<div class="cell">
+						<label>Importance</label>
+						<div class="input-control text full-size" data-role="input">
+							    <div class="rating" data-role="rating" data-size="large" data-size="small" data-show-score="false" data-on-rate="demo_func_onRated"></div>
+    							<script>
+	        						function demo_func_onRated(value, star, widget){
+	            						alert('You rated this as ' + value);
+	        						}
+    							</script>
+						</div>
+					</div>
+					
+					<div class="cell">
 						<label style="display: block;">Date</label>
 						<div class="input-control text" data-role="datepicker" data-format="dd/mm/yyyy">
         					<input style="padding-right: 41px;" type="text" name="date">
