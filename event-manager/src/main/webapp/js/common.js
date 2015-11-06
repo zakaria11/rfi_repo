@@ -6,6 +6,13 @@ function unloading(){
     $('#loadingDiv').hide(); 
 }
 
+onRateEvent = function(value, star, widget){
+	$('#eventRatingInput').val(value);
+	$('#rating').val(value);
+	
+};
+
+
 plotGrid_Room = function(roomsList){
 	var grid = $("#grid").jqGrid({
 		url : contextPath+'/room/list',
@@ -51,7 +58,7 @@ plotGrid_Event = function(roomsList){
 		url : contextPath+'/event/listJson',
 		datatype : "json",
 		colNames : [ 'Id', 'date', 'price','name','description','state','places','Salles'],
-		colModel : [ {name : 'id',key : true,index : 'id',width : 40, editable : false,search : false}, 
+		colModel : [ {name : 'id',key : true,index : 'id',width : 40, editable : false,search : false,order:"desc"}, 
 		             {name : 'date',key : true,width : 150,editable : true
 						/*,editoptions : {size:20,dataInit:function(el){jQuery(el).datepicker({dateFormat:'yy-mm-dd'});}}*/
 						,search : false
@@ -259,29 +266,140 @@ initCreateEntity = function(entityName){
     var editdialog= $('#'+entityName+'AddDialog');
 	editdialog.find("input[type=text], textarea").val("");
 	var dialog = editdialog.children().data('dialog');
-	if(entityName == 'event'){
-		$.ajax({
-			url: contextPath+'/room/list',
-			data: {responseFormat:'SELECT2_MAP'},
-			success: function(roomList) {
-				var roomsOptionComponent= $("#roomsList");
-				roomsOptionComponent.empty();
-				$.each( roomList, function( key, value ) {
-					var option = $('<option>');
-					option.html(value.text);
-					option.attr({"value":value.id});
-					roomsOptionComponent.append(option);
-				});
-				dialog.open();
-			},
-			dataType: 'json'
-		});
+
+	
+	//call custom functions
+	funcName = entityName+'CustomInitCreat';			
+	if (typeof window[funcName] == 'function') {
+		eval(funcName+'(entityName);');
 	}
-	//Create dialog with no extra treatment (Select component, ajax calls ...)
-	else{
-		dialog.open();
-	}
+		
+	dialog.open();
+	
     
+};
+
+standardFormat = function(repo){
+    //if (repo.loading) return repo.text;
+
+    var markup = '<div class="clearfix">' +
+    '<div class="col-sm-1">' +
+    '<img src="' + repo.owner.avatar_url + '" style="max-width: 100%" />' +
+    '</div>' +
+    '<div clas="col-sm-10">' +
+    '<div class="clearfix">' +
+    '<div class="col-sm-6">' + repo.full_name + '</div>' +
+    '<div class="col-sm-3"><i class="fa fa-code-fork"></i> ' + repo.forks_count + '</div>' +
+    '<div class="col-sm-2"><i class="fa fa-star"></i> ' + repo.stargazers_count + '</div>' +
+    '</div>';
+
+    if (repo.description) {
+      markup += '<div>' + repo.description + '</div>';
+    }
+
+    markup += '</div></div>';
+
+    return markup;
+}
+
+function standardFormatSelection(repo) {
+    return repo.full_name || repo.text;
+  }
+
+
+function formatRepo (repo) {
+    if (repo.loading) return repo.text;
+
+    var markup = '<div class="clearfix">' +
+    '<div class="col-sm-1">' +
+    '<img src="' + repo.owner.avatar_url + '" style="max-width: 100%" />' +
+    '</div>' +
+    '<div clas="col-sm-10">' +
+    '<div class="clearfix">' +
+    '<div class="col-sm-6">' + repo.full_name + '</div>' +
+    '<div class="col-sm-3"><i class="fa fa-code-fork"></i> ' + repo.forks_count + '</div>' +
+    '<div class="col-sm-2"><i class="fa fa-star"></i> ' + repo.stargazers_count + '</div>' +
+    '</div>';
+
+    if (repo.description) {
+      markup += '<div>' + repo.description + '</div>';
+    }
+
+    markup += '</div></div>';
+
+    return markup;
+  }
+
+  function formatRepoSelection (repo) {
+    return repo.full_name || repo.text;
+  }
+eventCustomInitCreat = function(eventEntityName){
+//	$.ajax({
+//		url: contextPath+'/room/list',
+//		data: {responseFormat:'SELECT2_MAP'},
+//		success: function(roomList) {
+//			var roomsOptionComponent = $("#roomsList");
+//			roomsOptionComponent.empty();
+//			$.each( roomList, function( key, value ) {
+//				var option = $('<option>');
+//				option.html(value.text);
+//				option.attr({"value":value.id});
+//				roomsOptionComponent.append(option);
+//			});
+//		},
+//		dataType: 'json'
+//	});
+//
+//	$.ajax({
+//		url: contextPath+'/state/list',
+//		data: {responseFormat:'SELECT2_MAP'},
+//		success: function(roomList) {
+//			var roomsOptionComponent = $("#statesList");
+//			roomsOptionComponent.empty();
+//			$.each( roomList, function( key, value ) {
+//				var option = $('<option>');
+//				option.html(value.text);
+//				option.attr({"value":value.id});
+//				roomsOptionComponent.append(option);
+//			});
+//		},
+//		dataType: 'json'
+//	});
+
+    $("#roomsList").select2({
+        ajax: {
+          url: "https://api.github.com/search/repositories",
+          //url: contextPath+'/room/list',
+          dataType: 'json',
+          delay: 250,
+          data: function (params) {
+            return {
+              q: params.term, // search term
+              page: params.page
+            };
+          },
+          processResults: function (data, page) {
+            // parse the results into the format expected by Select2.
+            // since we are using custom formatting functions we do not need to
+            // alter the remote JSON data
+            return {
+              results: data.items
+            };
+          },
+          cache: true
+        },
+        escapeMarkup: function (markup) { return markup; }, // let our custom formatter work
+        minimumInputLength: 1,
+        templateResult: formatRepo, // omitted for brevity, see the source of this page
+        templateSelection: formatRepoSelection // omitted for brevity, see the source of this page
+        });
+};
+
+eventCustomInitEdit = function(eventEntity){
+	console.log(eventEntity.rating);
+	var score = eventEntity.rating;
+	var rating = $('#eventRatingEdit').data('rating');
+	rating.value(score);
 };
 
 initEditEntity = function(entityName,entityId,columns){
@@ -307,8 +425,13 @@ initEditEntity = function(entityName,entityId,columns){
 				eval(evalStr);
 				editDialog.find('#'+key).val(att);
 			});
-			
-
+					
+			//call custom functions
+			funcName = entityName+'CustomInitEdit';			
+			if (typeof window[funcName] == 'function') {
+				eval(funcName+'(entity);');
+			}
+						
 			editDialog.data('dialog').open();
 		},
 		dataType: 'json'
@@ -418,6 +541,7 @@ crudHundlers = function(entityName){
 dataTables_Event = function(){
 	
 	 var table = $('#eventAdminTable').dataTable({
+		"order": [[ 0, 'desc']],
 		"ajaxSource": contextPath+"/event/list",
 		"columns": [
 		    { "data": "id", "title": "Id" ,"width": "70px",
@@ -425,11 +549,11 @@ dataTables_Event = function(){
 		    		$(nTd).html("<a href='"+contextPath+"/entity/load?entityFormat=htmlTableDetails&entityName=event&entityId="+oData.id+"'>"+oData.id+"</a>");
 		    	}
 		    },
+		    { "data": "name", "title": "Nom"},
 		    { "data": "date", "title": "Date", "width": "140px" },
 		    { "data": "price", "title": "Prix"},
-		    { "data": "name", "title": "Nom"},
 		    { "data": "description", "title": "Description"},
-		    { "data": "state", "title": "Statut"},
+		    { "data": "rating", "title": "Importance"},
 		    { "data": "places", "title": "Nbr places"},
 		    { "data": "room.name","sDefaultContent": "-", "title": "Salle"}
 		  ]
@@ -711,7 +835,6 @@ printEventDetails = function(entityId){
 		dataType: 'json'
 	});
 };
-
 
 var identificationStep = function(){
 	console.log(selectedEventId);
