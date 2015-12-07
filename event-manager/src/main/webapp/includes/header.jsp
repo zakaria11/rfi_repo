@@ -11,6 +11,8 @@
 
 <link href="<%=request.getContextPath()%>/css/metro.css" rel="stylesheet">
 <link href="<%=request.getContextPath()%>/css/metro-icons.css" rel="stylesheet">
+<link href="<%=request.getContextPath()%>/css/select2.min.css" rel="stylesheet">
+
 <!--<link href="css/metro-responsive.css" rel="stylesheet">-->
 
 <script src="<%=request.getContextPath()%>/js/jquery-2.1.3.js"></script>
@@ -70,4 +72,5 @@
 var contextPath = '<%=request.getContextPath()%>';
 var roomsList = null;
 var adminSelectedItem = null;
+var files = null;
 </script>

@@ -33,12 +33,9 @@ public class Room{
 		this.state = state;
 	}
 
-
-
-
 	public Room(RoomVo room)
 	{
-		if(room.getId() != null){
+		if(room.getId() != null && !"".equals(room.getId()) && !"null".equals(room.getId())){
 			this.id = Integer.parseInt(room.getId());	
 		}
 		this.name = room.getName();

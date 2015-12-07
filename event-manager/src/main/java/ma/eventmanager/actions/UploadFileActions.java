@@ -61,8 +61,7 @@ public class UploadFileActions extends ActionSupport{
 	)
 	public String uploadClients() throws IOException{
 		List<Client> clientsList = new ArrayList<Client>();
-		FileInputStream fis = null;
-		fis = new FileInputStream(upload.getAbsoluteFile());
+		FileInputStream fis = new FileInputStream(upload.getAbsoluteFile());
 		Workbook workbook = null;
 		try{
 			workbook = new XSSFWorkbook(fis);

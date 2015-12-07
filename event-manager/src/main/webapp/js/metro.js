@@ -2295,7 +2295,8 @@ $.widget("metro.calendar", {
         actions: true,
         condensedGrid: false,
         getDates: function(d){},
-        dayClick: function(d, d0){}
+        dayClick: function(d, d0){},
+        monthClick:function(month, year){}
     },
 
     //_storage: [],
@@ -2730,6 +2731,18 @@ $.widget("metro.calendar", {
                 that._month = parseInt($(this).data('month'));
                 that._mode = 'day';
                 that._renderCalendar();
+                if (typeof o.monthClick === 'function') {
+                    o.monthClick(that._month, that._year);
+                }else{
+                    if (typeof window[o.monthClick] === 'function') {
+                        window[o.monthClick](that._month, that._year);
+                    } else {
+                        var result = eval("(function(){"+o.monthClick+"})");
+                        result.call(that._month, that._year);
+                    	//alert("ssss");
+                    	//eval(o.monthClick+"('that._month', 'that._year');");
+                    }
+                }
             });
             table.find('.btn-previous-year').on('click', function(e){
                 that._event = 'eventPrevious';
@@ -3794,6 +3807,7 @@ $.widget("metro.datepicker", {
             date: o.preset ? o.preset : new Date(),
             minDate: o.minDate,
             maxDate: o.maxDate,
+            monthClick: function(month, year){},
             dayClick: function(d, d0){
                 //console.log(d, d0);
                 _calendar.calendar('setDate', d0);

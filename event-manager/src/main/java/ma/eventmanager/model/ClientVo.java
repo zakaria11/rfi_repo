@@ -17,8 +17,11 @@ public class ClientVo{
 	private String mail;
 	private String password;
 	private String orderNumber;
-	private String gender;
-	
+	private String gender;	
+	private String identityNumber;
+	private String isDummy;
+
+
 	@ViewField(name="Id")
 	public String getId()
 	{
@@ -110,6 +113,24 @@ public class ClientVo{
 	public void setGender(String gender)
 	{
 		this.gender = gender;
+	}
+	
+	@ViewField(name="Identité")
+	public String getIdentityNumber()
+	{
+		return identityNumber;
+	}
+	public void setIdentityNumber(String identityNumber)
+	{
+		this.identityNumber = identityNumber;
+	}
+	public String getIsDummy()
+	{
+		return isDummy;
+	}
+	public void setIsDummy(String isDummy)
+	{
+		this.isDummy = isDummy;
 	}
 
 }

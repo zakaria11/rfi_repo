@@ -4,18 +4,25 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.RandomAccessFile;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+
+
+
+
 
 import ma.eventmanager.constant.Constants;
 import ma.eventmanager.dao.EventManagerDao;
 import ma.eventmanager.entitys.Client;
 import ma.eventmanager.entitys.Event;
 import ma.eventmanager.entitys.Room;
+import ma.eventmanager.entitys.State;
+import ma.eventmanager.entitys.Tag;
 import ma.eventmanager.entitys.Subscription;
 import ma.eventmanager.model.CartInformations;
 import ma.eventmanager.model.TicketRepotBean;
@@ -56,85 +63,119 @@ public class BookingActions extends ActionSupport{
 	public String initBooking(){
 		bookedEvent= (Event) eventManagerDao.retrieveEvent(eventId+"");
 		ServletActionContext.getRequest().getSession().setAttribute("bookedEvent", bookedEvent);
-		eventManagerDao.listEvents(0,Constants.DEFAULT_ROWS_NUM,new Date(),null);
+		eventManagerDao.listEvents(0,Constants.DEFAULT_ROWS_NUM,new Date(),null,"CHOICE");
 		return "initBookingSuccess";
 	}
 		
 	@Action(value = "executePayment", results = {@Result(name="ticket",location="/event/ticketStep.jsp")})
 	public String executePayment() throws IOException{
 		
+		String[] params = new String[]{ServletActionContext.getRequest().getRemoteAddr()};
 		responseInfo.put("isOK", "1");
 		
-		
-		bookedEvent = (Event)ServletActionContext.getRequest().getSession().getAttribute("bookedEvent");
-		if(bookedEvent == null){
-			bookedEvent= (Event) eventManagerDao.retrieveEvent(eventId+"");
-		}
-		
-		
-		selectedClient = (Client)ServletActionContext.getRequest().getSession().getAttribute("selectedClient");
-		
-		String userId = SecurityContextHolder.getContext().getAuthentication().getName();	
-		subscription = new Subscription(bookedEvent,paymentMethod,userId,selectedClient,new Date());
-		
-		if(bookedEvent.getRemainingPlaces() <= 0){
-			responseInfo.put("isOK","0");
-			responseInfo.put("message",String.format(ReferenceService.getMessages().get("MSG000009"), subscription.getEvent().getPlaces()));
-			ProjectHelper.sendObjectAsJsonResponse(responseInfo,ServletActionContext.getResponse());
-			return null;
-		}else{
-			Double count = bookedEvent.getRemainingPlaces();
-			count--;
-			bookedEvent.setRemainingPlaces(count);	
-		}
-		
-		if(isAlreadySubscribed(bookedEvent.getId(),selectedClient.getId())){
-			responseInfo.put("isOK","0");
-			responseInfo.put("message",String.format(ReferenceService.getMessages().get("MSG000005"), selectedClient.getId()));
-			ProjectHelper.sendObjectAsJsonResponse(responseInfo,ServletActionContext.getResponse());
-			return null;
-		}
-		
-		eventManagerDao.saveSubscription(subscription);
-		eventManagerDao.updateEvent(bookedEvent);
-		responseInfo.put("subscription", subscription);
-		ServletActionContext.getRequest().getSession().setAttribute("ticketRepotBean", createReportBean(subscription));
+		try{
 
-		/*Payment types test*/
-		if("CASH".equals(paymentMethod) || "CR_CARD".equals(paymentMethod)){
-			responseInfo.put("message",ReferenceService.getMessages().get("MSG000003"));
-			ProjectHelper.sendObjectAsJsonResponse(responseInfo,ServletActionContext.getResponse());
-			return null;
-		}else if("LIST".equals(paymentMethod)){
-			responseInfo.put("message",ReferenceService.getMessages().get("MSG000003"));
-			ProjectHelper.sendObjectAsJsonResponse(responseInfo,ServletActionContext.getResponse());
-			return null;
-		}else if("MS_CARD".equals(paymentMethod)){
-			//get card information
-			CartInformations cartInfo= creatCartInfo(ReferenceService.getEnvVariabls().get("payment.reader.outFile"));
+			bookedEvent = (Event)ServletActionContext.getRequest().getSession().getAttribute("bookedEvent");
+			if(bookedEvent == null){
+				bookedEvent= (Event) eventManagerDao.retrieveEvent(eventId+"");
+			}
+			
+			
+			selectedClient = (Client)ServletActionContext.getRequest().getSession().getAttribute("selectedClient");
 
-			if(!validateCard(cartInfo)){
-				ProjectHelper.sendObjectAsJsonResponse(responseInfo,ServletActionContext.getResponse());
-				return null;
-			}		
-			//debiter
-			debitFromCard(cartInfo.getNumPme(),bookedEvent.getPrice()+"");
-			ProjectHelper.sendObjectAsJsonResponse(responseInfo,ServletActionContext.getResponse());
-			return null;
-		}else if("BORDER".equals(paymentMethod)){
-			responseInfo.put("isOK","0");
-			//Reteive client informations from credit card
-			CartInformations cartInfo= creatCartInfo(ReferenceService.getEnvVariabls().get("payment.reader.outFile"));
-			if(!validateCard(cartInfo)){
+			if("BORDER".equals(paymentMethod)){
+				responseInfo.put("isOK","0");
+				//Reteive client informations from credit card
+				CartInformations cartInfo= creatCartInfo(ReferenceService.retrieveEnvVarUsingParams("payment.reader.outFile",params));
+				if(!validateCard(cartInfo)){
+					ProjectHelper.sendObjectAsJsonResponse(responseInfo,ServletActionContext.getResponse());
+					return null;
+				}
+							
+				selectedClient = eventManagerDao.retrieveClientByIdentityNumber(cartInfo.getNumPme());
+				if(selectedClient == null){
+					//if not exit create dummy client
+					eventManagerDao.saveClient(buildClientFromCardInfo(cartInfo));
+				}
+				selectedClient = eventManagerDao.retrieveClientByIdentityNumber(cartInfo.getNumPme());
+				
+				if(selectedClient == null){
+					responseInfo.put("isOK","0");
+					responseInfo.put("message",ReferenceService.getMessages().get("MSG000012"));
+					ProjectHelper.sendObjectAsJsonResponse(responseInfo,ServletActionContext.getResponse());
+					return null;
+				}
+				
+				//debiter
+				debitFromCard(cartInfo.getNumPme(),bookedEvent.getPrice()+"");
 				ProjectHelper.sendObjectAsJsonResponse(responseInfo,ServletActionContext.getResponse());
 				return null;
 			}
-			//deiiter
-			debitFromCard(cartInfo.getNumPme(),bookedEvent.getPrice()+"");
+			
+			String userId = SecurityContextHolder.getContext().getAuthentication().getName();	
+			subscription = new Subscription(bookedEvent,paymentMethod,userId,selectedClient,new Date());
+			
+			if(bookedEvent.getRemainingPlaces() <= 0){
+				responseInfo.put("isOK","0");
+				responseInfo.put("message",String.format(ReferenceService.getMessages().get("MSG000009"), subscription.getEvent().getPlaces()));
+				ProjectHelper.sendObjectAsJsonResponse(responseInfo,ServletActionContext.getResponse());
+				return null;
+			}else{
+				Double count = bookedEvent.getRemainingPlaces();
+				count--;
+				bookedEvent.setRemainingPlaces(count);	
+			}
+			
+			if(isAlreadySubscribed(bookedEvent.getId(),selectedClient.getId())){
+				responseInfo.put("isOK","0");
+				responseInfo.put("message",String.format(ReferenceService.getMessages().get("MSG000005"), selectedClient.getId()));
+				ProjectHelper.sendObjectAsJsonResponse(responseInfo,ServletActionContext.getResponse());
+				return null;
+			}
+			
+			eventManagerDao.saveSubscription(subscription);
+			eventManagerDao.updateEvent(bookedEvent);
+			responseInfo.put("subscription", subscription);
+			ServletActionContext.getRequest().getSession().setAttribute("ticketRepotBean", createReportBean(subscription));
+
+			/*Payment types test*/
+			if("CASH".equals(paymentMethod) || "CR_CARD".equals(paymentMethod)){
+				responseInfo.put("message",ReferenceService.getMessages().get("MSG000003"));
+				ProjectHelper.sendObjectAsJsonResponse(responseInfo,ServletActionContext.getResponse());
+				return null;
+			}else if("LIST".equals(paymentMethod)){
+				responseInfo.put("message",ReferenceService.getMessages().get("MSG000003"));
+				ProjectHelper.sendObjectAsJsonResponse(responseInfo,ServletActionContext.getResponse());
+				return null;
+			}else if("MS_CARD".equals(paymentMethod)){
+				//get card information
+				CartInformations cartInfo= creatCartInfo(ReferenceService.retrieveEnvVarUsingParams("payment.reader.outFile",params));
+
+				if(!validateCard(cartInfo)){
+					ProjectHelper.sendObjectAsJsonResponse(responseInfo,ServletActionContext.getResponse());
+					return null;
+				}		
+				//debiter
+				debitFromCard(cartInfo.getNumPme(),bookedEvent.getPrice()+"");
+				ProjectHelper.sendObjectAsJsonResponse(responseInfo,ServletActionContext.getResponse());
+				return null;
+			}
+		}catch(Exception e){
+			responseInfo.put("isOK", "0");
+			responseInfo.put("message",ReferenceService.getMessages().get("MSG000004"));
 			ProjectHelper.sendObjectAsJsonResponse(responseInfo,ServletActionContext.getResponse());
 			return null;
 		}
+		
 		return "ticket";
+	}
+
+	private Client buildClientFromCardInfo(CartInformations cartInfo)
+	{
+		Client client = new Client();
+		client.setIdentityNumber(cartInfo.getNumPme());
+		client.setIsDummy("1");
+		return client;
 	}
 
 	private boolean validateCard(CartInformations cartInfo) throws IOException
@@ -176,7 +217,6 @@ public class BookingActions extends ActionSupport{
 		Event e = subscription.getEvent();
 		bean.setEventId(e.getId()+"");
 		bean.setEventName(e.getName());
-		bean.setEventState(e.getState());
 		bean.setEventDate(sdf.format(e.getDate()));
 		bean.setEventdDscription(e.getDescription());
 		bean.setEventdPlaces(e.getPlaces()+"");
@@ -189,6 +229,15 @@ public class BookingActions extends ActionSupport{
 		bean.setRoomName(r.getName());
 		bean.setRoomState(r.getState());
 		bean.setRoomDescription(r.getDescription());
+		
+		//State info
+		State s= e.getState();
+		bean.setEventStateName(s.getName());
+		
+		//Tag info
+		Tag t = new Tag(); 		
+		bean.setEventTagName(t.getName());
+		
 		
 		//QR Code
 		bean.setQrCode( 
@@ -217,9 +266,11 @@ public class BookingActions extends ActionSupport{
 	
 
 	private void debitFromCard(String pmeNumber,String price) throws IOException{
-		
+
+		String[] params = new String[]{ServletActionContext.getRequest().getRemoteAddr()};
+
 		// write price and numPme in DataDebitIn
-		File paymentParamsFile = new File(ReferenceService.getEnvVariabls().get("payment.debit.inFile"));
+		File paymentParamsFile = new File(ReferenceService.retrieveEnvVarUsingParams("payment.debit.inFile",params));
 		List<String> lines = FileUtils.readLines(paymentParamsFile);
 		
 		creatCartInfo(ReferenceService.getEnvVariabls().get("payment.reader.outFile"));
@@ -229,8 +280,9 @@ public class BookingActions extends ActionSupport{
 		FileUtils.writeLines(paymentParamsFile, lines);
 		
 		//and execute payment.debit.exec using payment.debit.inFile (passed as param in bat file)
-		Runtime.getRuntime().exec(new String[]{ReferenceService.getEnvVariabls().get("payment.debit.exec")});	
-		String paymentOutData = ReferenceService.getEnvVariabls().get("payment.debit.outFile");
+		
+		Runtime.getRuntime().exec(new String[]{ReferenceService.retrieveEnvVarUsingParams("payment.debit.exec",params)});	
+		String paymentOutData = ReferenceService.retrieveEnvVarUsingParams("payment.debit.outFile",params);
 		BufferedReader bufferedReader = new BufferedReader(new FileReader(paymentOutData));
 		String line;
 		while ((line = bufferedReader.readLine()) != null) {
@@ -246,7 +298,9 @@ public class BookingActions extends ActionSupport{
 	}
 
 	private CartInformations creatCartInfo(String outData) throws IOException{
-		Runtime.getRuntime().exec(new String[]{ReferenceService.getEnvVariabls().get("payment.reader.exec")});
+		
+		String[] params = new String[]{ServletActionContext.getRequest().getRemoteAddr()};
+		Runtime.getRuntime().exec(new String[]{ReferenceService.retrieveEnvVarUsingParams("payment.reader.exec",params)});
 		CartInformations info = new CartInformations();
 		BufferedReader bufferedReader = new BufferedReader(new FileReader(outData));
 		String line;

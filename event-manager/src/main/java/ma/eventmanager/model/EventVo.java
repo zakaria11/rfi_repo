@@ -19,11 +19,17 @@ public class EventVo{
 	
 	private String description;
 	
-	private String state;
-	
 	private String places;
 	
+	private String rating;
+	
+	private String imageName;
+	
 	private RoomVo room;
+	
+	private StateVo state;
+
+	private TagVo tag;
 
 	@ViewField(name="Id")
 	public String getId()
@@ -79,15 +85,7 @@ public class EventVo{
 	{
 		this.description = description;
 	}
-	@ViewField(name="Etat")
-	public String getState()
-	{
-		return state;
-	}
-	public void setState(String state)
-	{
-		this.state = state;
-	}
+
 	@ViewField(name="Places")
 	public String getPlaces()
 	{
@@ -97,6 +95,14 @@ public class EventVo{
 	{
 		this.places = places;
 	}
+	@ViewField(name="Salle")
+	public String roomName()
+	{
+		if(room != null){
+			return room.getName();			
+		}
+		return "";
+	}
 	public RoomVo getRoom()
 	{
 		return room;
@@ -105,6 +111,64 @@ public class EventVo{
 	{
 		this.room = room;
 	}
+
+	@ViewField(name="Image")
+	public String getImageName()
+	{
+		return imageName;
+	}
+	
+	public void setImageName(String imageName)
+	{
+		this.imageName = imageName;
+	}
+	@ViewField(name="Importance")
+	public String getRating()
+	{
+		return rating;
+	}
+	public void setRating(String rating)
+	{
+		this.rating = rating;
+	}
+	public StateVo getState()
+	{
+		return state;
+	}
+	public void setState(StateVo state)
+	{
+		this.state = state;
+	}
+	@ViewField(name="Etat")
+	public String stateName()
+	{
+		if(state != null){
+			return state.getName();
+		}
+		return "";
+	}
+
+	
+	@ViewField(name="Tag")
+	public String tagName()
+	{
+		if(tag != null){
+			return tag.getName();			
+		}
+		return "";
+	}
+
+	public TagVo getTag()
+	{
+		return tag;
+	}
+	public void setTag(TagVo tag)
+	{
+		this.tag = tag;
+	}
+	
+	
+	
 	
 
 }

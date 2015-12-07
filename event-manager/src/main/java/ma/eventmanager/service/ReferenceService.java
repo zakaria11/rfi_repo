@@ -1,5 +1,6 @@
 package ma.eventmanager.service;
 
+import java.util.List;
 import java.util.Map;
 
 
@@ -40,7 +41,14 @@ public class ReferenceService{
 		ReferenceService.paymentMethods = paymentMethods;
 	}
 
-	
+	public static String retrieveEnvVarUsingParams(String envVarName,String[] params){
+		if(getEnvVariabls().get(envVarName) != null){
+			return String.format(getEnvVariabls().get(envVarName), params);			
+		}else{
+			//throw exception
+			return null;
+		}
+	}
 
 
 

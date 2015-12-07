@@ -42,12 +42,18 @@ public class Client
 	@Column
 	private String gender;
 
+	@Column
+	private String identityNumber;
+
+	@Column
+	private String isDummy;
+
 	
 	public Client(){}
 	
 	
 
-	public Client(String firstName, String lastName, String cne, String cin, String roleId,String orderNumber,String mail,String gender)
+	public Client(String firstName, String lastName, String cne, String cin, String roleId,String orderNumber,String mail,String gender,String identityNumber,String isDummy)
 	{
 		super();
 		this.firstName = firstName;
@@ -58,6 +64,8 @@ public class Client
 		this.orderNumber = orderNumber;
 		this.mail = mail;
 		this.gender = gender;
+		this.identityNumber = identityNumber;
+		this.isDummy = isDummy;
 
 	}
 
@@ -78,6 +86,8 @@ public class Client
 		this.password = client.getPassword();
 		this.orderNumber = client.getOrderNumber();
 		this.gender = client.getGender();
+		this.identityNumber = client.getIdentityNumber();
+		this.isDummy = client.getIsDummy();
 	}
 
 
@@ -217,7 +227,39 @@ public class Client
 		clientVo.setOrderNumber(this.getOrderNumber());
 		clientVo.setGender(this.getGender());
 		
+		clientVo.setIdentityNumber(this.getIdentityNumber());
+		clientVo.setIsDummy(this.getIsDummy());
 		return clientVo;
 	}
 
+
+
+	public String getIdentityNumber()
+	{
+		return identityNumber;
+	}
+
+
+
+	public void setIdentityNumber(String identityNumber)
+	{
+		this.identityNumber = identityNumber;
+	}
+
+
+
+	public String getIsDummy()
+	{
+		return isDummy;
+	}
+
+
+
+	public void setIsDummy(String isDummy)
+	{
+		this.isDummy = isDummy;
+	}
+
+	
+	
 }

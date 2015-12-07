@@ -16,8 +16,8 @@
 	</repositories>
 
 	<properties>
-		<org.springframework-version>3.2.2.RELEASE</org.springframework-version>
-		<org.springframework-secureity-version>3.2.2.RELEASE</org.springframework-secureity-version>
+		<org.springframework-version>3.2.13.RELEASE</org.springframework-version>
+		<org.springframework-secureity-version>3.2.8.RELEASE</org.springframework-secureity-version>
 		
 	</properties>
 	
@@ -235,31 +235,31 @@
 	  		<groupId>com.sun.xml.ws</groupId>
 	        <artifactId>jaxws-rt</artifactId>
 	        <version>2.2.3</version>		
-	    </dependency>		
-		<dependency>
+	    </dependency>
+<!--		<dependency>
 			<groupId>org.jvnet.jax-ws-commons.spring</groupId>
 			<artifactId>jaxws-spring</artifactId>
 			<version>1.8</version>
 			<exclusions>
-		  	<exclusion>
-				<groupId>org.springframework</groupId>
-				<artifactId>spring-core</artifactId>
-			</exclusion>
-			<exclusion>
-				<groupId>org.springframework</groupId>
-				<artifactId>spring-context</artifactId>
-			</exclusion>
-			<exclusion>
-				<groupId>com.sun.xml.stream.buffer</groupId>
-				<artifactId>streambuffer</artifactId>
-			</exclusion>
-			<exclusion>
-				<groupId>org.jvnet.staxex</groupId>
-				<artifactId>stax-ex</artifactId>
+ 			  	<exclusion>
+					<groupId>org.springframework</groupId>
+					<artifactId>spring-core</artifactId>
 				</exclusion>
-			</exclusions>
+				<exclusion>
+					<groupId>org.springframework</groupId>
+					<artifactId>spring-context</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>com.sun.xml.stream.buffer</groupId>
+					<artifactId>streambuffer</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.jvnet.staxex</groupId>
+					<artifactId>stax-ex</artifactId>
+					</exclusion>
+ 			</exclusions>
 		</dependency>
-		
+-->		
 		<dependency>
 			<groupId>com.google.zxing</groupId>
 			<artifactId>core</artifactId>

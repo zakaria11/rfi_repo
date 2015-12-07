@@ -97,7 +97,7 @@
 	<jsp:include page="/includes/head_menu.jsp"></jsp:include>
 	
         <div class="tile-group double">
-            <span class="tile-group-title">General</span>
+            <span class="tile-group-title">Général</span>
 
             <div class="tile-container">
 
@@ -105,13 +105,13 @@
                     <div class="tile-content iconic">
                         <span class="icon mif-calendar"></span>
                     </div>
-                    <span class="tile-label">Evenements</span>
+                    <span class="tile-label">Événements</span>
                 </a>
             </div>
         </div>
 
         <div class="tile-group double">
-            <span class="tile-group-title">options</span>
+            <span class="tile-group-title">Options</span>
             <div class="tile-container">
                 <a href="<%=request.getContextPath()%>/admin/manageEvent.jsp" class="tile bg-yellow fg-white" data-role="tile">
                     <div class="tile-content iconic">
@@ -133,6 +133,37 @@
                 </a>
             </div>
         </div>
+        <div class="tile-group double">
+            <span class="tile-group-title">Administration</span>
+            <div class="tile-container">
+                <a href="<%=request.getContextPath()%>/admin/manageUsers.jsp" class="tile bg-magenta fg-white" data-role="tile">
+                    <div class="tile-content iconic">
+                        <span class="icon mif-security"></span>
+                    </div>
+                    <span class="tile-label">Rôles et Utilisateurs</span>
+                </a>
+                <a href="<%=request.getContextPath()%>/admin/manageClient.jsp" class="tile bg-lime fg-white" data-role="tile">
+                    <div class="tile-content iconic">
+                        <span class="icon mif-user"></span>
+                    </div>
+                    <span class="tile-label">Clients</span>
+                </a>
+                <a href="<%=request.getContextPath()%>/admin/manageRoom.jsp" class="tile bg-lightPink fg-white" data-role="tile">
+                    <div class="tile-content iconic">
+                        <span class="icon mif-library"></span>
+                    </div>
+                    <span class="tile-label">Salles</span>
+                </a>
+                <a href="<%=request.getContextPath()%>/admin/manageEvent.jsp" class="tile bg-lightRed fg-white" data-role="tile">
+                    <div class="tile-content iconic">
+                        <span class="icon mif-tag"></span>
+                    </div>
+                    <span class="tile-label">Événements</span>
+                </a>
+                
+            </div>
+        </div>
+        
     </div>
 
 

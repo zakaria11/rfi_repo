@@ -1,5 +1,6 @@
 package ma.eventmanager.dao;
 
+import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
 
@@ -7,16 +8,20 @@ import ma.evenetmanager.criteria.CriteriaModel;
 import ma.eventmanager.entitys.Client;
 import ma.eventmanager.entitys.Event;
 import ma.eventmanager.entitys.Room;
+import ma.eventmanager.entitys.State;
 import ma.eventmanager.entitys.Subscription;
+import ma.eventmanager.entitys.Tag;
 import ma.eventmanager.entitys.User;
 import ma.eventmanager.model.Attribute;
+import ma.eventmanager.model.EntityGroup;
+import ma.eventmanager.model.EntityGroupedBy;
 
 public interface EventManagerDao {
 
 	//dao EVnmt
 	public void addEvent(Event event);
 
-	public List<Event> listEvents(int offset, Integer rows,Date from,Date to);
+	public List<Event> listEvents(int offset, Integer rows,Date from,Date to,String sourceView);
 
 	public void deleteEvent(Integer eventId);
 
@@ -52,11 +57,23 @@ public interface EventManagerDao {
 
 	public Integer getClientsCount();
 
-	//dao Rom
+
+	//Rooms
 	public List<Room> getRooms(int offset, Integer rows, List<CriteriaModel> usedSearchFields);
 	public List<Room> getRooms(int offset, Integer rows);
 	public Integer addRoom(Room room);
 
+	//Tags 
+	public List<Tag> getTags(int offset, Integer rows, List<CriteriaModel> usedSearchFields);
+	public List<Tag> getTags(int offset, Integer rows);
+	
+	//States
+	public List<State> getStates(int offset, Integer rows, List<CriteriaModel> usedSearchFields);
+	public List<State> getStates(int offset, Integer rows);
+	
+	
+	
+	
 	public List<Event> listEvents(int offset, Integer rows, List<CriteriaModel> usedSearchFields,Date from,Date to);
 
 	public Client retreiveClient(String entityId);
@@ -94,6 +111,22 @@ public interface EventManagerDao {
 	public void deleteUser(Integer userId);
 
 	public void addClients(List<Client> clientsList);
+
+	public void addState(State state);
+
+	public Integer getRoomsCount();
+
+	public void addTag(Tag tag);
+
+	public EntityGroupedBy getEventsGroupedBy(String groupBy,String sourceView);
+
+	public EntityGroupedBy getEventsInDay(Date date, String sourceView);
+
+	public EntityGroupedBy getEventsInMonth(String date, String sourceView) throws ParseException;
+
+	public void saveClient(Client client);
+
+	public Client retrieveClientByIdentityNumber(String numPme);
 
 
 

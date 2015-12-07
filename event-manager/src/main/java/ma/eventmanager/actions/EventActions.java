@@ -4,8 +4,12 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+
+
+
 
 
 
@@ -22,6 +26,8 @@ import ma.eventmanager.entitys.Event;
 import ma.eventmanager.entitys.Room;
 import ma.eventmanager.entitys.Subscription;
 import ma.eventmanager.model.DataTableResponseObject;
+import ma.eventmanager.model.EntityGroup;
+import ma.eventmanager.model.EntityGroupedBy;
 import ma.eventmanager.model.EventVo;
 import ma.eventmanager.util.ProjectHelper;
 
@@ -56,6 +62,11 @@ public class EventActions extends AbstractAction{
 	private String state;
 	private Date date;
 	private Integer roomId;
+	private String rating;
+	
+	private String selectedDate;
+	private String zoom;
+	private String sourceView;
 	
 	@Autowired private EventManagerDao eventManagerDao;
 	private Subscription subscription;
@@ -63,14 +74,14 @@ public class EventActions extends AbstractAction{
 	
 	@Action(value = "choice", results = {@Result(name="home",location="/event/choice.jsp")})
 	public String  choice() {
-		list = eventManagerDao.listEvents(0,Constants.DEFAULT_ROWS_NUM,new Date(),null);				
+		list = eventManagerDao.listEvents(0,Constants.DEFAULT_ROWS_NUM,new Date(),null,"CHOICE");				
 		return "home";
 	}
 	
 	@Action(value = "administration", results = {@Result(name="administration",location="/event/administration.jsp")})
 	public String  administration() {
 		try{
-			list = eventManagerDao.listEvents(0,Constants.DEFAULT_ROWS_NUM,new Date(),null);				
+			list = eventManagerDao.listEvents(0,Constants.DEFAULT_ROWS_NUM,new Date(),null,"ADMIN");				
 			return "list";
 		}catch(DataAccessResourceFailureException e){
 			e.printStackTrace();
@@ -92,8 +103,8 @@ public class EventActions extends AbstractAction{
 	}
 
 
-	@Action(value = "list", results = { @Result(name = "success", type = "json", params = {"root", "resp" }) })
-	public String list() throws IOException{
+	@Action(value = "list", results = { @Result(name = "success", location = "null") })
+	public String list() throws IOException, ParseException{
 		int offset;
 		try {
 			offset = (rows) * (page - 1);
@@ -102,50 +113,47 @@ public class EventActions extends AbstractAction{
 			rows = Constants.DEFAULT_ROWS_NUM;
 		}
 
+		Calendar c = Calendar.getInstance();
+		c.setTime(new Date());
+		c.add(Calendar.DATE, -1);
+		Date from = c.getTime();
+
+		if("YES".equals(getGrouped())){
+			//Default group by criteria
+			EntityGroupedBy gr =null;
+			if(getGroupBy() == null){
+				setGroupBy("ROOM");
+			}
+			if("DATE".equals(getGroupBy())){
+				if("day".equals(getZoom())){
+					SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+					gr = eventManagerDao.getEventsInDay(sdf.parse(selectedDate),sourceView);
+					if(gr.getGroups().size() > 0){
+						gr.setTitle(gr.getGroups().get(0).getTitle());						
+					}
+				}else if("month".equals(getZoom())){
+					gr = eventManagerDao.getEventsInMonth(selectedDate,sourceView);
+				}
+			}else{
+				gr = eventManagerDao.getEventsGroupedBy(getGroupBy(),sourceView);				
+			}
+			ProjectHelper.sendObjectAsJsonResponse(gr,ServletActionContext.getResponse());
+			return null;
+		}
+		
 		if(get_search() != null && get_search().equals("true")){
-			list = eventManagerDao.listEvents(offset, rows,usedSearchFields(), new Date(),null);
+			list = eventManagerDao.listEvents(offset, rows,usedSearchFields(), from,null);
 			resp.setData(list);
 		}else{
-			list = eventManagerDao.listEvents(offset, rows,new Date(),null);
+			list = eventManagerDao.listEvents(offset, rows,from,null,sourceView);
 			resp.setData(list);
 		}
 		records = eventManagerDao.getEventsCount();
-		total = (int) Math.ceil((double) records / (double) rows);	
-		return SUCCESS;
-	}
-	
-	
-	@Action(value = "add", results = {@Result  (name = "success", type = "json",params = {"root", "resp" })})
-	public String add() throws IOException{
-		Event e = new Event();
-		e.setName(name);
-		e.setPrice(price);
-		e.setDescription(description);
-		e.setDate(date);
-		Room room = new Room();
-		room.setId(roomId);
-		e.setRoom(room);
-		eventManagerDao.addEvent(e);
-		return SUCCESS;
-	}
-
-	@Action(value = "del", results = {@Result  (name = "success", type = "json")})
-	public String del() throws IOException{
-		eventManagerDao.deleteEvent(id);
-		ProjectHelper.sendObjectAsJsonResponse(null,ServletActionContext.getResponse());
+		total = (int) Math.ceil((double) records / (double) rows);
+		ProjectHelper.sendObjectAsJsonResponse(resp,ServletActionContext.getResponse());
 		return null;
 	}
-
 	
-	@Action(value = "edit", results = {@Result(name = "success", type = "json")})
-	public String edit() throws IOException, ParseException{
-		Event e = (Event) ServletActionContext.getRequest().getSession().getAttribute("editEvent");
-		
-		event.setId(e.getId()+"");
-		eventManagerDao.updateEvent(new Event(event));
-		ProjectHelper.sendObjectAsJsonResponse(null,ServletActionContext.getResponse());
-		return null;
-	}
 
 	public List<Event> getList() {
 		return list;
@@ -270,5 +278,46 @@ public class EventActions extends AbstractAction{
 	{
 		this.roomId = roomId;
 	}
+
+	public String getRating()
+	{
+		return rating;
+	}
+
+	public void setRating(String rating)
+	{
+		this.rating = rating;
+	}
+
+	public String getSelectedDate()
+	{
+		return selectedDate;
+	}
+
+	public void setSelectedDate(String selectedDate)
+	{
+		this.selectedDate = selectedDate;
+	}
+
+	public String getZoom()
+	{
+		return zoom;
+	}
+
+	public void setZoom(String zoom)
+	{
+		this.zoom = zoom;
+	}
+
+	public String getSourceView()
+	{
+		return sourceView;
+	}
+
+	public void setSourceView(String sourceView)
+	{
+		this.sourceView = sourceView;
+	}
+	
 	
 }

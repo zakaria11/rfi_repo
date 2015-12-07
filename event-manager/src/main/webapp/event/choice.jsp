@@ -108,41 +108,7 @@
 					<div class="cell auto-size padding20 bg-white" id="cell-content">
                     <h1 class="text-light">Événements</h1>
                     <!-- <hr class="thin bg-grayLighter"> -->
-
-					<%-- <button class="shortcut-button bg-cyan bg-active-darkBlue fg-white" onclick="identificationStep();">
-					    <span class="icon mif-tag"></span>
-					    <span class="title">Reserver</span>
-					    <span class="badge">22/10</span>
-					</button> --%>                    
-
                     <hr class="thin bg-grayLighter">
-                    <%-- <table aria-describedby="DataTables_Table_0_info" role="grid" id="DataTables_Table_0" class="dataTable border bordered no-footer hovered" data-role="datatable" data-auto-width="false">
-                        <thead>
-                        <tr role="row">
-	                        <td aria-label="Id: activate to sort column descending" aria-sort="ascending" colspan="1" rowspan="1" aria-controls="DataTables_Table_0" tabindex="0" class="sortable-column sort-asc sorting_asc">Id</td>
-	                        <td aria-label="Date: activate to sort column ascending" colspan="1" rowspan="1" aria-controls="DataTables_Table_0" tabindex="0" class="sortable-column sorting" style="width: 160px">Date</td>
-	                        <td aria-label="Prix: activate to sort column ascending" colspan="1" rowspan="1" aria-controls="DataTables_Table_0" tabindex="0" class="sortable-column sorting" style="width: 90px">Prix</td>
-	                        <td aria-label="Prix: activate to sort column ascending" colspan="1" rowspan="1" aria-controls="DataTables_Table_0" tabindex="0" class="sortable-column sorting" style="width: 90px">Nb places</td>
-	                        <td aria-label="Prix: activate to sort column ascending" colspan="1" rowspan="1" aria-controls="DataTables_Table_0" tabindex="0" class="sortable-column sorting" style="width: 90px">Nbr places restantes</td>                        
-	                        <td aria-label="Salle: activate to sort column ascending" colspan="1" rowspan="1" aria-controls="DataTables_Table_0" tabindex="0" class="sortable-column sorting" style="width: 70px">Salle</td>
-	                        <td aria-label="Name: activate to sort column ascending" colspan="1" rowspan="1" aria-controls="DataTables_Table_0" tabindex="0" class="sortable-column sorting" style="width: 240px">Name</td></tr>
-                        </thead>
-							<tbody>
-                        		<s:iterator value="list">
-					            	<tr id="<s:property value="id"/>" onclick="selectTableRow(this);">
-					                  <td><s:property value="id"/></td>
-					                  <td><s:property value="date"/></td>
-					                  <td><s:property value="price"/> DH</td>
-					                  
-					                  <td><s:property value="places"/></td>
-					                  <td><s:property value="remainingPlaces"/></td>
-					                  
-					                  <td><s:property value="room.name"/></td>
-					                  <td><s:property value="name"/></td>
-					        	</tr>
-							</s:iterator>
-						</tbody>
-                    </table> --%>
                     <table id="eventChoiceTable" class="dataTable border bordered no-footer hovered"></table>
                 </div>
                 </a>                   

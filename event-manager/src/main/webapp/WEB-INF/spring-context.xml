@@ -63,10 +63,10 @@
 			<value>jdbc:mysql://localhost:3306/eventmanager</value> 
 		</property>
 		<property name="username">
-			<value>root</value>
+			<value>XXXXXXXXXXXXXXX</value>
 		</property>
 		<property name="password">
-			<value>root</value>
+			<value>XXXXXXXXXXXXXXX</value>
 		</property>
 		
 		
@@ -99,13 +99,17 @@
 		<constructor-arg>
 			<map>
 				<!-- Lecture -->
-				<entry key="payment.reader.exec" value="C:\Users\zakaria\dev\evenetmanager\dll_monetique\Lecture\lecture.bat" />
-				<entry key="payment.reader.outFile" value="C:\Users\zakaria\dev\evenetmanager\dll_monetique\Lecture\Dataout.txt" />
+				<entry key="payment.reader.exec" value="\\%s\Users\zakaria\dev\evenetmanager\dll_monetique\Lecture\lecture.bat" />
+				<entry key="payment.reader.outFile" value="\\%s\Users\zakaria\dev\evenetmanager\dll_monetique\Lecture\Dataout.txt" />
 				<!-- Debiter -->
-				<entry key="payment.debit.exec" value="C:\Users\zakaria\dev\evenetmanager\dll_monetique\Debit\Debit.bat" />
-				<entry key="payment.debit.inFile" value="C:\Users\zakaria\dev\evenetmanager\dll_monetique\Debit\DataDebitIn.txt" />
-				<entry key="payment.debit.outFile" value="C:\Users\zakaria\dev\evenetmanager\dll_monetique\Debit\DataDebitout.txt" />
-				<entry key="event.trending.max" value="7" />
+				<entry key="payment.debit.exec" value="\\%s\Users\zakaria\dev\evenetmanager\dll_monetique\Debit\Debit.bat" />
+				<entry key="payment.debit.inFile" value="\\%s\Users\zakaria\dev\evenetmanager\dll_monetique\Debit\DataDebitIn.txt" />
+				<entry key="payment.debit.outFile" value="\\%s\Users\zakaria\dev\evenetmanager\dll_monetique\Debit\DataDebitout.txt" />
+				<!-- <entry key="upload.event.folder.images" value="C:\Users\zakaria\dev\evenetmanager\uploads" /> -->
+				<entry key="upload.event.folder.images" value="C:\Users\zakaria\git\rfi_repo\event-manager\src\main\webapp\uploads\event\images" />
+				<entry key="event.trending.max" value="5" />
+				
+				
 			</map>
 		</constructor-arg>
 	</bean>
@@ -124,7 +128,7 @@
 				<entry key="MSG000009" value="La salle est pleine Nombre (Max = %s)" />
 				<entry key="MSG000010" value="Fichier invalid" />
 				<entry key="MSG000011" value="Fichier importé avec succès" />
-				
+				<entry key="MSG000012" value="Impossible de créer le client" />
 			</map>
 		</constructor-arg>
 	</bean>

@@ -14,8 +14,8 @@
 <%-- <script src="<%=request.getContextPath()%>/js/jquery-1.9.1.js"></script> --%>
 <%-- <script src="<%=request.getContextPath()%>/js/jquery-ui-1.10.2.custom.js"></script> --%>
 
-<script src="<%=request.getContextPath()%>/js/select2.js"></script>
-<script src="<%=request.getContextPath()%>/js/select2_locale_fr.js"></script>
+<script src="<%=request.getContextPath()%>/js/select2.min.js"></script>
+<%-- <script src="<%=request.getContextPath()%>/js/select2_locale_fr.js"></script> --%>
 
 <script src="<%=request.getContextPath()%>/js/jquery.dataTables-1.10.7.js"></script>
 <%-- <script src="<%=request.getContextPath()%>/js/DT_bootstrap.js"></script> --%>

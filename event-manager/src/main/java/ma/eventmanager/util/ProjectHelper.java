@@ -56,9 +56,12 @@ public class ProjectHelper
 		    		attr.setLabel(method.getAnnotation(ViewField.class).name());
 					String value;
 					try{
-						value = (String) method.invoke(entity,null);
-			    		attr.setValue(value);
-			    		attributes.add(attr);
+						Object object = method.invoke(entity,null);
+						if(object != null){
+							value = (String) object; 
+				    		attr.setValue(value);
+				    		attributes.add(attr);							 
+						}
 					}
 					catch (IllegalArgumentException e){
 						e.printStackTrace();

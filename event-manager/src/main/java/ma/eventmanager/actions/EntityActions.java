@@ -1,7 +1,10 @@
 package ma.eventmanager.actions;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.text.ParseException;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -18,10 +21,13 @@ import ma.eventmanager.model.EventVo;
 import ma.eventmanager.model.RoomVo;
 import ma.eventmanager.model.UserVo;
 import ma.eventmanager.model.ViewEntity;
+import ma.eventmanager.service.ReferenceService;
 import ma.eventmanager.util.ProjectHelper;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.struts2.ServletActionContext;
 import org.apache.struts2.convention.annotation.Action;
+import org.apache.struts2.convention.annotation.InterceptorRef;
 import org.apache.struts2.convention.annotation.Namespace;
 import org.apache.struts2.convention.annotation.ParentPackage;
 import org.apache.struts2.convention.annotation.Result;
@@ -30,7 +36,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 @Namespace("/entity")
 @ResultPath(value = "/")
-@ParentPackage("json-default")
 public class EntityActions extends AbstractAction{
 
 	@Autowired private EventManagerDao eventManagerDao;
@@ -44,11 +49,15 @@ public class EntityActions extends AbstractAction{
 	private RoomVo room;
 	private ClientVo client;
 	private UserVo user;
-	
-	ViewEntity viewEntity;
+
+	private File upload;
+	private String uploadContentType;
+	private String uploadFileName;
+
+	private ViewEntity viewEntity;
 	
 	@Action(value = "load", results = {
-		@Result  (name = "success", type = "json",params = {"root", "resp" }),
+		@Result  (name = "success", location = "null"),
 		@Result  (name = "htmlTableDetails", location="/entity/htmlTableDetails.jsp")
 	})
 	public String load() throws IOException{
@@ -84,7 +93,7 @@ public class EntityActions extends AbstractAction{
 		return null;
 	}
 
-	@Action(value = "delete", results = {@Result  (name = "success", type = "json",params = {"root", "resp" })})
+	@Action(value = "delete", results = {@Result  (name = "success", location = "null")})
 	public String delete() throws IOException{
 		if("event".equals(entityName)){
 			eventManagerDao.deleteEvent(Integer.parseInt(entityId));
@@ -100,13 +109,33 @@ public class EntityActions extends AbstractAction{
 			eventManagerDao.deleteUser(Integer.parseInt(entityId));
 		}	
 		resp.put("isOK", "1");
-
-		return SUCCESS;
+		ProjectHelper.sendObjectAsJsonResponse(resp,ServletActionContext.getResponse());
+		return null;
 	}
 
-	@Action(value = "modify", results = {@Result  (name = "success", type = "json",params = {"root", "resp" })})
+	@Action(value = "modify", 
+		results = {
+			@Result  (name = "success", location = "null")
+		},
+		interceptorRefs={
+	        @InterceptorRef(
+	            params={
+	            	"maximumSize","100000000"
+			    }, 
+	            value="fileUpload"
+	        ),
+	        @InterceptorRef("defaultStack"),
+	        @InterceptorRef("validation")
+		}
+	)
 	public String modify() throws IOException, ParseException{
 		if("event".equals(entityName)){
+			if(upload != null){
+				String imageName = (new Date()).getTime()+"_"+uploadFileName;
+				File dest = new File(ReferenceService.getEnvVariabls().get("upload.event.folder.images")+File.separator+imageName);
+				event.setImageName(imageName);
+				FileUtils.copyFile(upload, dest);
+			}
 			eventManagerDao.updateEvent(new Event(event));
 		}
 		if("room".equals(entityName)){
@@ -117,11 +146,52 @@ public class EntityActions extends AbstractAction{
 		}	
 		if("user".equals(entityName)){
 			eventManagerDao.updateUser(new User(user));
-		}		
-
+		}
 		resp.put("isOK", "1");
-		return SUCCESS;
+		ProjectHelper.sendObjectAsJsonResponse(resp,ServletActionContext.getResponse());
+		return null;
 	}
+	
+	@Action(value = "add", 
+		results = {
+			@Result  (name = "success", location = "null"),
+			@Result(name="input",location="/admin/error.jsp")
+		},
+		interceptorRefs={
+	        @InterceptorRef(
+	            params={
+	            	"maximumSize","100000000"
+			    }, 
+	            value="fileUpload"
+	        ),
+	        @InterceptorRef("defaultStack"),
+	        @InterceptorRef("validation")
+		})
+	public String add() throws IOException, ParseException{
+		if("event".equals(entityName)){
+			if(upload != null){				
+				String imageName = (new Date()).getTime()+"_"+uploadFileName;
+				File dest = new File(ReferenceService.getEnvVariabls().get("upload.event.folder.images")+File.separator+imageName);
+				event.setImageName(imageName);
+				FileUtils.copyFile(upload, dest);
+			}
+			eventManagerDao.addEvent(new Event(event));
+		}
+		if("room".equals(entityName)){
+			eventManagerDao.addRoom(new Room(room));
+		}		
+		if("client".equals(entityName)){
+			eventManagerDao.addClient(new Client(client));
+		}	
+		if("user".equals(entityName)){
+			eventManagerDao.addUser(new User(user));
+		}
+		
+		ProjectHelper.sendObjectAsJsonResponse(resp,ServletActionContext.getResponse());
+		resp.put("isOK", "1");
+		return null;
+	}
+
 	
 	public String getEntityName()
 	{
@@ -211,6 +281,36 @@ public class EntityActions extends AbstractAction{
 	public void setViewEntity(ViewEntity viewEntity)
 	{
 		this.viewEntity = viewEntity;
+	}
+
+	public File getUpload()
+	{
+		return upload;
+	}
+
+	public void setUpload(File upload)
+	{
+		this.upload = upload;
+	}
+
+	public String getUploadContentType()
+	{
+		return uploadContentType;
+	}
+
+	public void setUploadContentType(String uploadContentType)
+	{
+		this.uploadContentType = uploadContentType;
+	}
+
+	public String getUploadFileName()
+	{
+		return uploadFileName;
+	}
+
+	public void setUploadFileName(String uploadFileName)
+	{
+		this.uploadFileName = uploadFileName;
 	}
 	
 

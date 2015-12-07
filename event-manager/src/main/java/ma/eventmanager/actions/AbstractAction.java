@@ -10,6 +10,8 @@ public class AbstractAction extends ActionSupport{
 	protected Integer page = 0;
 	protected String oper;
 	protected String _search;
+	protected String grouped;
+	protected String groupBy;
 	
 	public Integer getRecords()
 	{
@@ -58,6 +60,22 @@ public class AbstractAction extends ActionSupport{
 	public void set_search(String _search)
 	{
 		this._search = _search;
+	}
+	public String getGrouped()
+	{
+		return grouped;
+	}
+	public void setGrouped(String grouped)
+	{
+		this.grouped = grouped;
+	}
+	public String getGroupBy()
+	{
+		return groupBy;
+	}
+	public void setGroupBy(String groupBy)
+	{
+		this.groupBy = groupBy;
 	}
 
 	

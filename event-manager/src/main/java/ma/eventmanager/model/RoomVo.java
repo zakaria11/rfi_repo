@@ -51,6 +51,5 @@ public class RoomVo{
 	{
 		this.state = state;
 	}
-
 	
 }

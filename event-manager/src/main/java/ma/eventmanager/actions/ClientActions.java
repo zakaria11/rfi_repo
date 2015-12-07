@@ -37,6 +37,7 @@ public class ClientActions extends AbstractAction{
 	private String orderNumber;
 	private String mail;
 	private String gender;
+	private String identityNumber;
 	
 	private DataTableResponseObject resp = new DataTableResponseObject();
 
@@ -72,7 +73,7 @@ public class ClientActions extends AbstractAction{
 	
 	@Action(value = "add", results = { @Result(name = "success", type = "json") })
 	public String add() throws IOException{
-		Client client = new Client(firstName,lastName,cne,cin,roleId,orderNumber,mail,gender);
+		Client client = new Client(firstName,lastName,cne,cin,roleId,orderNumber,mail,gender,identityNumber,"0");
 		Integer addState = eventManagerDao.addClient(client);
 		ProjectHelper.sendObjectAsJsonResponse(addState,ServletActionContext.getResponse());
 		return null;
@@ -223,6 +224,17 @@ public class ClientActions extends AbstractAction{
 	{
 		this.gender = gender;
 	}
+
+	public String getIdentityNumber()
+	{
+		return identityNumber;
+	}
+
+	public void setIdentityNumber(String identityNumber)
+	{
+		this.identityNumber = identityNumber;
+	}
+	
 	
 
 	

@@ -30,6 +30,14 @@ public class TicketRepotBean {
 	private String roomState;
 	private String roomDescription;
 	
+	//Event state info
+	private String eventStateName;
+	private String eventStateDescription;
+	
+	//Event tag info
+	private String eventTagName;
+	private String eventTagDescription;
+	
 	private String qrCode;
 	
 	
@@ -204,8 +212,38 @@ public class TicketRepotBean {
 	{
 		this.qrCode = qrCode;
 	}
-	
-
+	public String getEventStateName()
+	{
+		return eventStateName;
+	}
+	public void setEventStateName(String eventStateName)
+	{
+		this.eventStateName = eventStateName;
+	}
+	public String getEventStateDescription()
+	{
+		return eventStateDescription;
+	}
+	public void setEventStateDescription(String eventStateDescription)
+	{
+		this.eventStateDescription = eventStateDescription;
+	}
+	public String getEventTagName()
+	{
+		return eventTagName;
+	}
+	public void setEventTagName(String eventTagName)
+	{
+		this.eventTagName = eventTagName;
+	}
+	public String getEventTagDescription()
+	{
+		return eventTagDescription;
+	}
+	public void setEventTagDescription(String eventTagDescription)
+	{
+		this.eventTagDescription = eventTagDescription;
+	}
 	
 	
 }

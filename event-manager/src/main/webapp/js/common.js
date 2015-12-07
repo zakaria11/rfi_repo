@@ -139,6 +139,7 @@ executePayment = function(PaymentType,eventId){
 			eventId : eventId
 		},
 		success: function(resp){
+			$('#dialog2').data('dialog').close();
 			if(resp.isOK == "1"){
 				//dialog.removeClass("alert");
 				//dialog.addClass("success");
@@ -154,6 +155,7 @@ executePayment = function(PaymentType,eventId){
 			}
 		},
 		error : function(){
+			$('#dialog2').data('dialog').close();
 			var dialog = $('#dialog');
 				var dialogData = dialog.data('dialog');
 				dialog.addClass("alert");
@@ -266,7 +268,6 @@ initCreateEntity = function(entityName){
     var editdialog= $('#'+entityName+'AddDialog');
 	editdialog.find("input[type=text], textarea").val("");
 	var dialog = editdialog.children().data('dialog');
-
 	
 	//call custom functions
 	funcName = entityName+'CustomInitCreat';			
@@ -274,129 +275,121 @@ initCreateEntity = function(entityName){
 		eval(funcName+'(entityName);');
 	}
 		
-	dialog.open();
-	
+	dialog.open();	
     
 };
 
-standardFormat = function(repo){
-    //if (repo.loading) return repo.text;
-
-    var markup = '<div class="clearfix">' +
-    '<div class="col-sm-1">' +
-    '<img src="' + repo.owner.avatar_url + '" style="max-width: 100%" />' +
-    '</div>' +
-    '<div clas="col-sm-10">' +
-    '<div class="clearfix">' +
-    '<div class="col-sm-6">' + repo.full_name + '</div>' +
-    '<div class="col-sm-3"><i class="fa fa-code-fork"></i> ' + repo.forks_count + '</div>' +
-    '<div class="col-sm-2"><i class="fa fa-star"></i> ' + repo.stargazers_count + '</div>' +
-    '</div>';
-
-    if (repo.description) {
-      markup += '<div>' + repo.description + '</div>';
-    }
-
-    markup += '</div></div>';
-
-    return markup;
-}
-
-function standardFormatSelection(repo) {
-    return repo.full_name || repo.text;
-  }
 
 
-function formatRepo (repo) {
-    if (repo.loading) return repo.text;
 
-    var markup = '<div class="clearfix">' +
-    '<div class="col-sm-1">' +
-    '<img src="' + repo.owner.avatar_url + '" style="max-width: 100%" />' +
-    '</div>' +
-    '<div clas="col-sm-10">' +
-    '<div class="clearfix">' +
-    '<div class="col-sm-6">' + repo.full_name + '</div>' +
-    '<div class="col-sm-3"><i class="fa fa-code-fork"></i> ' + repo.forks_count + '</div>' +
-    '<div class="col-sm-2"><i class="fa fa-star"></i> ' + repo.stargazers_count + '</div>' +
-    '</div>';
 
-    if (repo.description) {
-      markup += '<div>' + repo.description + '</div>';
-    }
 
-    markup += '</div></div>';
-
-    return markup;
-  }
-
-  function formatRepoSelection (repo) {
-    return repo.full_name || repo.text;
-  }
-eventCustomInitCreat = function(eventEntityName){
-//	$.ajax({
-//		url: contextPath+'/room/list',
-//		data: {responseFormat:'SELECT2_MAP'},
-//		success: function(roomList) {
-//			var roomsOptionComponent = $("#roomsList");
-//			roomsOptionComponent.empty();
-//			$.each( roomList, function( key, value ) {
-//				var option = $('<option>');
-//				option.html(value.text);
-//				option.attr({"value":value.id});
-//				roomsOptionComponent.append(option);
-//			});
-//		},
-//		dataType: 'json'
-//	});
-//
-//	$.ajax({
-//		url: contextPath+'/state/list',
-//		data: {responseFormat:'SELECT2_MAP'},
-//		success: function(roomList) {
-//			var roomsOptionComponent = $("#statesList");
-//			roomsOptionComponent.empty();
-//			$.each( roomList, function( key, value ) {
-//				var option = $('<option>');
-//				option.html(value.text);
-//				option.attr({"value":value.id});
-//				roomsOptionComponent.append(option);
-//			});
-//		},
-//		dataType: 'json'
-//	});
-
-    $("#roomsList").select2({
+addRoomSelectHundler = function(){
+    $(".roomsList").select2({
         ajax: {
-          url: "https://api.github.com/search/repositories",
-          //url: contextPath+'/room/list',
+          url: contextPath+'/room/list',
           dataType: 'json',
           delay: 250,
           data: function (params) {
             return {
-              q: params.term, // search term
-              page: params.page
+              name: params.term, // search term
+              page: params.page,
+              _search : 'true'
             };
           },
           processResults: function (data, page) {
-            // parse the results into the format expected by Select2.
-            // since we are using custom formatting functions we do not need to
-            // alter the remote JSON data
             return {
-              results: data.items
+              results: data.data
             };
           },
           cache: true
         },
-        escapeMarkup: function (markup) { return markup; }, // let our custom formatter work
+        escapeMarkup: function (markup) { return markup; },
         minimumInputLength: 1,
-        templateResult: formatRepo, // omitted for brevity, see the source of this page
-        templateSelection: formatRepoSelection // omitted for brevity, see the source of this page
-        });
+        templateResult: function(repo){
+            if (repo.loading) return repo.text;
+            var markup = '<div class="clearfix"><div>'+repo.name +'</div>';
+            return markup;
+        },
+        templateSelection: function(repo) {
+        	return repo.name;
+        } 
+	});
+};
+addStateSelectHundler = function(){
+    $(".statesList").select2({
+        ajax: {
+          url: contextPath+'/state/list',
+          dataType: 'json',
+          delay: 250,
+          data: function (params) {
+            return {
+              description: params.term, // search term
+              page: params.page,
+              _search : 'true'
+            };
+          },
+          processResults: function (data, page) {
+            return {
+              results: data.data
+            };
+          },
+          cache: true
+        },
+        escapeMarkup: function (markup) { return markup; },
+        minimumInputLength: 1,
+        templateResult: function(repo) {
+            if (repo.loading) return repo.text;
+            var markup = '<div class="clearfix"><div>'+repo.name +'</div>';
+            return markup;
+        },
+        templateSelection: function(repo){
+        	return repo.name;
+        } 
+	});
+}
+
+addTagSelectHundler = function(){
+    $(".tagsList").select2({
+        ajax: {
+          url: contextPath+'/tag/list',
+          dataType: 'json',
+          delay: 250,
+          data: function (params) {
+            return {
+              name: params.term, // search term
+              page: params.page,
+              _search : 'true'
+            };
+          },
+          processResults: function (data, page) {
+            return {
+              results: data.data
+            };
+          },
+          cache: true
+        },
+        escapeMarkup: function (markup) { return markup; },
+        minimumInputLength: 1,
+        templateResult: function(repo) {
+            if (repo.loading) return repo.text;
+            var markup = '<div class="clearfix"><div>'+repo.name +'</div>';
+            return markup;
+        },
+        templateSelection: function(repo){
+        	return repo.name;
+        } 
+	});
+};
+
+
+eventCustomInitCreat = function(eventEntityName){
+	addRoomSelectHundler();
+	addStateSelectHundler();
+	addTagSelectHundler();
 };
 
 eventCustomInitEdit = function(eventEntity){
-	console.log(eventEntity.rating);
 	var score = eventEntity.rating;
 	var rating = $('#eventRatingEdit').data('rating');
 	rating.value(score);
@@ -416,15 +409,135 @@ initEditEntity = function(entityName,entityId,columns){
 		},
 		success: function(entity){
 			var editDialog = $('#'+entityName+'EditDialog').children();
-			$.each( entity, function( key, value ) {
-				editDialog.find('#'+key).val(value);					
+
+			var $select = editDialog.find('.js-select');
+			$select.each(function(i,item){
+				var dataSource = $(item).attr("dataSource");
+				var select2options = {
+				        //placeholder : showedText,
+						ajax: {
+				          url: contextPath+'/'+dataSource+'/list',
+				          dataType: 'json',
+				          delay: 250,
+				          data: function (params) {
+				            return {
+				              name: params.term, // search term
+				              page: params.page,
+				              _search : 'true'
+				            };
+				          },
+				          processResults: function (data, page) {
+				            return {
+				              results: data.data
+				            };
+				          },
+				          cache: true
+				        },
+				        escapeMarkup: function (markup) { return markup; },
+				        minimumInputLength: 1,
+				        templateResult: function(repo){
+				            if (repo.loading) return repo.text;
+				            var markup = '<div class="clearfix"><div>'+repo.name +'</div>';
+				            return markup;
+				        },
+				        templateSelection: function(repo) {
+				        	return repo.name || repo.text;
+				        } 
+					};			
+					var option = $('<option selected></option>');
+					option.text("");
+					option.attr({"value":""});
+					$(item).append(option);
+					$(item).select2(select2options);
+					$(item).trigger('change');
 			});
+
 			
-			$.each( columns, function( key, value ) {
-				var evalStr = 'var att = entity.'+value+';';
-				eval(evalStr);
-				editDialog.find('#'+key).val(att);
-			});
+			for (var key in entity) {
+				var value = entity[key];
+				//if typeof val == object
+				if(entity.hasOwnProperty(key) && typeof entity[key] == "object"){					
+					// loop on attributes and replace . it with _
+					// then test if the target input equals <select>
+					for (var subKey in entity[key]){
+						var subValue = entity[key][subKey];
+						var inputTag = editDialog.find('#'+key+"_"+subKey);
+
+						if(inputTag.prop("type") == "select-one"){
+							var option = $('<option selected></option>');
+							var showedText= entity[key]['name'];
+
+							option.text(showedText);
+							option.attr({"value":entity[key][subKey]});							
+							inputTag.empty();
+							inputTag.append(option);
+							var dataSource = inputTag.attr("dataSource");
+							var select2options = {
+						        //placeholder : showedText,
+								ajax: {
+						          url: contextPath+'/'+dataSource+'/list',
+						          dataType: 'json',
+						          delay: 250,
+						          data: function (params) {
+						            return {
+						              name: params.term, // search term
+						              page: params.page,
+						              _search : 'true'
+						            };
+						          },
+						          processResults: function (data, page) {
+						            return {
+						              results: data.data
+						            };
+						          },
+						          cache: true
+						        },
+						        escapeMarkup: function (markup) { return markup; },
+						        minimumInputLength: 1,
+						        templateResult: function(repo){
+						            if (repo.loading) return repo.text;
+						            var markup = '<div class="clearfix"><div>'+repo.name +'</div>';
+						            return markup;
+						        },
+						        templateSelection: function(repo) {
+						        	return repo.name || repo.text;
+						        } 
+							};
+							inputTag.select2(select2options);
+							inputTag.trigger('change');
+							
+//							$.fn.select2.amd.require(
+//							    	['select2/data/array', 'select2/utils'],
+//							    	function (ArrayData, Utils) {
+//						    		 function CustomData ($element, options) {
+//						    		    CustomData.__super__.constructor.call(this, $element, options);
+//						    		  }
+//						    		  Utils.Extend(CustomData, ArrayData);
+//						    		  CustomData.prototype.current = function (callback) {
+//						    			  console.log(subKey);
+//						    		    var data = [];
+//						    		      data.push({
+//						    		        id: "ee",
+//						    		        text: "ss"
+//						    		      });
+//						    		    callback(data);
+//						    		  };
+//						    		  $('#state_id').select2({
+//						    		    dataAdapter: CustomData
+//						    		  });
+//							});
+						}						
+					}
+			
+				}else{
+					editDialog.find('#'+key).val(value);
+				}
+			}		    
+//			$.each( columns, function( key, value ) {
+//				var evalStr = 'var att = entity.'+value+';';
+//				eval(evalStr);
+//				editDialog.find('#'+key).val(att);
+//			});
 					
 			//call custom functions
 			funcName = entityName+'CustomInitEdit';			
@@ -441,29 +554,38 @@ initEditEntity = function(entityName,entityId,columns){
 
 editEntity = function(entityName){
 	form = $('#'+entityName+'EditDialog');
-	
-	var params = {};
-	var serArray = form.serializeArray();
-	$.each(serArray, function(key, value){
-		var n =serArray[key].name;
-		var v =serArray[key].value;
-		if(n.indexOf("_") > -1){
-			var re = new RegExp('_', 'g');
-			n = n.replace(re, '.');
+    var params = new FormData();
+	$.each(form.prop('elements'), function(key, tag){
+		if($(tag).prop("tagName").toLowerCase() != "button"){
+			var inputName = $(tag).attr("name");
+			var inputType = $(tag).attr("type");
+			var inputValue = $(tag).val();
+			if(inputName.indexOf("_") > -1){
+				var re = new RegExp('_', 'g');
+				inputName = inputName.replace(re, '.');
+			}
+			if(inputType == "file"){
+				if(files != null){
+					params.append(inputName, files[0]);
+				}
+			}else{
+				params.append(entityName+'.'+inputName, inputValue);
+			}				
 		}
-		params[entityName+'.'+n] = v;
 	});
-	params['entityName']=entityName;
+	params.append('entityName', entityName);
 	
 	$.ajax({
 		url : contextPath+'/entity/modify',
-		method  : 'POST',
+		type  : 'POST',
 		data : params,
 		dataType : "json",
+		cache: false,
+		processData: false,
+		contentType: false,
 		success : function(response){
 			form.children().data('dialog').close();
 			var table = $('#'+entityName+'AdminTable').DataTable();
-			console.log(table);
 			table.ajax.reload();
 		},
 		error : function(response){
@@ -502,14 +624,44 @@ deleteEntity = function(entityName,entityId){
 	});		
 };
 
+prepareUpload = function(event){
+  files = event.target.files;
+}
+
 createEntity = function(entityName){
 	form = $('#'+entityName+'AddDialog');
+	
+    var params = new FormData();
+	$.each(form.prop('elements'), function(key, tag){
+		if($(tag).prop("tagName").toLowerCase() != "button"){
+			var inputName = $(tag).attr("name");
+			var inputType = $(tag).attr("type");
+			var inputValue = $(tag).val();
+			if(inputName.indexOf("_") > -1){
+				var re = new RegExp('_', 'g');
+				inputName = inputName.replace(re, '.');
+			}
+			if(inputType == "file"){
+				if(files != null){
+					params.append(inputName, files[0]);
+				}
+			}else{
+				params.append(entityName+'.'+inputName, inputValue);
+			}
+
+		}
+	});
+	params.append('entityName', entityName);
+	
 	if(form.data("validator").validateForm()){
 		$.ajax({
-			url : contextPath+'/'+entityName+'/add',
-			method  : 'POST',
-			data : form.serializeArray(),
+			url : contextPath+'/entity/add',
+			type  : 'POST',
+			data : params,
 			dataType : "json",
+			cache: false,
+			processData: false,
+			contentType: false,
 			success : function(response){
 				form.children().data('dialog').close();
 				var table = $('#'+entityName+'Table').DataTable();
@@ -542,7 +694,12 @@ dataTables_Event = function(){
 	
 	 var table = $('#eventAdminTable').dataTable({
 		"order": [[ 0, 'desc']],
-		"ajaxSource": contextPath+"/event/list",
+		"ajax": {
+            "url": contextPath+"/event/list",
+            "data": function ( d ){
+                d.sourceView = "ADMIN";
+            }
+		},
 		"columns": [
 		    { "data": "id", "title": "Id" ,"width": "70px",
 		    	"fnCreatedCell": function (nTd, sData, oData, iRow, iCol) {
@@ -550,12 +707,19 @@ dataTables_Event = function(){
 		    	}
 		    },
 		    { "data": "name", "title": "Nom"},
-		    { "data": "date", "title": "Date", "width": "140px" },
+		    { "data": "date", "title": "Date", "width": "140px",
+		      "render": function (data) {
+		            var date = new Date(data);
+		            var month = date.getMonth() + 1;
+		            return date.getDate() + "/" + month + "/" +  date.getFullYear();
+		        }
+		    },
 		    { "data": "price", "title": "Prix"},
 		    { "data": "description", "title": "Description"},
-		    { "data": "rating", "title": "Importance"},
+		    { "data": "rating", "title": "Importance", "width": "70px"},
 		    { "data": "places", "title": "Nbr places"},
-		    { "data": "room.name","sDefaultContent": "-", "title": "Salle"}
+		    { "data": "room.name","sDefaultContent": "-", "title": "Salle"},
+		    { "data": "state.name","sDefaultContent": "-", "title": "Statut"}
 		  ]
 	});
 	crudHundlers('event');	
@@ -628,41 +792,170 @@ dataTables_Client = function(){
 	crudHundlers('client');
 };
 
+showEventDetailsPopUp = function(eventId){
+	$.ajax({
+		url: contextPath+'/entity/load',
+		data: {entityName:'event',entityId : eventId,entityFormat:'json'},
+		beforeSend : function(){
+			//TODO
+		},
+		complete : function(){
+			//TODO
+		},
+		success: function(data){
+			var dialog = $('#dialog2');
+			var dialogData = dialog.data('dialog');
+			dialog.addClass("info");
+			dialog.find("h1:first").empty();
+			dialog.find("h1:first").html(data.name+" #"+eventId);
+			dialog.find("p:first").empty();
+			$.each(data.attributes, function( key, value ) {
+				if(value.label == "Image"){
+					dialog.find("img:first").attr({"src":"../uploads/event/images/"+value.value});
+				}else{
+					dialog.find("p:first").append(value.label+" : "+value.value+'<br />');
+				}
+			});
+			dialog.find("#controls").empty();
+			var executeButton = $('<button class="shortcut-button bg-white bg-active-darkBlue fg-cyan place-right"></button>');
+			executeButton.on( "click", function() {
+				executePayment('BORDER',eventId);
+			});
+			executeButton.append('<span class="icon mif-rocket"></span><span class="title">Réserver</span>')
+			dialog.find("#controls").append(executeButton);			
+			dialogData.open();
+		},
+		dataType: 'json'
+	});
+};
+
+showEventsBorderCalendar = function(){
+	$('#mainContainer').empty();
+	$('#borderCalednar').show();
+	var currentDate = new Date();
+	reloadEventsBorderChoiceByMonth(currentDate.getMonth()+1,currentDate.getFullYear());	
+};
 
 
-eventsBorderChoice = function(){
-	 var table = $('#eventChoiceTable').dataTable({
-			"ajaxSource": contextPath+"/event/list",
-			//"scrollY":"470px",
-			"searching":false,
-			"pageLength": 8,
-		    "bLengthChange": false,
-		    "bFilter": true,
-	        "scrollCollapse": true,
-			"columns": [
-			    { "data": "id", "title": "Id" ,"width": "70px"},
-			    { "data": "date", "title": "Name", "width": "140px" },
-			    { "data": "price", "title": "Prix"},
-			    { "data": "name", "title": "Nom"},
-			    { "data": "state", "title": "Statut"},
-			    { "data": "places", "title": "Nbr places","width": "70px"},
-			    { "data": "remainingPlaces", "title": "Nbr places restantes","width": "70px"},
-			    { "data": "room.name","sDefaultContent": "-", "title": "Salle"}
-			  ]
+reloadEventsBorderChoiceByDay = function(short, full){
+	$.ajax({
+		cache: false,
+		url: contextPath+'/event/list',
+		data: {grouped:'YES',groupBy : 'DATE',zoom :'day',selectedDate: short,sourceView : "BORDER"},
+		beforeSend : function(){
+			$('#mainContainer').empty();
+			//$('#borderCalednar').hide();
+			//TODO loading
+		},
+		complete : function(){
+			//TODO unloading
+		},
+		success: function(data){
+			printEventsGrouped(data,'DATE');
+		},
+		dataType: 'json'
+	});
+
+	console.log(full);
+};
+
+reloadEventsBorderChoiceByMonth = function(month,year){
+	month
+	$.ajax({
+		cache: false,
+		url: contextPath+'/event/list',
+		data: {grouped:'YES',groupBy : 'DATE',zoom :'month',selectedDate: year+'-'+month,sourceView : "BORDER"},
+		beforeSend : function(){
+			$('#mainContainer').empty();
+			//$('#borderCalednar').hide();
+			//TODO loading
+		},
+		complete : function(){
+			//TODO unloading
+		},
+		success: function(data){
+			printEventsGrouped(data,'DATE');
+		},
+		dataType: 'json'
+	});
+};
+
+printEventsGrouped = function(data,groupBy){
+	$.each(data.groups, function(k1, v1){
+		var title = v1.title;
+		if(groupBy == 'RATING'){
+			title = '<div data-size="large" data-static="true" class="rating" data-role="rating" data-show-score="false" data-value="'+title+'"></div>';
+		}
+		var tilesGroup = $('<div class="tile-group four"><span class="tile-group-title">'+title+'</span></div>');
+		var tilesGroupContainer = $('<div class="tile-container"></div>'); 
+		tilesGroup.append(tilesGroupContainer);
+		$('#mainContainer').append(tilesGroup);
+		$.each(v1.list, function(k2, v2){
+			var tile = $('<div class="tile-wide bg-yellow fg-white" data-role="tile" onclick="showEventDetailsPopUp('+v2.id+')"></div>');
+			var img = v2.imageName;
+			if(img == null || img == 'undefined' || img == ''){
+				img = 'default.jpg';
+			}
+			var desc = v2.description.substring(0, 70);
+			tile.append('<div class="tile-content"><img src="'+contextPath+'/uploads/event/images/'+img+'" class="icon" /></div>');
+			tile.append('<div class="tile-label"><p>Description : '+desc+'</p><p>Nom : '+v2.name+'</p></div></div>');
+			tilesGroupContainer.append(tile);
 		});
-		
-	 	var table = $('#eventChoiceTable').DataTable();
-	    $('#eventChoiceTable tbody').on('click', 'tr', function () {
-		    var data = table.row(this).data();
-       	$("tr").removeClass("selected");
-       	$(this).addClass("selected");
-       	printEventDetails(data.id);
-		});
+	});
+	updateMetroUiTiles();
+}
+reloadEventsBorderChoice = function(groupBy){
+	
+	$.ajax({
+		cache: false,
+		url: contextPath+'/event/list',
+		data: {grouped:'YES',groupBy : groupBy,sourceView : "BORDER"},
+		beforeSend : function(){
+			$('#mainContainer').empty();
+			$('#borderCalednar').hide();
+			//TODO loading
+		},
+		complete : function(){
+			//TODO unloading
+		},
+		success: function(data){
+			printEventsGrouped(data,groupBy);
+		},
+		dataType: 'json'
+	});
+//	 var table = $('#eventChoiceTable').dataTable({
+//			"ajaxSource": contextPath+"/event/list",
+//			//"scrollY":"470px",
+//			"searching":false,
+//			"pageLength": 8,
+//		    "bLengthChange": false,
+//		    "bFilter": true,
+//	        "scrollCollapse": true,
+//			"columns": [
+//			    { "data": "id", "title": "Id" ,"width": "70px"},
+//			    { "data": "date", "title": "Name", "width": "140px" },
+//			    { "data": "price", "title": "Prix"},
+//			    { "data": "name", "title": "Nom"},
+//			    { "data": "state", "title": "Statut"},
+//			    { "data": "places", "title": "Nbr places","width": "70px"},
+//			    { "data": "remainingPlaces", "title": "Nbr places restantes","width": "70px"},
+//			    { "data": "room.name","sDefaultContent": "-", "title": "Salle"}
+//			  ]
+//		});
+//		
+//	 	var table = $('#eventChoiceTable').DataTable();
+//	    $('#eventChoiceTable tbody').on('click', 'tr', function () {
+//		    var data = table.row(this).data();
+//       	$("tr").removeClass("selected");
+//       	$(this).addClass("selected");
+//       	printEventDetails(data.id);
+//		});
+	
 };
 
 dataTables_Choice_Event = function(){
 	 var table = $('#eventChoiceTable').dataTable({
-			"ajaxSource": contextPath+"/event/list",
+			//"ajaxSource": contextPath+"/event/list",
 			//"scrollY":"380px",
 	        "scrollCollapse": true,
 			"columns": [
@@ -670,11 +963,17 @@ dataTables_Choice_Event = function(){
 			    { "data": "date", "title": "Name", "width": "140px" },
 			    { "data": "price", "title": "Prix"},
 			    { "data": "name", "title": "Nom"},
-			    { "data": "state", "title": "Statut"},
+			    { "data": "state.name", "title": "Statut"},
 			    { "data": "places", "title": "Nbr places","width": "70px"},
 			    { "data": "remainingPlaces", "title": "Nbr places restantes","width": "70px"},
 			    { "data": "room.name","sDefaultContent": "-", "title": "Salle"}
-			  ]
+			  ],
+			"ajax": {
+	            "url": contextPath+"/event/list",
+	            "data": function ( d ){
+	                d.sourceView = "CHOICE";
+	            }
+			}
 		});
 		
 	 	var table = $('#eventChoiceTable').DataTable();
@@ -839,4 +1138,30 @@ printEventDetails = function(entityId){
 var identificationStep = function(){
 	console.log(selectedEventId);
 	window.location = contextPath+'/booking/identification?eventId='+selectedEventId;
+};
+
+updateMetroUiTiles = function(){
+    $(function(){
+        $.StartScreen();
+
+        var tiles = $(".tile, .tile-small, .tile-sqaure, .tile-wide, .tile-large, .tile-big, .tile-super");
+
+        $.each(tiles, function(){
+            var tile = $(this);
+            setTimeout(function(){
+                tile.css({
+                    opacity: 1,
+                    "-webkit-transform": "scale(1)",
+                    "transform": "scale(1)",
+                    "-webkit-transition": ".3s",
+                    "transition": ".3s"
+                });
+            }, Math.floor(Math.random()*500));
+        });
+
+        $(".tile-group").animate({
+            left: 0
+        });
+    });  
+    //"scrollY":"200px"
 };
